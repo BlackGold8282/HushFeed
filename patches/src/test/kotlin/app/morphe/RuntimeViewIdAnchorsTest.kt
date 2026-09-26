@@ -87,7 +87,7 @@ class RuntimeViewIdAnchorsTest {
 
     @Test
     fun `every anchor resolves on the declared target and its owner loads the id`() {
-        val compatibility = AppCompatibilities.tiktok4703().single()
+        val compatibility = AppCompatibilities.tiktok().single()
         val version = checkNotNull(compatibility.targets.single().version)
         val targets = Fixtures.files {
             it.extension == "apk" && (it.name.contains("_$version-") || it.name == "tiktok-$version.apk")
@@ -113,7 +113,7 @@ class RuntimeViewIdAnchorsTest {
      */
     @Test
     fun `older fixtures report which anchors they cover`() {
-        val compatibility = AppCompatibilities.tiktok4703().single()
+        val compatibility = AppCompatibilities.tiktok().single()
         val version = checkNotNull(compatibility.targets.single().version)
         val older = Fixtures.apks().filter { !it.name.contains("_$version-") && it.name != "tiktok-$version.apk" }
         val anchors = anchors()
@@ -152,7 +152,7 @@ class RuntimeViewIdAnchorsTest {
 
     @Test
     fun `semantic owners reject an unrelated id for every group that needs one`() {
-        val version = checkNotNull(AppCompatibilities.tiktok4703().single().targets.single().version)
+        val version = checkNotNull(AppCompatibilities.tiktok().single().targets.single().version)
         val apk = Fixtures.files {
             it.extension == "apk" && (it.name.contains("_$version-") || it.name == "tiktok-$version.apk")
         }.single()
@@ -166,7 +166,7 @@ class RuntimeViewIdAnchorsTest {
             wrongNames[anchor.lookup]?.let { anchor.copy(names = listOf(it)) } ?: anchor
         }
         val rejected = coverage(apk, changed, checkNotNull(
-            AppCompatibilities.tiktok4703().single().packageName,
+            AppCompatibilities.tiktok().single().packageName,
         )).filter { it.anchor.lookup in wrongNames && it.state == State.BROKEN }
             .map { it.anchor.lookup }.toSet()
         assertEquals(wrongNames.keys, rejected)
@@ -185,7 +185,7 @@ class RuntimeViewIdAnchorsTest {
      */
     @Test
     fun `every tell is carried by an owner that needs one`() {
-        val compatibility = AppCompatibilities.tiktok4703().single()
+        val compatibility = AppCompatibilities.tiktok().single()
         val version = checkNotNull(compatibility.targets.single().version)
         val apk = Fixtures.files {
             it.extension == "apk" && (it.name.contains("_$version-") || it.name == "tiktok-$version.apk")

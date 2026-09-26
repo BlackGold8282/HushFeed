@@ -21,7 +21,7 @@ val hidePlayStoreUpdatePatch = resourcePatch(
     default = false,
 ) {
     category("Performance")
-    compatibleWith(*AppCompatibilities.tiktok4703())
+    compatibleWith(*AppCompatibilities.tiktok())
 
     execute {
         document("AndroidManifest.xml").use { xml ->

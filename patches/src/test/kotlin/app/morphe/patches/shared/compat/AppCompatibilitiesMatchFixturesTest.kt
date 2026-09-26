@@ -30,7 +30,7 @@ class AppCompatibilitiesMatchFixturesTest {
                 signers[name] = result.signerCertificates.map { sha256(it.encoded) }.toSet()
             }
         }
-        val declared = AppCompatibilities.tiktok4703().single().signatures
+        val declared = AppCompatibilities.tiktok().single().signatures
         assertEquals("declared signatures", setOf(AppCompatibilities.TIKTOK_SIGNER_SHA256), declared)
         val other = signers.filterValues { it != declared }
         assertEquals("fixtures another certificate signed", emptyMap<String, Set<String>>(), other)
@@ -38,7 +38,7 @@ class AppCompatibilitiesMatchFixturesTest {
 
     @Test
     fun `the declared target carries the version code of the vendor build`() {
-        val target = AppCompatibilities.tiktok4703().single().targets.single()
+        val target = AppCompatibilities.tiktok().single().targets.single()
         val version = checkNotNull(target.version)
         val codes = checkNotNull(target.versionCodes) { "the $version target declares no version codes" }
         assertEquals("declared codes for $version", setOf(AppCompatibilities.TIKTOK_4703_VERSION_CODE), codes.values.toSet())

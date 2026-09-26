@@ -21,7 +21,7 @@ val amoledThemePatch = resourcePatch(
     default = false,
 ) {
     category("Performance")
-    compatibleWith(*AppCompatibilities.tiktok4703())
+    compatibleWith(*AppCompatibilities.tiktok())
     val background by colorOption(
         key = "backgroundColor",
         default = "#000000",
@@ -166,7 +166,7 @@ internal fun unreadPaletteRefusal(versionName: String?): String {
 
 /** The builds this patch is declared for, where the sheet style names are known to be right. */
 internal fun declaredVersions(): Set<String> =
-    AppCompatibilities.tiktok4703().flatMap { it.targets }.mapNotNull { it.version }.toSet()
+    AppCompatibilities.tiktok().flatMap { it.targets }.mapNotNull { it.version }.toSet()
 
 /**
  * On a declared build every sheet item has to have been found: the names are that build's,

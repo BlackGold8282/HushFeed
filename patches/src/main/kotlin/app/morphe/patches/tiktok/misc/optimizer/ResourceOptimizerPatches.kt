@@ -17,7 +17,7 @@ val p2pRelayBlockerPatch = rawResourcePatch(
     default = false,
 ) {
     category("Performance")
-    compatibleWith(*AppCompatibilities.tiktok4703())
+    compatibleWith(*AppCompatibilities.tiktok())
 
     execute {
         val nativeFiles = listOf(
@@ -45,7 +45,7 @@ val coreAssetDebloatPatch = rawResourcePatch(
     default = false,
 ) {
     category("Performance")
-    compatibleWith(*AppCompatibilities.tiktok4703())
+    compatibleWith(*AppCompatibilities.tiktok())
 
     execute {
         // Only libraries nothing else in the APK links against. An emptied .so that another
@@ -96,7 +96,7 @@ val languagePackPurgerPatch = rawResourcePatch(
     default = false,
 ) {
     category("Performance")
-    compatibleWith(*AppCompatibilities.tiktok4703())
+    compatibleWith(*AppCompatibilities.tiktok())
     val targetLocales by stringOption(
         key = "locales",
         title = "Languages to keep",
@@ -117,7 +117,7 @@ val studioCreationDebloatPatch = rawResourcePatch(
     default = false,
 ) {
     category("Performance")
-    compatibleWith(*AppCompatibilities.tiktok4703())
+    compatibleWith(*AppCompatibilities.tiktok())
 
     execute {
         val nativeFiles = listOf(
@@ -149,7 +149,7 @@ val liveStreamSuiteOptimizerPatch = rawResourcePatch(
     default = false,
 ) {
     category("Performance")
-    compatibleWith(*AppCompatibilities.tiktok4703())
+    compatibleWith(*AppCompatibilities.tiktok())
     dependsOn(liveGiftEffectOptimizerPatch)
 
     execute {

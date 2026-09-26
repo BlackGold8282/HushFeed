@@ -23,8 +23,8 @@ internal object AppCompatibilities {
     /** TikTok 47.0.3's version code. APKMirror lists three variants of the release, all with this one. */
     const val TIKTOK_4703_VERSION_CODE = 2024700030
 
-    /** Target: TikTok 47.0.3 global package. */
-    fun tiktok4703(): Array<Compatibility> = arrayOf(
+    /** Targets: the TikTok global package's builds every patch declares, 47.0.3 today. */
+    fun tiktok(): Array<Compatibility> = arrayOf(
         Compatibility(
             name = "TikTok",
             packageName = "com.zhiliaoapp.musically",
