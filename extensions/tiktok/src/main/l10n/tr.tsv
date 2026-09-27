@@ -91,9 +91,11 @@ Forget the %1$s videos @%2$s has seen.	@%2$s hesabının gördüğü %1$s videoy
 Forget the seen video.	Görülen videoyu unut.
 Forget the video @%2$s has seen.	@%2$s hesabının gördüğü videoyu unut.
 Got it	Anladım
+Hide the status bar in LIVE rooms	LIVE odalarında durum çubuğunu gizle
 How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.	Bir videonun bir dahaki sefere gizlenmesi için ne kadarını izlemen gerektiği. Sıfır, birkaç saniye sonra sayar.
 Later	Daha sonra
 Leave when TikTok says time is up	TikTok süre doldu deyince uygulamadan çık
+Let a LIVE fill the screen up to the top edge. The status bar comes back when you leave the LIVE. Swipe down from the top to peek at it.	Bir LIVE ekranı üst kenara kadar doldursun. Durum çubuğu LIVE'dan çıkınca geri gelir. Göz atmak için üstten aşağı kaydır.
 Loading the gate list and TikTok's current values…	Gate listesi ve TikTok'un geçerli değerleri yükleniyor…
 New value	Yeni değer
 No app on this phone opens that file	Bu telefonda o dosyayı açan bir uygulama yok
