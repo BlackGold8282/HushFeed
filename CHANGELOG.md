@@ -2,6 +2,10 @@
 
 Every Hushfeed release, newest first.
 
+## Unreleased
+
+* **TikTok:** Save story works again when you press and hold a story. It looked up TikTok's story player by names from TikTok 46.2.3, and neither 47.0.3 nor 47.1.3 has them, so holding a story showed "Open the story again and try once more" and saved nothing. It finds the story by TikTok's own class names now, which don't change between versions.
+
 ## 0.61.0 (2026-09-26)
 
 A large release. Hushfeed supports TikTok 47.1.3 as well as 47.0.3 now, and it carries every fix made since 0.60.0. Copy comments without username works from the comment menu again, folding a foldable no longer jumps to another video, and sticker saves read TikTok's own sticker data. The settings screens also had a long polish pass.
