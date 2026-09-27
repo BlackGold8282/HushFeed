@@ -43,6 +43,7 @@
 %1$s videos left	Noch %1$s Videos
 %1$s videos were recorded before each account kept its own list. They hide nothing until you add them here.	%1$s Videos wurden aufgezeichnet, bevor jedes Konto eine eigene Liste hatte. Sie blenden nichts aus, bis du sie hier hinzufügst.
 %1$s was rejected. %2$s	%1$s wurde abgelehnt. %2$s
+%1$s%%	%1$s %%
 %1$s, %2$s, %3$s, %4$s, %5$s	%1$s, %2$s, %3$s, %4$s, %5$s
 %1$s, selected	%1$s, ausgewählt
 %1$s. %2$s	%1$s. %2$s
@@ -61,6 +62,7 @@
 1 video left	Noch 1 Video
 A Lab change is already running	Eine Lab-Änderung läuft bereits
 A diagnostic report is already being saved	Ein Diagnosebericht wird gerade gespeichert
+A few seconds	Wenige Sekunden
 A field value couldn't be read. Check the values and try again.	Ein Feldwert konnte nicht gelesen werden. Prüfe die Werte und versuche es erneut.
 A good place to stop, if you want one.	Ein guter Moment zum Aufhören, falls du einen suchst.
 A green square in the top corner while TikTok has the camera open, and an orange diamond while it records sound. They go when the access ends.	Ein grünes Quadrat in der oberen Ecke, solange TikTok die Kamera geöffnet hat, und eine orange Raute, solange es Ton aufnimmt. Beide verschwinden, wenn der Zugriff endet.
@@ -80,8 +82,10 @@ Added to this account.	Zu diesem Konto hinzugefügt.
 Couldn't add the older seen videos. Try again.	Die älteren gesehenen Videos konnten nicht hinzugefügt werden. Versuche es erneut.
 Couldn't restart TikTok. Close it and open it again.	TikTok konnte nicht neu starten. Schließ die App und öffne sie wieder.
 Couldn't undo that. Try again.	Rückgängig machen hat nicht geklappt. Versuch es noch einmal.
+Count a video as seen after	Video als gesehen zählen nach
 Forget the %1$s videos @%2$s has seen.	Die %1$s Videos vergessen, die @%2$s gesehen hat.
 Got it	Verstanden
+How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.	Wie viel eines Videos du ansiehst, bevor es beim nächsten Mal ausgeblendet wird. Bei null zählt es nach wenigen Sekunden.
 Later	Später
 Leave when TikTok says time is up	Die App verlassen, wenn TikTok sagt, die Zeit ist um
 No app on this phone opens that file	Keine App auf diesem Handy öffnet diese Datei

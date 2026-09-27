@@ -292,6 +292,12 @@ public class FeedFilterPreferenceCategory extends ConditionalPreferenceCategory 
                         NumberFormat.getInstance().format(SeenVideoHistory.MAX_RECORDS)),
                 Settings.SEEN_VIDEO_RETENTION_DAYS, "%1$s day", "%1$s days"
         ).zeroMeansOff());
+        addPreference(new NumberInputPreference(
+                context,
+                "Count a video as seen after",
+                "How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.",
+                Settings.SEEN_VIDEO_MARK_PERCENT, "%1$s%%"
+        ).zeroMeans("A few seconds"));
         addPreference(new ClearSeenVideoHistoryPreference(context));
         int unowned = SeenVideoHistory.unownedCount();
         if (unowned > 0) addPreference(new AdoptSeenVideoHistoryPreference(context, unowned));

@@ -40,6 +40,7 @@
 %1$s videos left	Quedan %1$s videos
 %1$s videos were recorded before each account kept its own list. They hide nothing until you add them here.	%1$s vídeos se registraron antes de que cada cuenta tuviera su propia lista. No ocultan nada hasta que los añadas aquí.
 %1$s was rejected. %2$s	%1$s fue rechazado. %2$s
+%1$s%%	%1$s %%
 %1$s, %2$s, %3$s, %4$s, %5$s	%1$s, %2$s, %3$s, %4$s, %5$s
 %1$s, selected	%1$s, seleccionado
 %1$s. %2$s	%1$s. %2$s
@@ -58,6 +59,7 @@
 1 video left	Queda 1 video
 A Lab change is already running	Ya se está ejecutando un cambio del Lab
 A diagnostic report is already being saved	Ya se está guardando un informe de diagnóstico
+A few seconds	Unos segundos
 A field value couldn't be read. Check the values and try again.	No se pudo leer el valor de un campo. Revisa los valores e inténtalo de nuevo.
 A good place to stop, if you want one.	Un buen momento para parar, si quieres uno.
 A green square in the top corner while TikTok has the camera open, and an orange diamond while it records sound. They go when the access ends.	Un cuadrado verde en la esquina superior mientras TikTok tiene la cámara abierta, y un rombo naranja mientras graba sonido. Desaparecen cuando termina el acceso.
@@ -77,8 +79,10 @@ Added to this account.	Añadidos a esta cuenta.
 Couldn't add the older seen videos. Try again.	No se pudieron añadir los vídeos vistos anteriores. Inténtalo de nuevo.
 Couldn't restart TikTok. Close it and open it again.	No se pudo reiniciar TikTok. Ciérralo y vuelve a abrirlo.
 Couldn't undo that. Try again.	No se pudo deshacer. Inténtalo de nuevo.
+Count a video as seen after	Contar un vídeo como visto después de
 Forget the %1$s videos @%2$s has seen.	Olvidar los %1$s vídeos que ha visto @%2$s.
 Got it	Entendido
+How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.	Cuánto de un vídeo ves antes de que se oculte la próxima vez. Con cero cuenta tras unos segundos.
 Later	Más tarde
 Leave when TikTok says time is up	Salir cuando TikTok diga que se acabó el tiempo
 No app on this phone opens that file	Ninguna app de este teléfono abre ese archivo

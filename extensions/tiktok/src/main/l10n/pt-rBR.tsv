@@ -40,6 +40,7 @@
 %1$s videos left	Restam %1$s vídeos
 %1$s videos were recorded before each account kept its own list. They hide nothing until you add them here.	%1$s vídeos foram registrados antes de cada conta ter sua própria lista. Eles não ocultam nada até você adicioná-los aqui.
 %1$s was rejected. %2$s	%1$s foi rejeitado. %2$s
+%1$s%%	%1$s%%
 %1$s, %2$s, %3$s, %4$s, %5$s	%1$s, %2$s, %3$s, %4$s, %5$s
 %1$s, selected	%1$s, selecionado
 %1$s. %2$s	%1$s. %2$s
@@ -58,6 +59,7 @@
 1 video left	Resta 1 vídeo
 A Lab change is already running	Já há uma mudança do Lab em andamento
 A diagnostic report is already being saved	Um relatório de diagnóstico já está sendo salvo
+A few seconds	Alguns segundos
 A field value couldn't be read. Check the values and try again.	Não foi possível ler o valor de um campo. Verifique os valores e tente novamente.
 A good place to stop, if you want one.	Uma boa hora para parar, se você quiser uma.
 A green square in the top corner while TikTok has the camera open, and an orange diamond while it records sound. They go when the access ends.	Um quadrado verde no canto superior enquanto o TikTok está com a câmera aberta, e um losango laranja enquanto grava som. Eles somem quando o acesso termina.
@@ -77,8 +79,10 @@ Added to this account.	Adicionados a esta conta.
 Couldn't add the older seen videos. Try again.	Não foi possível adicionar os vídeos vistos anteriores. Tente de novo.
 Couldn't restart TikTok. Close it and open it again.	Não foi possível reiniciar o TikTok. Feche e abra de novo.
 Couldn't undo that. Try again.	Não foi possível desfazer. Tente de novo.
+Count a video as seen after	Contar um vídeo como visto depois de
 Forget the %1$s videos @%2$s has seen.	Esquecer os %1$s vídeos que @%2$s viu.
 Got it	Entendi
+How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.	Quanto de um vídeo você assiste antes que ele seja ocultado na próxima vez. Com zero, conta depois de alguns segundos.
 Later	Mais tarde
 Leave when TikTok says time is up	Sair quando o TikTok disser que o tempo acabou
 No app on this phone opens that file	Nenhum app neste celular abre esse arquivo

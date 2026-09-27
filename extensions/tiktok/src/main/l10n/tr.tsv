@@ -40,6 +40,7 @@
 %1$s videos left	%1$s video kaldı
 %1$s videos were recorded before each account kept its own list. They hide nothing until you add them here.	%1$s video, her hesap kendi listesini tutmadan önce kaydedildi. Onları buraya ekleyene kadar hiçbir şeyi gizlemezler.
 %1$s was rejected. %2$s	%1$s reddedildi. %2$s
+%1$s%%	%%%1$s
 %1$s, %2$s, %3$s, %4$s, %5$s	%1$s, %2$s, %3$s, %4$s, %5$s
 %1$s, selected	%1$s, seçili
 %1$s. %2$s	%1$s. %2$s
@@ -58,6 +59,7 @@
 1 video left	1 video kaldı
 A Lab change is already running	Bir Lab değişikliği zaten sürüyor
 A diagnostic report is already being saved	Bir tanılama raporu zaten kaydediliyor
+A few seconds	Birkaç saniye
 A field value couldn't be read. Check the values and try again.	Bir alan değeri okunamadı. Değerleri kontrol edip tekrar dene.
 A good place to stop, if you want one.	İstersen, durmak için iyi bir an.
 A green square in the top corner while TikTok has the camera open, and an orange diamond while it records sound. They go when the access ends.	TikTok kamerayı açık tuttuğu sürece üst köşede yeşil bir kare, ses kaydederken turuncu bir eşkenar dörtgen görünür. Erişim bitince kaybolurlar.
@@ -77,8 +79,10 @@ Added to this account.	Bu hesaba eklendi.
 Couldn't add the older seen videos. Try again.	Eski görülen videolar eklenemedi. Tekrar dene.
 Couldn't restart TikTok. Close it and open it again.	TikTok yeniden başlatılamadı. Kapatıp tekrar açın.
 Couldn't undo that. Try again.	Geri alınamadı. Tekrar deneyin.
+Count a video as seen after	Bir videoyu şu kadarından sonra görülmüş say
 Forget the %1$s videos @%2$s has seen.	@%2$s hesabının gördüğü %1$s videoyu unut.
 Got it	Anladım
+How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.	Bir videonun bir dahaki sefere gizlenmesi için ne kadarını izlemen gerektiği. Sıfır, birkaç saniye sonra sayar.
 Later	Daha sonra
 Leave when TikTok says time is up	TikTok süre doldu deyince uygulamadan çık
 No app on this phone opens that file	Bu telefonda o dosyayı açan bir uygulama yok

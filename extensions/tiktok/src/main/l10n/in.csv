@@ -41,6 +41,7 @@ source,target
 %1$s videos left,Sisa %1$s video
 %1$s videos were recorded before each account kept its own list. They hide nothing until you add them here.,%1$s video tercatat sebelum setiap akun menyimpan daftarnya sendiri. Video itu tidak menyembunyikan apa pun sampai kamu menambahkannya di sini.
 %1$s was rejected. %2$s,%1$s ditolak. %2$s
+%1$s%%,%1$s%%
 "%1$s, %2$s, %3$s, %4$s, %5$s","%1$s, %2$s, %3$s, %4$s, %5$s"
 "%1$s, selected","%1$s, dipilih"
 %1$s. %2$s,%1$s. %2$s
@@ -59,6 +60,7 @@ source,target
 1 video left,Sisa 1 video
 A Lab change is already running,Perubahan Lab sedang berjalan
 A diagnostic report is already being saved,Laporan diagnostik sedang disimpan
+A few seconds,Beberapa detik
 A field value couldn't be read. Check the values and try again.,Nilai kolom tidak dapat dibaca. Periksa nilainya lalu coba lagi.
 "A good place to stop, if you want one.","Tempat yang bagus untuk berhenti, kalau kamu mencarinya."
 "A green square in the top corner while TikTok has the camera open, and an orange diamond while it records sound. They go when the access ends.","Kotak hijau di pojok atas saat TikTok membuka kamera, dan belah ketupat oranye saat merekam suara. Keduanya hilang saat akses berakhir."
@@ -78,8 +80,10 @@ Added to this account.,Ditambahkan ke akun ini.
 Couldn't add the older seen videos. Try again.,Tidak dapat menambahkan video lama yang dilihat. Coba lagi.
 Couldn't restart TikTok. Close it and open it again.,Tidak bisa memulai ulang TikTok. Tutup lalu buka lagi.
 Couldn't undo that. Try again.,Tidak bisa dibatalkan. Coba lagi.
+Count a video as seen after,Anggap video sudah dilihat setelah
 Forget the %1$s videos @%2$s has seen.,Lupakan %1$s video yang telah dilihat @%2$s.
 Got it,Mengerti
+How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.,Berapa banyak video yang kamu tonton sebelum video itu disembunyikan lain kali. Nol menghitungnya setelah beberapa detik.
 Later,Nanti
 Restart TikTok to apply this,Mulai ulang TikTok agar berlaku
 Stay on the video in full screen,Tetap di video saat layar penuh

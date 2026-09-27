@@ -508,6 +508,13 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_SEEN_VIDEOS = new BooleanSetting("hide_seen_videos", FALSE, true);
     public static final IntegerSetting SEEN_VIDEO_RETENTION_DAYS =
             new IntegerSetting("seen_video_retention_days", 30).withRange(0, 3650);
+    /**
+     * How much of a video, in percent, has to play before it counts as seen. Zero keeps the
+     * original rule (a tenth of the video, one to five seconds). 90 is the top because the
+     * last progress report before a loop can land anywhere in the final second.
+     */
+    public static final IntegerSetting SEEN_VIDEO_MARK_PERCENT =
+            new IntegerSetting("seen_video_mark_percent", 0).withRange(0, 90);
     public static final BooleanSetting HIDE_PLAYLIST_BAR = new BooleanSetting("hide_playlist_bar", FALSE, true);
     public static final BooleanSetting HIDE_EVENT_BADGE = new BooleanSetting("hide_event_badge", FALSE, true);
     public static final BooleanSetting HIDE_INSERTED_CARDS = new BooleanSetting("hide_inserted_cards", FALSE, true);

@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Hide videos you have already seen has a new row, Count a video as seen after. Set a percent and a video only counts once you've watched that much of it, so five seconds of a ten-minute video no longer hides it at 50%. Zero, the default, keeps the old rule of a few seconds. A video TikTok gives no length for still counts after two seconds, and a short clip never needs its last second.
 * **TikTok:** The settings search and the Feature Gate Lab search match text the same way now: case, accents and punctuation don't matter in either, so "pre roll" finds "Pre-roll".
 * **TikTok:** Saving, restoring, resetting and undoing settings, and the Calm feed preset, tell you how it went in a banner at the bottom of the settings window instead of toasts that vanish. A restore that left some settings alone says so in the same banner, and a change that needs a restart has a Restart now button.
 * **TikTok:** On a phone whose blocked creators, hidden creators, creator exceptions or blocked caption words list grew past the limits added on 2026-09-14, restoring a backup, resetting settings and undoing now work again. Before, all three failed with the generic try-again message. Saving a backup names the list that's too long instead of writing a file no restore would accept.

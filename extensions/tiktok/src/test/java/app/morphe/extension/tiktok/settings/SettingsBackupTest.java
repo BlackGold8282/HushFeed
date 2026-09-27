@@ -1248,12 +1248,14 @@ public class SettingsBackupTest {
         JSONObject values = root.getJSONObject("settings");
         values.put("edge_seek_seconds", 100000);
         values.put("seen_video_retention_days", -12);
+        values.put("seen_video_mark_percent", 500);
         values.put("max_video_seconds", 999999999);
         values.put("caption_text_size", 400);
         SettingsBackup.restore(Utils.getContext(), root.toString(), true);
 
         assertEquals(60, (int) Settings.EDGE_SEEK_SECONDS.get());
         assertEquals(0, (int) Settings.SEEN_VIDEO_RETENTION_DAYS.get());
+        assertEquals(90, (int) Settings.SEEN_VIDEO_MARK_PERCENT.get());
         assertEquals(86400, (int) Settings.MAX_VIDEO_SECONDS.get());
         assertEquals(48, (int) Settings.CAPTION_TEXT_SIZE.get());
 
