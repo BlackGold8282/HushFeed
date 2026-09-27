@@ -27,6 +27,7 @@ import java.util.Set;
 import app.morphe.extension.shared.settings.StringSetting;
 import app.morphe.extension.tiktok.navigation.BottomNavigationTabOptions;
 import app.morphe.extension.tiktok.navigation.NavigationTabOptions;
+import app.morphe.extension.tiktok.navigation.TabOption;
 import app.morphe.extension.tiktok.settings.Settings;
 
 @SuppressWarnings("deprecation")
@@ -254,13 +255,13 @@ public class TabSelectionPreference extends Preference {
             Set<String> observed = BottomNavigationTabOptions.parseObservedKeys(Settings.BOTTOM_NAVIGATION_OBSERVED_TABS.savedValue());
             observed.add(BottomNavigationTabOptions.HOME);
             observed.add(BottomNavigationTabOptions.PROFILE);
-            for (BottomNavigationTabOptions.Option option : BottomNavigationTabOptions.optionsForKeys(observed)) {
+            for (TabOption option : BottomNavigationTabOptions.optionsForKeys(observed)) {
                 rows.add(new OptionRow(option.key, option.label));
             }
         } else {
             Set<String> observed = NavigationTabOptions.parseObservedKeys(Settings.FEED_NAVIGATION_OBSERVED_TABS.savedValue());
             observed.add(NavigationTabOptions.HOT);
-            for (NavigationTabOptions.Option option : NavigationTabOptions.optionsForKeys(observed)) {
+            for (TabOption option : NavigationTabOptions.optionsForKeys(observed)) {
                 rows.add(new OptionRow(option.key, option.label));
             }
         }
