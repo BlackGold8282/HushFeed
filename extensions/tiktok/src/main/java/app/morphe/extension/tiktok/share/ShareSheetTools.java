@@ -151,8 +151,12 @@ public final class ShareSheetTools {
             }
 
             List<View> roots = windowRoots(activity);
-            List<Map<Integer, View>> found = indexRoots(roots, wantedIds(activity,
-                    CONTACTS_LIST_IDS, CONTACTS_SECTION_IDS, CHANNELS_LIST_IDS, ACTIONS_LIST_IDS));
+            Set<Integer> wanted = new HashSet<>();
+            addIds(activity, wanted, CONTACTS_LIST_IDS);
+            addIds(activity, wanted, CONTACTS_SECTION_IDS);
+            addIds(activity, wanted, CHANNELS_LIST_IDS);
+            addIds(activity, wanted, ACTIONS_LIST_IDS);
+            List<Map<Integer, View>> found = indexRoots(roots, wanted);
             View contacts = find(activity, roots, found, CONTACTS_LIST_IDS);
             if (contacts == null) {
                 // The sheet is closed. Its cells are gone, so the armed state is stale.
@@ -531,16 +535,16 @@ public final class ShareSheetTools {
         });
     }
 
-    /** The resolved ids every group can name, so one walk per root can look for all of them. */
-    private static Set<Integer> wantedIds(Activity activity, String[]... groups) {
-        Set<Integer> ids = new HashSet<>();
-        for (String[] group : groups) {
-            for (String name : group) {
-                int id = RESOURCE_IDS.resolve(activity.getResources(), APP_PACKAGE, name, false);
-                if (id != 0) ids.add(id);
-            }
+    /**
+     * Adds the resolved ids one group can name, so one walk per root can look for all four groups.
+     * One array per call, like find(): RuntimeViewIdAnchorsTest traces every lookup's name to its
+     * literals through a helper's parameter, and a varargs call left it nothing to follow.
+     */
+    private static void addIds(Activity activity, Set<Integer> ids, String[] candidates) {
+        for (String name : candidates) {
+            int id = RESOURCE_IDS.resolve(activity.getResources(), APP_PACKAGE, name, false);
+            if (id != 0) ids.add(id);
         }
-        return ids;
     }
 
     /**
