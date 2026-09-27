@@ -1124,6 +1124,31 @@ try {
     $catalogVersion = ((Get-Content -LiteralPath (Join-Path $factsRoot 'gradle.properties')) `
         -match '^version\s*=' | Select-Object -First 1) -replace '^version\s*=\s*', ''
 
+    # The lagging path: a published index behind the catalog, here in its patch count and its
+    # targets at the same version, which is a release hold with a patch added. There the published
+    # facts decide what the description and the bug form have to say, and the description is read
+    # from -DescriptionText instead of gh. Every other case syncs the index up to the catalog, so
+    # this branch only ever ran on a real push; on 2026-09-26 it held two bugs the contracts passed:
+    # one published target read as a string ("TikTok 4"), and a lookahead that refused "47.0.3." at
+    # the end of a sentence.
+    Set-FactsFile 'patches-bundle.json' {
+        param($text)
+        [regex]::Replace(($text -replace '\b\d+ patches\b', '90 patches'),
+            'TikTok\s+\d+(?:\.\d+)+(?:(?:,\s*|,?\s+and\s+)\d+(?:\.\d+)+)*', 'TikTok 47.0.3')
+    }
+    Set-FactsFile $bugFormRelative {
+        param($text) $text -replace ('Version ' + [regex]::Escape($catalogVersion) + ' for TikTok \d+(?:\.\d+)+'), "Version $catalogVersion for TikTok 47.0.3"
+    }
+    $lagging = @{ Root = $factsRoot; SkipDescriptionTestCount = $true; SkipUrlCheck = $true; AllowPublishedIndexLag = $true }
+    & $factsScript @lagging -DescriptionText "Hushfeed v$($catalogVersion): TikTok with less noise. 90 patches for TikTok 47.0.3." 6> $null
+    Assert-True ($LASTEXITCODE -eq 0 -or $null -eq $LASTEXITCODE) `
+        'A release hold with a patch added, its index still on the published facts, was refused.'
+    $catalogCount = @((Get-Content -LiteralPath (Join-Path $factsRoot 'patches-list.json') -Raw | ConvertFrom-Json).patches).Count
+    Assert-Throws { & $factsScript @lagging -DescriptionText "Hushfeed v$($catalogVersion): $catalogCount patches for TikTok 47.0.3 and 47.1.3." 6> $null } `
+        '*does not say 90 patches*' 'While the index lags, the description was held to the catalog instead of the published index.'
+    Reset-FactsFile 'patches-bundle.json'
+    Reset-FactsFile $bugFormRelative
+
     # Manager decodes created_at as kotlinx.datetime.LocalDateTime, not Instant.
     # A trailing Z produces its generic "remote metadata file is unavailable" error,
     # even when both the JSON and bundle download answer HTTP 200.
