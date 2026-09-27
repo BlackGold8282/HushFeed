@@ -348,6 +348,10 @@ Start **Video filename** with `{creator}/` to give each creator a folder under y
 
 With `Advanced downloads`, **Save details beside the video** writes a TXT file containing the caption, creator handle, source link and publication date. Android 10 and later put the video and its details in Download or Documents, keeping the chosen subfolder, because Android won't accept a TXT file in DCIM. Older Android versions keep the chosen video folder. Subtitles saved with a details file use that same folder.
 
+**Show download progress**, under Downloads, adds a progress bar while a video saves. It shows a percentage when the video stream's size is known, then stays busy while the sound is fetched or the file is prepared and written. The switch starts off. It also works with Automatic quality. A save finished before the share sheet closes skips the progress row and shows its result. Screen readers hear the start once; changing percentages stay quiet.
+
+<img src="assets/settings/single-save-progress.png" alt="A single video save at 50 percent" width="328" />
+
 **Check for already-saved videos** remembers up to 10,000 successful video saves made while it's on. Saving one again offers Open or Save again if the file is still available, even if TikTok no longer supplies its download link. Deleted files can be downloaded again. The record stays on the phone. Both switches start off and apply to Hushfeed's saves, including video stories, rather than links handed to another app.
 
 <img src="assets/settings/already-saved.png" alt="Already-saved video choices in the dark theme" width="300" /> <img src="assets/settings/already-saved-light.png" alt="Already-saved video choices in the light theme" width="300" />
