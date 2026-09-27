@@ -25,6 +25,7 @@ import app.morphe.extension.tiktok.blockauthor.BlockGlyphDrawable;
 import app.morphe.extension.tiktok.blockauthor.Reflect;
 import app.morphe.extension.tiktok.blockauthor.VideoAuthor;
 import app.morphe.extension.shared.diagnostics.HookStatus;
+import app.morphe.extension.tiktok.SignedInUser;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.preference.SettingsUi;
 import app.morphe.extension.tiktok.settings.L10n;
@@ -1000,33 +1001,13 @@ public final class CommentTools {
         if (signedInUserIdForTests != null) {
             return signedInUserIdForTests.isEmpty() ? null : signedInUserIdForTests;
         }
-        try {
-            Class<?> serviceManagerClass = Class.forName(SERVICE_MANAGER_CLASS);
-            Object serviceManager = serviceManagerClass.getMethod("get").invoke(null);
-            Class<?> accountServiceClass = Class.forName(ACCOUNT_USER_SERVICE_CLASS);
-            Object accountService = serviceManagerClass
-                    .getMethod("getService", Class.class)
-                    .invoke(serviceManager, accountServiceClass);
-            if (accountService == null
-                    || !Boolean.TRUE.equals(accountServiceClass.getMethod("isLogin").invoke(accountService))) {
-                return null;
-            }
-            Object id = accountServiceClass.getMethod("getCurUserId").invoke(accountService);
-            return id instanceof String && !((String) id).isEmpty() ? (String) id : null;
-        } catch (Throwable ignored) {
-            // Not signed in, or a build where the account service moved. Either way the filter
-            // behaves as it did before: it hides every comment carrying a picture.
-            return null;
-        }
+        // Null when signed out or on a build where the account service moved. Either way the
+        // filter behaves as it did before: it hides every comment carrying a picture.
+        return SignedInUser.id();
     }
 
     /** So a test can stand in for the account service, which needs the host to be running. */
     static String signedInUserIdForTests;
-
-    private static final String SERVICE_MANAGER_CLASS =
-            "com.ss.android.ugc.aweme.framework.services.ServiceManager";
-    private static final String ACCOUNT_USER_SERVICE_CLASS =
-            "com.ss.android.ugc.aweme.IAccountUserService";
 
     private static boolean hasMedia(Object comment) {
         Object images = Reflect.property(comment, "getImageList", "imageList");

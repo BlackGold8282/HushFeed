@@ -8,6 +8,7 @@ import app.morphe.extension.shared.diagnostics.FeedFilterCounters;
 import app.morphe.extension.shared.diagnostics.HookStatus;
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.settings.BaseSettings;
+import app.morphe.extension.tiktok.SignedInUser;
 import app.morphe.extension.tiktok.settings.Settings;
 import com.ss.android.ugc.aweme.feed.model.Aweme;
 import com.ss.android.ugc.aweme.feed.model.AwemeBizExtKt;
@@ -175,6 +176,12 @@ public final class FeedItemsFilter {
             return;
         }
 
+        String profile = feedItemList.dataUserId;
+        if (profile != null && !profile.isEmpty()) {
+            filterProfileList(feedItemList);
+            return;
+        }
+
         if (verbose && shouldLogBatch()) {
             debugLogBatch(
                 "FeedItemList",
@@ -281,6 +288,57 @@ public final class FeedItemsFilter {
 
     public static List filterProfileAds(List items) {
         return filterAdOnlyAwemeList("ProfileAwemeList", items);
+    }
+
+    /** The counter line for a profile's list read through FeedItemList.getItems. */
+    static final String PROFILE_LIST_SOURCE = "FeedItemList:profile";
+
+    /**
+     * A profile's list: its posts, favorites or reposts, whoever it belongs to. TikTok parses a
+     * profile's posts from /aweme/v1/aweme/post/ straight into a FeedItemList and its profile model
+     * stamps the profile's uid on it, so every read went through the main feed's getItems filter,
+     * and the feed's preferences emptied pages the reader chose to open: a place badge took an
+     * owner's recent posts off their own grid (#35), and a minimum view count thinned out a small
+     * creator's page. A profile gets what the profile routes give it, ads only.
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static void filterProfileList(FeedItemList feedItemList) {
+        List items = feedItemList.items;
+        List kept = filterAdOnlyAwemeList(PROFILE_LIST_SOURCE, items);
+        if (kept == items) return;
+        try {
+            items.clear();
+            items.addAll(kept);
+        } catch (RuntimeException immutable) {
+            feedItemList.items = new ArrayList(kept);
+        }
+    }
+
+    /**
+     * The signed-in reader's own posts, which no route takes out: nothing on your own profile is
+     * a feed preference, and TikTok reads your profile's first page through the main feed's
+     * getItems before it stamps the profile's uid on the list (#35). The account is read once per
+     * list, and only once an item would go.
+     */
+    private static final class OwnPosts {
+        private String self;
+        private boolean read;
+        private int kept;
+
+        boolean owns(Aweme item) {
+            if (!read) {
+                read = true;
+                self = SignedInUser.id();
+            }
+            if (self == null || !self.equals(CreatorIdentity.uidOf(item))) return false;
+            kept++;
+            return true;
+        }
+
+        /** Says in Hook status that the check kept something, so an export shows it ran. */
+        void report() {
+            if (kept > 0) HookStatus.bound("main feed", "own posts kept");
+        }
     }
 
     /**
@@ -687,6 +745,7 @@ public final class FeedItemsFilter {
         int removed = 0;
         int notVideos = 0;
         String lastReason = null;
+        OwnPosts own = new OwnPosts();
         for (int index = 0; index < items.size(); index++) {
             Object container = items.get(index);
             Aweme item = container instanceof Aweme ? (Aweme) container : null;
@@ -695,6 +754,7 @@ public final class FeedItemsFilter {
                 nameNotVideo(source, container);
             }
             String reason = item == null ? null : getFilterReason(AD_ONLY_FILTERS, item);
+            if (reason != null && own.owns(item)) reason = null;
             if (reason == null) {
                 if (kept != null) kept.add(container);
                 if (item != null) logKeptItem(source, item, verbose);
@@ -710,6 +770,7 @@ public final class FeedItemsFilter {
             logItem(item, reason, verbose);
         }
 
+        own.report();
         FeedFilterCounters.removed(source, removed, lastReason);
         FeedFilterCounters.unreadable(source, notVideos);
         if (kept == null) return items;
@@ -944,6 +1005,7 @@ public final class FeedItemsFilter {
         List rangeKept = new ArrayList(snapshot.size());
         Object qualityFallback = null;
         double closestDistance = Double.POSITIVE_INFINITY;
+        OwnPosts own = new OwnPosts();
         for (Object container : snapshot) {
             Aweme item = extractor.extract(container);
             if (item == null) {
@@ -952,6 +1014,11 @@ public final class FeedItemsFilter {
             }
 
             String contentReason = getFilterReason(activeContentFilters, item);
+            String rangeReason = contentReason == null ? getFilterReason(activeRangeFilters, item) : null;
+            if ((contentReason != null || rangeReason != null) && own.owns(item)) {
+                rangeKept.add(container);
+                continue;
+            }
             if (contentReason != null) {
                 if (contentReason.equals("QualityFilter") && getFilterReason(activeRangeFilters, item) == null) {
                     double distance = AdvancedFeedRules.QualityFilter.distance(item);
@@ -966,7 +1033,6 @@ public final class FeedItemsFilter {
                 continue;
             }
 
-            String rangeReason = getFilterReason(activeRangeFilters, item);
             if (rangeReason != null) {
                 rangeRejected++;
                 incrementReason(reasonCounts, rangeReason);
@@ -977,6 +1043,7 @@ public final class FeedItemsFilter {
             rangeKept.add(container);
         }
 
+        own.report();
         // Never restore ads, blocked creators/words, seen videos, or other hard rejects.
         if (rangeKept.isEmpty() && qualityFallback != null) rangeKept.add(qualityFallback);
         List kept = rangeKept;
