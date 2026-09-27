@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** On a TikTok version where a patch's hook can't be written the way the patch asks, that patch now stops with a message naming the method, instead of applying and then doing nothing. Morphe's patcher could leave a hook call out without a word when a method has more than 16 registers. It never happened on 47.0.3 or 47.1.3, and now it can't happen silently on a later version either.
 * **TikTok:** Save story works again when you press and hold a story. It looked up TikTok's story player by names from TikTok 46.2.3, and neither 47.0.3 nor 47.1.3 has them, so holding a story showed "Open the story again and try once more" and saved nothing. It finds the story by TikTok's own class names now, which don't change between versions.
 
 ## 0.61.0 (2026-09-26)
