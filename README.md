@@ -243,6 +243,7 @@ Playback quality chooses among the video streams TikTok offers. It doesn't cap t
 | `Skip content warnings` | Play videos TikTok has classified without the warning overlay asking to be tapped through first. Switch: Hushfeed settings > Feed screen. |
 | `Skip the splash ad` | Stops TikTok's splash-ad preload tasks and returns false from its reviewed splash and TopView gates. Other startup behavior is left in place. |
 | `Skip update checks` | Skips TikTok's background and boot-finished device-ID update-check tasks. This may suppress some in-app update checks. Play Store updates are unaffected. |
+| `Stay on the video in full screen` | Keeps TikTok's full-screen viewer on a video when it ends instead of moving to the next one, and leaves out its next-video countdown. Swiping still moves on. Switch: Hushfeed settings > Playback. |
 | `Stop on-device AI profiling` | Kills the Pitaya on-device ML inference engine at startup so it cannot build a behavioral profile. The AI asset strip in the core de-bloat patch removes the native libraries. This patch stops the initialization code that would download replacements. |
 | `Stop video looping` | Stops videos at the end instead of replaying them. Switch: Hushfeed settings > App. |
 | `Subtitle tools` | Saves subtitle files beside downloaded videos and adds caption size, background, and clear-display options. Switch: Hushfeed settings > Feed screen. |
@@ -472,7 +473,7 @@ APKMirror also offers some TikTok releases as bundles, using an `.apkm` file. Mo
 
 ### Why those versions and not a newer one
 
-Patches use named components where TikTok retains them and code patterns where names are stripped. Both can change between builds. 47.0.3 and 47.1.3 are the declared targets. All 96 patches apply to both reviewed APKs, and the retained 46.2.3, 46.7.3, 46.8.3 and 46.9.3 builds remain regression fixtures rather than advertised targets. Another build can fail loudly when an anchor moves or, worse, accept the wrong shape.
+Patches use named components where TikTok retains them and code patterns where names are stripped. Both can change between builds. 47.0.3 and 47.1.3 are the declared targets. All 97 patches apply to both reviewed APKs, and the retained 46.2.3, 46.7.3, 46.8.3 and 46.9.3 builds remain regression fixtures rather than advertised targets. Another build can fail loudly when an anchor moves or, worse, accept the wrong shape.
 
 Only the global package is declared in the compatibility metadata.
 

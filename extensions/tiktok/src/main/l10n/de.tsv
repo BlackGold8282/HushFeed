@@ -84,6 +84,7 @@ Leave when TikTok says time is up	Die App verlassen, wenn TikTok sagt, die Zeit 
 No app on this phone opens that file	Keine App auf diesem Handy öffnet diese Datei
 Open	Öffnen
 Restart TikTok to apply this	TikTok neu starten, damit das gilt
+Stay on the video in full screen	Im Vollbild beim Video bleiben
 That creator pattern could stall the feed, so it was skipped: %1$s	Dieses Kreator-Muster könnte den Feed aufhalten und wurde übersprungen: %1$s
 That creator pattern could stall the feed, so it wasn't added: %1$s	Dieses Kreator-Muster könnte den Feed aufhalten und wurde nicht hinzugefügt: %1$s
 This key touches account safety. Forcing it can change login, region, payment or security checks.	Dieser Schlüssel betrifft den Kontoschutz. Ihn zu erzwingen kann Anmelde-, Regions-, Zahlungs- oder Sicherheitsprüfungen verändern.
@@ -1135,6 +1136,7 @@ Watching and sharing	Ansehen und Teilen
 WebP, exactly as TikTok sent it	WebP, genau so wie TikTok es geschickt hat
 What TikTok gets	Was TikTok erhält
 When TikTok requests this key, return the selected value below	Wenn TikTok diesen Schlüssel abfragt, den unten gewählten Wert zurückgeben
+When a video ends in full screen, stay on it instead of moving to the next one. Swiping still moves on.	Wenn ein Video im Vollbild endet, bleibt es stehen, statt zum nächsten zu wechseln. Wischen führt weiterhin weiter.
 While diagnostic logging is on, a message names the part of Hushfeed that failed. Off keeps failures in the report only.	Solange die Diagnoseprotokollierung läuft, nennt eine Meldung den Teil von Hushfeed, der fehlgeschlagen ist. Aus behält Fehler nur im Bericht.
 Window width needed to enable the layout. Restart TikTok to apply this.	Fensterbreite, ab der das Layout gilt. TikTok neu starten, damit das gilt.
 Words and countries	Wörter und Länder

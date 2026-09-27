@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** New patch, Stay on the video in full screen. When a video ends in TikTok's full-screen viewer, you stay on that video instead of being moved to the next one, and the next-video countdown doesn't show. Turn it on in Hushfeed settings > Playback. Swiping still moves on. The viewer has an auto-next of its own, which Auto-advance and Stop video looping never reached.
 * **TikTok:** People and apps hidden from the share sheet one per line are hidden from its contact row too. That row only split the list on commas, while the rest of the sheet also split it on line breaks.
 * **TikTok:** Share sheet tools looks through TikTok's screens once per layout pass instead of four times. It runs on every layout of the main screen, share sheet open or not.
 * **TikTok:** The block symbol that stands in for the thumbs down on comments is drawn in the same grey as the comment's name and time, so it shows on TikTok's dark comment sheet. It used to take its colour from the phone's theme, which TikTok's own dark mode doesn't follow, and came out almost black on black.

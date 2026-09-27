@@ -992,6 +992,7 @@ Start the day at,Start the day at
 Start today over,Start today over
 Start typing,Start typing
 "Start with comments. Hide the comment count, sort and close buttons, plus the suggestion area above them. Use Back or swipe down to close comments.","Start with comments. Hide the comment count, sort and close buttons, plus the suggestion area above them. Use Back or swipe down to close comments."
+Stay on the video in full screen,Stay on the video in full screen
 Sticker,Sticker
 Sticker destination,Sticker destination
 Sticker saved to %1$s,Sticker saved to %1$s
@@ -1239,6 +1240,7 @@ Watching and sharing,Watching and sharing
 What TikTok gets,What TikTok gets
 What's new,What's new
 "When TikTok requests this key, return the selected value below","When TikTok requests this key, return the selected value below"
+"When a video ends in full screen, stay on it instead of moving to the next one. Swiping still moves on.","When a video ends in full screen, stay on it instead of moving to the next one. Swiping still moves on."
 "While diagnostic logging is on, a message names the part of Hushfeed that failed. Off keeps failures in the report only.","While diagnostic logging is on, a message names the part of Hushfeed that failed. Off keeps failures in the report only."
 Window width needed to enable the layout. Restart TikTok to apply this.,Window width needed to enable the layout. Restart TikTok to apply this.
 Words and countries,Words and countries

@@ -81,6 +81,7 @@ Leave when TikTok says time is up	TikTok süre doldu deyince uygulamadan çık
 No app on this phone opens that file	Bu telefonda o dosyayı açan bir uygulama yok
 Open	Aç
 Restart TikTok to apply this	Bunu uygulamak için TikTok'u yeniden başlat
+Stay on the video in full screen	Tam ekranda videoda kal
 That creator pattern could stall the feed, so it was skipped: %1$s	Bu içerik üreticisi kalıbı akışı kilitleyebileceği için atlandı: %1$s
 That creator pattern could stall the feed, so it wasn't added: %1$s	Bu içerik üreticisi kalıbı akışı kilitleyebileceği için eklenmedi: %1$s
 This key touches account safety. Forcing it can change login, region, payment or security checks.	Bu anahtar hesap güvenliğine dokunur. Zorlamak giriş, bölge, ödeme veya güvenlik denetimlerini değiştirebilir.
@@ -1168,6 +1169,7 @@ Watching and sharing	İzleme ve paylaşma
 WebP, exactly as TikTok sent it	WebP, tam TikTok'un gönderdiği haliyle
 What TikTok gets	TikTok'un aldığı
 When TikTok requests this key, return the selected value below	TikTok bu anahtarı istediğinde aşağıda seçilen değeri döndür
+When a video ends in full screen, stay on it instead of moving to the next one. Swiping still moves on.	Tam ekranda bir video bittiğinde bir sonrakine geçmek yerine onda kalır. Kaydırmak yine ilerletir.
 While diagnostic logging is on, a message names the part of Hushfeed that failed. Off keeps failures in the report only.	Tanılama günlüğü açıkken bir mesaj, Hushfeed'in hata veren bölümünün adını söyler. Kapalıyken hatalar yalnızca raporda kalır.
 Window width needed to enable the layout. Restart TikTok to apply this.	Düzeni etkinleştirmek için gereken pencere genişliği. Bunu uygulamak için TikTok'u yeniden başlat.
 Words and countries	Kelimeler ve ülkeler
