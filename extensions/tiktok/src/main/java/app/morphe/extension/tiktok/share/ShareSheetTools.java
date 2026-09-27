@@ -669,12 +669,16 @@ public final class ShareSheetTools {
                 : ((Field) windowViewsReader).get(windowGlobal);
     }
 
-    private static List<String> entries(String stored) {
+    /**
+     * The hidden list, split the way ShareModelFilter and the checklist split it: on commas and
+     * line breaks. Split on commas alone, a list typed one per line hid nothing on the sheet.
+     */
+    static List<String> entries(String stored) {
         List<String> entries = new ArrayList<>();
         if (stored == null) {
             return entries;
         }
-        for (String part : stored.split(",")) {
+        for (String part : stored.split("[,\\n]")) {
             String trimmed = part.trim();
             if (!trimmed.isEmpty()) {
                 entries.add(trimmed.toLowerCase(Locale.ROOT));

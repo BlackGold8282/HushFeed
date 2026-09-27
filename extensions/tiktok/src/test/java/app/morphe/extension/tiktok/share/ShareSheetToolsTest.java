@@ -120,6 +120,12 @@ public class ShareSheetToolsTest {
         }
     }
 
+    @Test public void theHiddenListSplitsOnLineBreaksAsWellAsCommas() {
+        assertEquals(java.util.List.of("sam", "whatsapp", "copy link", "repost"),
+                ShareSheetTools.entries("Sam\nWhatsApp, Copy link\r\n,,Repost\n"));
+        assertTrue(ShareSheetTools.entries(null).isEmpty());
+    }
+
     @Test public void current47ContactsSectionWinsWhenOlderResourceStillResolves() {
         try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
             Activity activity = controller.get();

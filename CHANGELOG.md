@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** People and apps hidden from the share sheet one per line are hidden from its contact row too. That row only split the list on commas, while the rest of the sheet also split it on line breaks.
 * **TikTok:** Share sheet tools looks through TikTok's screens once per layout pass instead of four times. It runs on every layout of the main screen, share sheet open or not.
 * **TikTok:** The block symbol that stands in for the thumbs down on comments is drawn in the same grey as the comment's name and time, so it shows on TikTok's dark comment sheet. It used to take its colour from the phone's theme, which TikTok's own dark mode doesn't follow, and came out almost black on black.
 * **TikTok:** Hide videos you have already seen keeps a separate record for each TikTok account on the phone. Before, a second account inherited everything the first one had watched, and could have seen that list. Clear seen videos now names the account it forgets for. The record from before this update doesn't say whose it was, so it hides nothing until you add it to an account with the new Add older seen videos to this account row, which shows up while there's anything to add.
