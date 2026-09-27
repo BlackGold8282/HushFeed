@@ -460,9 +460,13 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
             }
         }
         if (parentTitle == null) return;
-        String reason = " " + L10n.f(context, "Turn on %1$s first.", parentTitle);
+        String note = L10n.f(context, "Turn on %1$s first.", parentTitle);
         CharSequence summary = pref.getSummary();
         String body = summary == null ? "" : summary.toString();
+        // A number row's summary is lines ("0 to 1,000 videos", "Current: Off"), and a space ran
+        // the note into the last of them; it gets a line of its own there, and follows the
+        // sentence on a prose row.
+        String reason = body.isEmpty() ? note : (body.contains("\n") ? "\n" : " ") + note;
         if (body.endsWith(reason)) return;
         pref.setSummary(body + reason);
         reasonSummaries.put(key, reason);
