@@ -203,7 +203,7 @@ public final class CalmFeedPresetPreference extends Preference implements Immedi
             AbstractPreferenceFragment.settingImportInProgress = false;
             busy = false;
             notifyChanged();
-            Utils.showToastLong(L10n.t(getContext(),
+            SettingsActionBanner.showNotice(getContext(), L10n.t(getContext(),
                     "Calm feed couldn't start. Try again in a moment."));
         }
     }
@@ -223,10 +223,13 @@ public final class CalmFeedPresetPreference extends Preference implements Immedi
                         ? "Calm feed is on."
                         : "Calm feed is on. Restart TikTok to apply all changes.";
             }
-            Utils.showToastLong(L10n.t(getContext(), message));
+            // In the settings window rather than a toast, with the restart one tap away when
+            // anything changed needs it.
+            if (result.restartChangedCount == 0) SettingsActionBanner.showNotice(getContext(), L10n.t(getContext(), message));
+            else SettingsActionBanner.showRestart(getContext(), L10n.t(getContext(), message));
         } else {
             Logger.printInfo(() -> "Calm feed preset operation failed", error);
-            Utils.showToastLong(L10n.t(getContext(), restoring
+            SettingsActionBanner.showNotice(getContext(), L10n.t(getContext(), restoring
                     ? "Your previous feed setup couldn't be restored. Nothing was changed."
                     : "Calm feed couldn't be applied. Nothing was changed."));
         }

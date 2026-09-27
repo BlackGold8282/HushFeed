@@ -17,6 +17,8 @@ import app.morphe.extension.shared.settings.preference.AbstractPreferenceFragmen
 import app.morphe.extension.tiktok.featuregatelab.FeatureGateLabRuntime;
 import app.morphe.extension.tiktok.featuregatelab.FeatureGateLabStore;
 import app.morphe.extension.tiktok.feedfilter.FeedRuleLimits;
+import android.view.View;
+import android.widget.TextView;
 import app.morphe.extension.tiktok.settings.preference.SettingsBackupPreference;
 import app.morphe.extension.tiktok.settings.preference.TikTokPreferenceFragment;
 import java.io.ByteArrayInputStream;
@@ -1178,6 +1180,53 @@ public class SettingsBackupTest {
             waitFor("Last change put back. The Feature Gate Lab rules were for another "
                     + "TikTok version and were left out. Restart TikTok to apply all changes.");
             assertEquals(73, (int) Settings.MAX_VIDEO_SECONDS.get());
+        }
+    }
+
+    /**
+     * The outcome stays in the settings window as one banner: a file that left a setting out said
+     * so in a toast, and the outcome followed in a second toast that replaced it.
+     */
+    @Test public void aRestoreSaysWhatItLeftAloneAndWhatItDidInOneBanner() throws Exception {
+        try (var owner = Robolectric.buildActivity(
+                app.morphe.extension.tiktok.captions.CaptionToolsTest.CaptionActivity.class)
+                .setup().visible()) {
+            var activity = owner.get();
+            Utils.setContext(activity);
+            activity.findViewById(android.R.id.content).setTag(app.morphe.extension.tiktok.settings.preference.SettingsActionBanner.CONTENT_ROOT_TAG);
+            JSONObject backup = new JSONObject(SettingsBackup.create(false));
+            backup.getJSONObject("settings").remove(Settings.MAX_VIDEO_SECONDS.key);
+            JSONArray keys = backup.getJSONArray("setting_keys");
+            for (int index = keys.length() - 1; index >= 0; index--) {
+                if (Settings.MAX_VIDEO_SECONDS.key.equals(keys.getString(index))) keys.remove(index);
+            }
+            Uri uri = Uri.parse("content://settings-test/partial-restore.json");
+            Shadows.shadowOf(activity.getContentResolver()).registerInputStream(uri,
+                    new ByteArrayInputStream(backup.toString().getBytes(StandardCharsets.UTF_8)));
+
+            var fragment = new TikTokPreferenceFragment();
+            Bundle arguments = new Bundle();
+            arguments.putString("morphe_settings_section", "BACKUP");
+            fragment.setArguments(arguments);
+            activity.getFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, fragment).commit();
+            activity.getFragmentManager().executePendingTransactions();
+
+            var run = SettingsBackupPreference.class.getDeclaredMethod(
+                    "run", TikTokPreferenceFragment.class, int.class, Uri.class);
+            run.setAccessible(true);
+            ShadowToast.reset();
+            run.invoke(null, fragment, 7312, uri);
+            Utils.awaitBackgroundTasksForTests();
+            Shadows.shadowOf(Looper.getMainLooper()).idle();
+
+            View banner = activity.getWindow().getDecorView().findViewWithTag("hushfeed_settings_action_banner");
+            assertNotNull("the outcome didn't reach the settings banner", banner);
+            TextView message = banner.findViewWithTag("hushfeed_settings_action_message");
+            assertEquals("1 setting wasn't in that file and was left as it is. "
+                    + "Settings restored. Restart TikTok to apply all changes.", String.valueOf(message.getText()));
+            assertNotNull("a restore offers the restart", banner.findViewWithTag("hushfeed_settings_action_button"));
+            assertEquals("the outcome went to a toast as well", 0, ShadowToast.shownToastCount());
         }
     }
 
