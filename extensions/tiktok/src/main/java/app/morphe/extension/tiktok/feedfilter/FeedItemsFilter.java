@@ -90,9 +90,6 @@ public final class FeedItemsFilter {
     private static final Set<String> NOT_VIDEO_CLASSES =
             Collections.newSetFromMap(new ConcurrentHashMap<>());
     private static final int MAX_NOT_VIDEO_CLASSES = 16;
-    private static final boolean FILTER_CALL_PROBE_ENABLED = true;
-    private static final boolean FILTER_CALL_PROBE_STACKS = false;
-    private static final boolean FILTER_CALL_PROBE_SUMMARY_ENABLED = true;
     private static final int FILTER_CALL_PROBE_AID_SAMPLE_SIZE = 5;
     private static final int FILTER_CALL_PROBE_MAX_SEEN_LISTS = 256;
     private static final int FILTER_CALL_PROBE_SLOW_MS = 8;
@@ -975,7 +972,7 @@ public final class FeedItemsFilter {
 
         String filterMask = getFilterMask(activeContentFilters, activeRangeFilters);
         ListFingerprint beforeFingerprint = ListFingerprint.from(list, extractor);
-        boolean probeEnabled = verbose && FILTER_CALL_PROBE_ENABLED;
+        boolean probeEnabled = verbose;
         int callId = probeEnabled ? filterCallProbeCount.incrementAndGet() : 0;
         long startNs = probeEnabled ? System.nanoTime() : 0;
         int ownerId = probeEnabled ? System.identityHashCode(owner) : 0;
@@ -1402,8 +1399,6 @@ public final class FeedItemsFilter {
     }
 
     private static void recordProbeCall(int listId, String filterMask) {
-        if (!FILTER_CALL_PROBE_SUMMARY_ENABLED) return;
-
         synchronized (filterCallProbeSummaryLock) {
             filterCallProbeSummary.calls++;
             filterCallProbeSummary.uniqueListIds.add(listId);
@@ -1412,8 +1407,6 @@ public final class FeedItemsFilter {
     }
 
     private static void recordProbeCacheHit(int listId) {
-        if (!FILTER_CALL_PROBE_SUMMARY_ENABLED) return;
-
         String summary = null;
         synchronized (filterCallProbeSummaryLock) {
             filterCallProbeSummary.cacheHits++;
@@ -1424,8 +1417,6 @@ public final class FeedItemsFilter {
     }
 
     private static void recordProbeCacheMiss(String reason) {
-        if (!FILTER_CALL_PROBE_SUMMARY_ENABLED) return;
-
         synchronized (filterCallProbeSummaryLock) {
             if ("newList".equals(reason)) {
                 filterCallProbeSummary.missNewList++;
@@ -1444,8 +1435,6 @@ public final class FeedItemsFilter {
     }
 
     private static void recordProbeScan(int listId, int removed, long elapsedNs) {
-        if (!FILTER_CALL_PROBE_SUMMARY_ENABLED) return;
-
         String summary = null;
         long elapsedMs = elapsedNs / 1_000_000L;
         synchronized (filterCallProbeSummaryLock) {
@@ -1554,7 +1543,6 @@ public final class FeedItemsFilter {
         if (!interesting) return;
 
         String counts = reasonCounts == null || reasonCounts.isEmpty() ? "none" : reasonCounts.toString();
-        String stack = FILTER_CALL_PROBE_STACKS ? " stack=" + getProbeStack() : "";
 
         Logger.printInfo(() -> "[Morphe TikTok FeedFilterProbe]"
             + " call=" + callId
@@ -1571,8 +1559,7 @@ public final class FeedItemsFilter {
             + " filters=\"" + filterMask + "\""
             + " before=\"" + beforeSample + "\""
             + " after=\"" + afterSample + "\""
-            + " elapsedMs=" + elapsedMs
-            + stack);
+            + " elapsedMs=" + elapsedMs);
     }
 
     private static ProbeSeenList updateSeenList(
@@ -1602,24 +1589,6 @@ public final class FeedItemsFilter {
             seen.lastAfterSize = afterSize;
             return seen;
         }
-    }
-
-    private static String getProbeStack() {
-        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-        StringBuilder builder = new StringBuilder();
-        int added = 0;
-        for (StackTraceElement frame : stack) {
-            String className = frame.getClassName();
-            if (className.startsWith("app.morphe.extension.tiktok.feedfilter.")
-                || className.startsWith("java.lang.Thread")) {
-                continue;
-            }
-
-            if (builder.length() > 0) builder.append(" <- ");
-            builder.append(className).append('#').append(frame.getMethodName()).append(':').append(frame.getLineNumber());
-            if (++added >= 4) break;
-        }
-        return builder.length() == 0 ? "none" : builder.toString();
     }
 
     private enum FilterPhase {
