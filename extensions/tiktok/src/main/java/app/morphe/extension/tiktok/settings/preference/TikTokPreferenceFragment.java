@@ -30,10 +30,8 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.shared.settings.BaseSettings;
@@ -903,8 +901,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
     }
 
     private static String normalizeSearchText(String value) {
-        String normalized = Normalizer.normalize(value == null ? "" : value, Normalizer.Form.NFD);
-        return normalized.replaceAll("\\p{M}+", "").toLowerCase(Locale.ROOT);
+        return app.morphe.extension.tiktok.settings.SearchText.normalize(value);
     }
 
     private static PreferenceCategory createCategory(
