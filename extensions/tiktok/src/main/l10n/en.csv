@@ -5,6 +5,7 @@ source,target
 %1$d fields will be overridden when requested,%1$d fields will be overridden when requested
 %1$d gates selected,%1$d gates selected
 %1$d minutes left,%1$d minutes left
+%1$d overrides were turned off because the Lab couldn't confirm their gates are unchanged in TikTok %2$s. Review them before turning them back on.,%1$d overrides were turned off because the Lab couldn't confirm their gates are unchanged in TikTok %2$s. Review them before turning them back on.
 %1$d rejected,%1$d rejected
 %1$d results,%1$d results
 %1$d results so far,%1$d results so far
@@ -74,6 +75,7 @@ source,target
 1 field will be overridden when requested,1 field will be overridden when requested
 1 gate selected,1 gate selected
 1 min left,1 min left
+1 override was turned off because the Lab couldn't confirm its gate is unchanged in TikTok %2$s. Review it before turning it back on.,1 override was turned off because the Lab couldn't confirm its gate is unchanged in TikTok %2$s. Review it before turning it back on.
 1 result,1 result
 1 result so far,1 result so far
 1 video left,1 video left
@@ -724,7 +726,6 @@ Off,Off
 "Off forces false, on forces true. Reset hands the choice back to TikTok.","Off forces false, on forces true. Reset hands the choice back to TikTok."
 Offline videos,Offline videos
 Offline videos limit,Offline videos limit
-Older overrides were kept disabled. Review their values before enabling them on TikTok %1$s.,Older overrides were kept disabled. Review their values before enabling them on TikTok %1$s.
 On,On
 On mobile data,On mobile data
 On or off,On or off

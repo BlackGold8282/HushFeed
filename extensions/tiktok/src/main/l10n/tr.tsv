@@ -4,6 +4,7 @@
 %1$d fields will be overridden when requested	İstendiğinde %1$d alan geçersiz kılınacak
 %1$d gates selected	%1$d özellik kapısı seçildi
 %1$d minutes left	%1$d dakika kaldı
+%1$d overrides were turned off because the Lab couldn't confirm their gates are unchanged in TikTok %2$s. Review them before turning them back on.	Lab, TikTok %2$s sürümünde özellik kapılarının değişmediğini doğrulayamadığı için %1$d geçersiz kılma kapatıldı. Yeniden açmadan önce gözden geçir.
 %1$d rejected	%1$d reddedildi
 %1$d results	%1$d sonuç
 %1$d results so far	Şimdiye kadar %1$d sonuç
@@ -50,6 +51,7 @@
 1 field will be overridden when requested	İstendiğinde 1 alan geçersiz kılınacak
 1 gate selected	1 özellik kapısı seçildi
 1 min left	1 dk kaldı
+1 override was turned off because the Lab couldn't confirm its gate is unchanged in TikTok %2$s. Review it before turning it back on.	Lab, TikTok %2$s sürümünde özellik kapısının değişmediğini doğrulayamadığı için 1 geçersiz kılma kapatıldı. Yeniden açmadan önce gözden geçir.
 1 result	1 sonuç
 1 result so far	Şimdiye kadar 1 sonuç
 1 video left	1 video kaldı
@@ -688,7 +690,6 @@ Off	Kapalı
 Off forces false, on forces true. Reset hands the choice back to TikTok.	Kapalı false, açık true değerini zorlar. Sıfırla, seçimi TikTok'a geri verir.
 Offline videos	Çevrimdışı videolar
 Offline videos limit	Çevrimdışı video sınırı
-Older overrides were kept disabled. Review their values before enabling them on TikTok %1$s.	Eski geçersiz kılmalar devre dışı tutuldu. TikTok %1$s sürümünde etkinleştirmeden önce değerlerini gözden geçir.
 On	Açık
 On mobile data	Mobil veride
 On. Restore puts back the feed setup you had before.	Açık. Geri yükle, daha önceki akış düzenini geri getirir.

@@ -4,6 +4,7 @@
 %1$d fields will be overridden when requested	%1$d campos se sobrescribirán cuando se soliciten
 %1$d gates selected	%1$d interruptores seleccionados
 %1$d minutes left	Quedan %1$d minutos
+%1$d overrides were turned off because the Lab couldn't confirm their gates are unchanged in TikTok %2$s. Review them before turning them back on.	Se desactivaron %1$d sustituciones porque el Lab no pudo confirmar que sus interruptores sigan igual en TikTok %2$s. Revísalas antes de volver a activarlas.
 %1$d rejected	%1$d rechazados
 %1$d results	%1$d resultados
 %1$d results so far	%1$d resultados hasta ahora
@@ -50,6 +51,7 @@
 1 field will be overridden when requested	1 campo se sobrescribirá cuando se solicite
 1 gate selected	1 interruptor seleccionado
 1 min left	Queda 1 min
+1 override was turned off because the Lab couldn't confirm its gate is unchanged in TikTok %2$s. Review it before turning it back on.	Se desactivó 1 sustitución porque el Lab no pudo confirmar que su interruptor siga igual en TikTok %2$s. Revísala antes de volver a activarla.
 1 result	1 resultado
 1 result so far	1 resultado hasta ahora
 1 video left	Queda 1 video
@@ -660,7 +662,6 @@ Off	Desactivado
 Off forces false, on forces true. Reset hands the choice back to TikTok.	Apagado fuerza false y encendido fuerza true. Restablecer le devuelve la decisión a TikTok.
 Offline videos	Vídeos sin conexión
 Offline videos limit	Límite de vídeos sin conexión
-Older overrides were kept disabled. Review their values before enabling them on TikTok %1$s.	Las sustituciones anteriores se han dejado desactivadas. Revisa sus valores antes de activarlas en TikTok %1$s.
 On mobile data	Con datos móviles
 Once today's budget runs out, the hold stays and can't be dismissed. The budget settings are locked until the day starts over. Turn this off any time before the budget runs out.	Una vez que se agote el presupuesto de hoy, la pausa se queda y no se puede cerrar. Los ajustes de presupuesto se bloquean hasta que comience el nuevo día. Desactiva esto en cualquier momento antes de que se agote.
 One area was checked and everything it needs is here.	Se comprobó un área y está todo lo que necesita.

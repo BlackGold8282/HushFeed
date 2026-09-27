@@ -4,6 +4,7 @@
 %1$d fields will be overridden when requested	%1$d campos serão substituídos quando solicitados
 %1$d gates selected	%1$d gates selecionados
 %1$d minutes left	Restam %1$d minutos
+%1$d overrides were turned off because the Lab couldn't confirm their gates are unchanged in TikTok %2$s. Review them before turning them back on.	%1$d substituições foram desligadas porque o Lab não conseguiu confirmar que os gates delas continuam iguais no TikTok %2$s. Confira antes de ligá-las de novo.
 %1$d rejected	%1$d rejeitados
 %1$d results	%1$d resultados
 %1$d results so far	%1$d resultados até agora
@@ -50,6 +51,7 @@
 1 field will be overridden when requested	1 campo será substituído quando solicitado
 1 gate selected	1 gate selecionado
 1 min left	Resta 1 min
+1 override was turned off because the Lab couldn't confirm its gate is unchanged in TikTok %2$s. Review it before turning it back on.	1 substituição foi desligada porque o Lab não conseguiu confirmar que o gate dela continua igual no TikTok %2$s. Confira antes de ligá-la de novo.
 1 result	1 resultado
 1 result so far	1 resultado até agora
 1 video left	Resta 1 vídeo
@@ -660,7 +662,6 @@ Off	Desligado
 Off forces false, on forces true. Reset hands the choice back to TikTok.	Desligado força false e ligado força true. Redefinir devolve a decisão ao TikTok.
 Offline videos	Vídeos offline
 Offline videos limit	Limite de vídeos offline
-Older overrides were kept disabled. Review their values before enabling them on TikTok %1$s.	As substituições antigas ficaram desligadas. Confira os valores antes de ligá-las no TikTok %1$s.
 On mobile data	Nos dados móveis
 Once today's budget runs out, the hold stays and can't be dismissed. The budget settings are locked until the day starts over. Turn this off any time before the budget runs out.	Quando o orçamento de hoje acaba, a pausa fica e não pode ser fechada. As configurações de orçamento ficam bloqueadas até o dia recomeçar. Desative isso a qualquer momento antes do orçamento acabar.
 One area was checked and everything it needs is here.	Uma área foi verificada e tudo de que ela precisa está aqui.

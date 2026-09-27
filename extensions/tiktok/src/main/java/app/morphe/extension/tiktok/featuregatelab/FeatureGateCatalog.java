@@ -180,6 +180,66 @@ public final class FeatureGateCatalog {
     }
 
     /**
+     * The rules a build change can leave as they are: those whose gate both builds' catalogs
+     * carry under the same manager, key and type with an identical row, so the same default,
+     * provenance and (for a SettingsManager read) model class and default. None when either
+     * build has no catalog, since then nothing says the gate is the same gate. Reads only the
+     * tables the rules' managers live in, off the caller's thread or not: it runs once per
+     * change of build, when the Lab store is first opened on the new one.
+     */
+    static java.util.Set<String> compatibleRuleIds(String from, String to,
+            java.util.Collection<FeatureGateLabStore.Rule> rules) throws Exception {
+        java.util.Set<String> result = new HashSet<>();
+        if (rules.isEmpty() || !hasCatalogFor(from) || !hasCatalogFor(to)) return result;
+        Set<String> identities = new HashSet<>();
+        for (FeatureGateLabStore.Rule rule : rules) identities.add(rule.manager + "\n" + rule.key);
+        Map<String, String> before = catalogRows(from, identities);
+        Map<String, String> after = from.equals(to) ? before : catalogRows(to, identities);
+        for (FeatureGateLabStore.Rule rule : rules) {
+            String identity = rule.manager + "\n" + rule.key;
+            String row = after.get(identity);
+            if (row == null || !row.equals(before.get(identity))) continue;
+            if (!FeatureGateLabStore.supportsOverride(rule.manager, rule.type)) continue;
+            String type = FeatureGateLabStore.MANAGER_SETTINGS_MANAGER.equals(rule.manager)
+                    ? "OBJECT" : row.split("\\t", -1)[2];
+            if (FeatureGateLabStore.normalizeType(type).equals(FeatureGateLabStore.normalizeType(rule.type))) {
+                result.add(rule.id);
+            }
+        }
+        return result;
+    }
+
+    /** [build]'s catalog row for each of [identities] (manager, newline, key) it carries. */
+    private static Map<String, String> catalogRows(String build, Set<String> identities) throws Exception {
+        boolean scalar = false, player = false, ve = false, settings = false;
+        for (String identity : identities) {
+            String manager = identity.substring(0, identity.indexOf('\n'));
+            if (FeatureGateLabStore.MANAGER_PLAYER_CONFIG.equals(manager)) player = true;
+            else if (FeatureGateLabStore.MANAGER_VE_CONFIG.equals(manager)) ve = true;
+            else if (FeatureGateLabStore.MANAGER_SETTINGS_MANAGER.equals(manager)) settings = true;
+            else scalar = true;
+        }
+        Map<String, String> rows = new HashMap<>();
+        RowReader typed = line -> {
+            String[] fields = line.split("\\t", -1);
+            if (fields.length == 10 && identities.contains(fields[1] + "\n" + fields[0])) {
+                rows.put(fields[1] + "\n" + fields[0], line);
+            }
+        };
+        if (scalar) Table.abLive().forEachRow(build, typed);
+        if (player) Table.player().forEachRow(build, typed);
+        if (ve) Table.ve().forEachRow(build, typed);
+        if (settings) {
+            String prefix = FeatureGateLabStore.MANAGER_SETTINGS_MANAGER + "\n";
+            Table.settings().forEachRow(build, line -> {
+                String identity = prefix + line.substring(0, Math.max(0, line.indexOf('\t')));
+                if (identities.contains(identity)) rows.put(identity, line);
+            });
+        }
+        return rows;
+    }
+
+    /**
      * One generated table: each build's row count, the rows every build has, and each build's
      * own, in {@link GeneratedGateCatalogBuilds#BUILDS} order. Built only when read, since
      * naming a generated class runs its initialiser and that builds every one of its strings.

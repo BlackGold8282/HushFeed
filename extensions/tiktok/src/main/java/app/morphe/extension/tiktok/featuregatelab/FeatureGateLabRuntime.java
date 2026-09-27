@@ -828,7 +828,11 @@ public final class FeatureGateLabRuntime {
             return new Snapshot(builtAt, true, false, Collections.emptyMap());
         }
         Map<String, FeatureGateLabStore.Rule> active = new HashMap<>();
-        for (FeatureGateLabStore.Rule rule : FeatureGateLabStore.rules()) {
+        // Rules another TikTok build saved wait until the main process has checked them against
+        // this build's catalog. A secondary process opens the store without doing that.
+        boolean forThisBuild = FeatureGateLabStore.storedForRunningBuild();
+        for (FeatureGateLabStore.Rule rule : forThisBuild
+                ? FeatureGateLabStore.rules() : Collections.<FeatureGateLabStore.Rule>emptyList()) {
             if (rule.enabled && FeatureGateLabStore.supportsOverride(rule.manager, rule.type)) {
                 active.put(identity(rule.manager, rule.key, rule.type), rule);
             }

@@ -5,6 +5,7 @@ source,target
 %1$d fields will be overridden when requested,%1$d kolom akan ditimpa saat diminta
 %1$d gates selected,%1$d gate dipilih
 %1$d minutes left,%1$d menit lagi
+%1$d overrides were turned off because the Lab couldn't confirm their gates are unchanged in TikTok %2$s. Review them before turning them back on.,%1$d penggantian dimatikan karena Lab tidak dapat memastikan gate-nya tidak berubah di TikTok %2$s. Periksa sebelum menyalakannya lagi.
 %1$d rejected,%1$d ditolak
 %1$d results,%1$d hasil
 %1$d results so far,%1$d hasil sejauh ini
@@ -51,6 +52,7 @@ source,target
 1 field will be overridden when requested,1 kolom akan ditimpa saat diminta
 1 gate selected,1 gate dipilih
 1 min left,Sisa 1 mnt
+1 override was turned off because the Lab couldn't confirm its gate is unchanged in TikTok %2$s. Review it before turning it back on.,1 penggantian dimatikan karena Lab tidak dapat memastikan gate-nya tidak berubah di TikTok %2$s. Periksa sebelum menyalakannya lagi.
 1 result,1 hasil
 1 result so far,1 hasil sejauh ini
 1 video left,Sisa 1 video
@@ -660,7 +662,6 @@ Off,Mati
 "Off forces false, on forces true. Reset hands the choice back to TikTok.","Mati memaksa false, hidup memaksa true. Atur ulang mengembalikan pilihannya ke TikTok."
 Offline videos,Video offline
 Offline videos limit,Batas video offline
-Older overrides were kept disabled. Review their values before enabling them on TikTok %1$s.,Penggantian lama dibiarkan nonaktif. Periksa nilainya sebelum mengaktifkannya di TikTok %1$s.
 On mobile data,Saat memakai data seluler
 "Once today's budget runs out, the hold stays and can't be dismissed. The budget settings are locked until the day starts over. Turn this off any time before the budget runs out.","Setelah anggaran hari ini habis, jeda tetap ada dan tidak bisa ditutup. Pengaturan anggaran dikunci sampai hari baru dimulai. Matikan ini kapan saja sebelum anggaranmu habis."
 One area was checked and everything it needs is here.,Satu area diperiksa dan semua yang dibutuhkannya ada.
