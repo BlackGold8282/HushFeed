@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Downloads can save a TXT file with the video's caption and source details. An optional saved-video check offers Open or Save again before making another copy. Start a video filename template with `{creator}/` for a folder per creator. The switches start off and existing templates keep their current folders.
+
 * **TikTok:** The Feature Gate Lab leaves more room for gates on small screens (#42). Its title fits in the toolbar, the warning opens from the icon beside Apply overrides, and tabs can scroll sideways at larger text sizes. Search and the override switch stay on screen.
 
 * **TikTok:** The Feature Gate Lab now has Reviewed presets in its menu. The first restores See translation on 47.1.3 by setting both required gates together. You can review the values before applying and undo the whole change. A preset for another TikTok version won't apply.

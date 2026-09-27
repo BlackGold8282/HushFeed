@@ -845,10 +845,7 @@ Saving %1$s original photos	%1$s Originalfotos werden gespeichert
 Saving one original photo	Ein Originalfoto wird gespeichert
 Saving settings backup	Einstellungssicherung wird gespeichert
 Saving the sticker	Sticker wird gespeichert
-Saving the selected video quality	Die gewählte Videoqualität wird gespeichert
-Saving the selected video quality without sound	Die gewählte Videoqualität wird ohne Ton gespeichert
 Saving the story	Story wird gespeichert
-Saving video and subtitles to %1$s	Video und Untertitel werden in %1$s gespeichert
 Screen	Bildschirm
 Screen time	Bildschirmzeit
 Search	Suche
@@ -1102,7 +1099,6 @@ Today: %1$d minutes	Heute: %1$d Minuten
 Today: %1$d video	Heute: %1$d Video
 Today: %1$d videos	Heute: %1$d Videos
 Tokens: {creator}, {date}, {video_id}, {index}. {index} numbers the photos of a slideshow you save with Download original photos. Anything saved through TikTok's own button is numbered by the folder instead. The file extension is kept automatically.	Platzhalter: {creator}, {date}, {video_id}, {index}. {index} nummeriert die Fotos einer Bilderfolge, die du mit Originalfotos herunterladen speicherst; alles über TikToks eigenen Knopf nummeriert stattdessen der Ordner. Die Dateiendung bleibt automatisch erhalten.
-Tokens: {creator}, {date}, {video_id}. The file extension is kept automatically.	Platzhalter: {creator}, {date}, {video_id}. Die Dateiendung bleibt automatisch erhalten.
 Tokens: {date}, {media_id}. Works for image and video stickers.	Platzhalter: {date}, {media_id}. Gilt für Bild- und Video-Sticker.
 Too many media saves are already running. Try again in a moment.	Es laufen bereits zu viele Medienspeicherungen. Versuche es gleich noch einmal.
 Tracking	Tracking
@@ -1312,3 +1308,17 @@ Preset applied. Restart TikTok to use it.	Vorlage angewendet. Starte TikTok neu,
 Preset saved. Turn on overrides in the Lab to use it.	Vorlage gespeichert. Aktiviere Überschreibungen im Lab, um sie zu nutzen.
 This preset doesn't match the installed gates. Nothing changed.	Diese Vorlage passt nicht zu den installierten Gates. Nichts wurde geändert.
 About overrides	Über Überschreibungen
+Tokens: {creator}, {date}, {video_id}. Start with {creator}/ to give each creator a folder. The file extension is kept automatically.	Platzhalter: {creator}, {date}, {video_id}. Beginne mit {creator}/, damit jeder Ersteller einen eigenen Ordner erhält. Die Dateiendung bleibt automatisch erhalten.
+Save details beside the video	Details neben dem Video speichern
+Save the caption, creator, link and publication date in a TXT file. On Android 10 and later, the pair uses Download or Documents under the same folder name. Applies to saves handled here.	Speichere Beschreibung, Ersteller, Link und Veröffentlichungsdatum als TXT. Ab Android 10 liegen beide Dateien unter demselben Ordnernamen in Download oder Documents. Gilt für hier gespeicherte Videos.
+Check for already-saved videos	Bereits gespeicherte Videos prüfen
+Remember up to %1$s video saves made here while this is on. If the file still exists, offer Open or Save again before downloading another copy.	Merke dir bis zu %1$s Videos, die hier bei aktivierter Option gespeichert werden. Existiert die Datei noch, erscheint vor einem erneuten Download die Wahl Öffnen oder Erneut speichern.
+This video is already saved. Open TikTok to save another copy.	Dieses Video ist bereits gespeichert. Öffne TikTok, um eine weitere Kopie zu speichern.
+This video is already saved	Dieses Video ist bereits gespeichert
+Save again	Erneut speichern
+The saved-video choice couldn't open. Try again.	Die Auswahl zum gespeicherten Video konnte nicht geöffnet werden. Versuch es erneut.
+This video isn't available as a complete file. Try again later.	Dieses Video ist nicht als vollständige Datei verfügbar. Versuch es später erneut.
+Saving video to %1$s	Video wird in %1$s gespeichert
+Video and details saved to %1$s	Video und Details in %1$s gespeichert
+The video was saved, but its record couldn't be updated. A later save may make another copy.	Das Video wurde gespeichert, sein Eintrag konnte aber nicht aktualisiert werden. Ein erneutes Speichern kann eine weitere Kopie erstellen.
+The already-saved check failed. Try again.	Die Prüfung bereits gespeicherter Videos ist fehlgeschlagen. Versuch es erneut.
