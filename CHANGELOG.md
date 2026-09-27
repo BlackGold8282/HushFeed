@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Saves refuse a download address in any block the internet's registry sets aside for testing, documentation, benchmarking or network equipment, not just private and local ones. TikTok's servers never use those, so a link that points there is not a TikTok file. On a mobile network that only has IPv6, saves from IPv4-only servers keep working.
 * **TikTok:** Your own profile shows your newest posts again (#35). TikTok loads a profile's posts in the same kind of list as the feed, so the feed rules reached profile grids too. With Filter location-tagged videos on, recent posts with a place tag were taken off your own grid and only older ones were left. Your own posts now stay wherever TikTok shows them.
 * **TikTok:** A profile you open keeps all of its videos. Minimum views, likes and the other count limits, Hide seen videos and the rest of the feed rules used to hide posts there as well, so a small creator's page could look nearly empty. Profiles, their favorites and their reposts now lose only ads, the same as the rest of the profile page.
 * **TikTok:** The camera and microphone indicator stays up for as long as TikTok records. Before, the orange diamond only flashed at the start of a story recording, because TikTok records a story's sound in its own native code, which the patch never saw. On Android 11 and newer the mark now also reads what Android itself reports for TikTok's camera and microphone, the same thing the status bar's privacy dots show. On older Android it works as before.
