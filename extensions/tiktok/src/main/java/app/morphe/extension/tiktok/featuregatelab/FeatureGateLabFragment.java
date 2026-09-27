@@ -274,7 +274,7 @@ public final class FeatureGateLabFragment extends Fragment {
         searchRow.setAddStatesFromChildren(true);
         search = new EditText(context);
         search.setSingleLine(true);
-        search.setTextSize(16);
+        search.setTextSize(SettingsUi.TEXT_TITLE);
         // No content description on a search box. On an editable view it replaces what was
         // typed in the announcement, so "cats" came back as the label. The hint names it.
         search.setHint(L10n.t(context, "Search by name or gate key"));
@@ -1861,7 +1861,7 @@ public final class FeatureGateLabFragment extends Fragment {
                 TextView title = FeatureGateLabUi.text(context, "", 16, SettingsUi.textPrimary(), Typeface.BOLD);
                 title.setMaxLines(2);
                 TextView key = FeatureGateLabUi.label(context, "");
-                key.setTextSize(12);
+                key.setTextSize(SettingsUi.TEXT_CAPTION);
                 key.setTypeface(Typeface.MONOSPACE);
                 key.setPadding(0, FeatureGateLabUi.dp(context, 6), 0, 0);
                 key.setSingleLine(true);

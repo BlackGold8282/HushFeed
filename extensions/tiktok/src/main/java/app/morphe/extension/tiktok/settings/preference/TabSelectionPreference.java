@@ -146,7 +146,7 @@ public class TabSelectionPreference extends Preference {
         title.setText(L10n.t(getContext(),
                 bottomTabs ? "Bottom tabs to keep" : "Feed tabs to keep"));
         title.setTextColor(getTitleTextColor());
-        title.setTextSize(20);
+        title.setTextSize(SettingsUi.TEXT_HEADLINE);
         title.setTypeface(title.getTypeface(), Typeface.BOLD);
         SettingsUi.markDialogHeading(title);
         dialogView.addView(title, new LinearLayout.LayoutParams(
@@ -182,7 +182,7 @@ public class TabSelectionPreference extends Preference {
                     ? "Open the feed once so Hushfeed can see which bottom tabs TikTok loaded."
                     : "Open the feed once so Hushfeed can see which tabs TikTok loaded."));
             emptyState.setTextColor(SettingsUi.textSecondary());
-            emptyState.setTextSize(14);
+            emptyState.setTextSize(SettingsUi.TEXT_BODY_SMALL);
             emptyState.setGravity(Gravity.CENTER);
             int emptyPad = SettingsUi.dp(context, 24);
             emptyState.setPadding(emptyPad, emptyPad, emptyPad, emptyPad);
@@ -339,14 +339,14 @@ public class TabSelectionPreference extends Preference {
         TextView label = new TextView(context);
         label.setText(L10n.t(getContext(), option.label));
         label.setTextColor(getTitleTextColor());
-        label.setTextSize(16);
+        label.setTextSize(SettingsUi.TEXT_TITLE);
         textContainer.addView(label);
 
         if (isRequiredOption(option.key)) {
             TextView summary = new TextView(context);
             summary.setText(L10n.t(getContext(), "Required"));
             summary.setTextColor(getSummaryTextColor());
-            summary.setTextSize(14);
+            summary.setTextSize(SettingsUi.TEXT_BODY_SMALL);
             textContainer.addView(summary);
         }
 

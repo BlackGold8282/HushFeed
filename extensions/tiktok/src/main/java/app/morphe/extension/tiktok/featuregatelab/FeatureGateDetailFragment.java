@@ -771,7 +771,7 @@ public final class FeatureGateDetailFragment extends Fragment {
         notice.setText(L10n.t(getContext(),
                 "The Lab can't check this. TikTok gets it exactly as typed."));
         notice.setTextColor(SettingsUi.textSecondary());
-        notice.setTextSize(14);
+        notice.setTextSize(SettingsUi.TEXT_BODY_SMALL);
         dialogBody.addView(notice);
         LinearLayout.LayoutParams inputParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
