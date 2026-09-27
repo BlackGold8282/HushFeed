@@ -23,8 +23,6 @@ extensions/tiktok/src/main/java/app/morphe/extension/tiktok/download/AnimatedWeb
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/download/AnimatedWebpGifConverter.java|LIZIZ
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/download/AnimatedWebpMp4Converter.java|LIZ
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/download/AnimatedWebpMp4Converter.java|LIZIZ
-extensions/tiktok/src/main/java/app/morphe/extension/tiktok/download/StoryDownloads.java|LL
-extensions/tiktok/src/main/java/app/morphe/extension/tiktok/download/StoryDownloads.java|LLJIJIL
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/featurecontrols/CaptchaGate.java|LJIIJ
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/featuregatelab/FeatureGateLabRuntime.java|X.090T
 extensions/tiktok/src/main/java/app/morphe/extension/tiktok/featuregatelab/FeatureGateLabRuntime.java|X.0BP8
