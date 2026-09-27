@@ -36,6 +36,7 @@
 %1$s min left	Restam %1$s min
 %1$s to %2$s	De %1$s a %2$s
 %1$s videos left	Restam %1$s vídeos
+%1$s videos were recorded before each account kept its own list. They hide nothing until you add them here.	%1$s vídeos foram registrados antes de cada conta ter sua própria lista. Eles não ocultam nada até você adicioná-los aqui.
 %1$s was rejected. %2$s	%1$s foi rejeitado. %2$s
 %1$s, %2$s, %3$s, %4$s, %5$s	%1$s, %2$s, %3$s, %4$s, %5$s
 %1$s, selected	%1$s, selecionado
@@ -67,8 +68,13 @@ A web address someone left in a comment can be tapped instead of copied out by h
 AI-generated posts	Publicações geradas por IA
 About	Sobre
 A forced value applies to this copy of TikTok whichever account is signed in. It can't get past a check the server makes.	Um valor forçado vale para esta cópia do TikTok, seja qual for a conta conectada. Ele não passa por cima de uma verificação feita pelo servidor.
+Add older seen videos to this account	Adicionar vídeos vistos anteriores a esta conta
+Added %1$s older seen videos to this account	%1$s vídeos vistos anteriores adicionados a esta conta
+Added to this account.	Adicionados a esta conta.
+Couldn't add the older seen videos. Try again.	Não foi possível adicionar os vídeos vistos anteriores. Tente de novo.
 Couldn't restart TikTok. Close it and open it again.	Não foi possível reiniciar o TikTok. Feche e abra de novo.
 Couldn't undo that. Try again.	Não foi possível desfazer. Tente de novo.
+Forget the %1$s videos @%2$s has seen.	Esquecer os %1$s vídeos que @%2$s viu.
 Got it	Entendi
 Later	Mais tarde
 Leave when TikTok says time is up	Sair quando o TikTok disser que o tempo acabou

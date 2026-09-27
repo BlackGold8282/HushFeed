@@ -54,6 +54,7 @@ source,target
 %1$s video,%1$s video
 %1$s videos,%1$s videos
 %1$s videos left,%1$s videos left
+%1$s videos were recorded before each account kept its own list. They hide nothing until you add them here.,%1$s videos were recorded before each account kept its own list. They hide nothing until you add them here.
 %1$s view per comment,%1$s view per comment
 %1$s view per like,%1$s view per like
 %1$s views per comment,%1$s views per comment
@@ -106,7 +107,10 @@ Add a creator,Add a creator
 Add a search box that filters comments already loaded on this video by text or username. It doesn't search all of TikTok or remove TikTok's suggested-search banner.,Add a search box that filters comments already loaded on this video by text or username. It doesn't search all of TikTok or remove TikTok's suggested-search banner.
 Add a separate button that skips videos using the current sound.,Add a separate button that skips videos using the current sound.
 Add hidden creator,Add hidden creator
+Add older seen videos to this account,Add older seen videos to this account
 Added %1$s,Added %1$s
+Added %1$s older seen videos to this account,Added %1$s older seen videos to this account
+Added to this account.,Added to this account.
 Ads,Ads
 Advanced,Advanced
 Advanced JSON value,Advanced JSON value
@@ -264,6 +268,7 @@ Copy quick report,Copy quick report
 Copy report,Copy report
 Copy the sound link,Copy the sound link
 Copy the video link,Copy the video link
+Couldn't add the older seen videos. Try again.,Couldn't add the older seen videos. Try again.
 Couldn't change the Lab settings. Try again.,Couldn't change the Lab settings. Try again.
 Couldn't clear the suggested accounts. Reopen the Inbox and try again.,Couldn't clear the suggested accounts. Reopen the Inbox and try again.
 Couldn't confirm the block for %1$s. Open their profile to check.,Couldn't confirm the block for %1$s. Open their profile to check.
@@ -406,6 +411,7 @@ Forced 1 gate. Restart TikTok to apply this.,Forced 1 gate. Restart TikTok to ap
 Forced result,Forced result
 Forget seen videos after,Forget seen videos after
 Forget the %1$s seen videos.,Forget the %1$s seen videos.
+Forget the %1$s videos @%2$s has seen.,Forget the %1$s videos @%2$s has seen.
 Forget what has been counted today and end any hold. The budgets themselves are left alone.,Forget what has been counted today and end any hold. The budgets themselves are left alone.
 Friends,Friends
 "From the next start TikTok runs as if it weren't patched, so you can tell whether a problem comes from Hushfeed. Your settings stay as they are.","From the next start TikTok runs as if it weren't patched, so you can tell whether a problem comes from Hushfeed. Your settings stay as they are."

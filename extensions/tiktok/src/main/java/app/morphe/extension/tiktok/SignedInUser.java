@@ -18,6 +18,8 @@ public final class SignedInUser {
 
     /** So a test can stand in for the account service, which needs the host running. Empty is signed out. */
     public static volatile String idForTests;
+    /** The handle a test stands in with, read while {@link #idForTests} is set. */
+    public static volatile String handleForTests;
 
     private static volatile Lookups lookups;
     private static volatile boolean unavailable;
@@ -51,6 +53,29 @@ public final class SignedInUser {
             return id instanceof String && !((String) id).isEmpty() ? (String) id : null;
         } catch (Throwable ignored) {
             // Not signed in yet, or the service is still starting. Whoever asks treats it as unknown.
+            return null;
+        }
+    }
+
+    /**
+     * The signed-in account's handle without the @, or null. For text that names the account,
+     * so it looks its members up on each call rather than keeping them.
+     */
+    public static String handle() {
+        if (idForTests != null) {
+            String forTests = handleForTests;
+            return forTests == null || forTests.isEmpty() ? null : forTests;
+        }
+        Lookups found = lookups();
+        if (found == null) return null;
+        try {
+            Object service = found.getService.invoke(found.manager, found.accountClass);
+            if (service == null || !Boolean.TRUE.equals(found.isLogin.invoke(service))) return null;
+            Object user = found.accountClass.getMethod("getCurUser").invoke(service);
+            if (user == null) return null;
+            Object handle = user.getClass().getMethod("getUniqueId").invoke(user);
+            return handle instanceof String && !((String) handle).isEmpty() ? (String) handle : null;
+        } catch (Throwable ignored) {
             return null;
         }
     }

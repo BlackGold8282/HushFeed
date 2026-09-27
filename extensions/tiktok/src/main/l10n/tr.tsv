@@ -36,6 +36,7 @@
 %1$s min left	%1$s dk kaldı
 %1$s to %2$s	%1$s ile %2$s arası
 %1$s videos left	%1$s video kaldı
+%1$s videos were recorded before each account kept its own list. They hide nothing until you add them here.	%1$s video, her hesap kendi listesini tutmadan önce kaydedildi. Onları buraya ekleyene kadar hiçbir şeyi gizlemezler.
 %1$s was rejected. %2$s	%1$s reddedildi. %2$s
 %1$s, %2$s, %3$s, %4$s, %5$s	%1$s, %2$s, %3$s, %4$s, %5$s
 %1$s, selected	%1$s, seçili
@@ -67,8 +68,13 @@ A web address someone left in a comment can be tapped instead of copied out by h
 AI-generated posts	Yapay zeka ile üretilmiş gönderiler
 About	Hakkında
 A forced value applies to this copy of TikTok whichever account is signed in. It can't get past a check the server makes.	Zorlanan bir değer, hangi hesap oturum açmış olursa olsun bu TikTok kopyası için geçerlidir. Sunucunun yaptığı bir denetimi aşamaz.
+Add older seen videos to this account	Eski görülen videoları bu hesaba ekle
+Added %1$s older seen videos to this account	%1$s eski görülen video bu hesaba eklendi
+Added to this account.	Bu hesaba eklendi.
+Couldn't add the older seen videos. Try again.	Eski görülen videolar eklenemedi. Tekrar dene.
 Couldn't restart TikTok. Close it and open it again.	TikTok yeniden başlatılamadı. Kapatıp tekrar açın.
 Couldn't undo that. Try again.	Geri alınamadı. Tekrar deneyin.
+Forget the %1$s videos @%2$s has seen.	@%2$s hesabının gördüğü %1$s videoyu unut.
 Got it	Anladım
 Later	Daha sonra
 Leave when TikTok says time is up	TikTok süre doldu deyince uygulamadan çık
