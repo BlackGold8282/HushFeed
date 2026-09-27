@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The Feature Gate Lab now has Reviewed presets in its menu. The first restores See translation on 47.1.3 by setting both required gates together. You can review the values before applying and undo the whole change. A preset for another TikTok version won't apply.
+
 * **TikTok:** New patch, Mute feed videos. It adds a movable button beside the block control, and a switch under Playback, that play the feed without sound while the phone's volume stays where it is. Music from another app keeps playing while the feed is muted, since TikTok no longer takes the audio over for it. DMs, stories and LIVE keep their sound, and the button says Muted or Sound on to a screen reader.
 * **TikTok:** With a playback quality set, a video's quality list is read once instead of on every switch. TikTok asks for it through two getters and reads the next video's list in between, and Hushfeed kept only the last one, so each switch parsed the whole list again. It keeps the last four now.
 * **TikTok:** New switch under Feed screen, Hide the status bar in LIVE rooms (#38). A LIVE then fills the screen up to the top edge, camera cutout included, and TikTok's buttons at the top move up into the space the bar left. The status bar comes back as soon as you leave the LIVE or switch apps. Hide the status bar never reached LIVE rooms, since TikTok opens them as a separate screen. It's part of Hide video overlays.

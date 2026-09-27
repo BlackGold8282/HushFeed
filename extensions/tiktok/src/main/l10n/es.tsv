@@ -1297,3 +1297,14 @@ This is the video's own sound, so YouTube Music won't have it	Este es el sonido 
 Not a handle or id, so ignored: %1$s	No es un nombre de cuenta ni un id, así que se ignora: %1$s
 What's new	Novedades
 Changes in Hushfeed %1$s	Cambios en Hushfeed %1$s
+Reviewed presets	Ajustes verificados
+Show See translation	Mostrar la opción de traducir
+Reviewed for TikTok %1$s	Verificado para TikTok %1$s
+Value: %1$s to %2$s	Valor: de %1$s a %2$s
+The presets couldn't load. Open the Lab again.	No se pudieron cargar los ajustes. Abre el laboratorio de nuevo.
+Apply enables these overrides. Undo last Lab change restores your previous rules.	Aplicar activa estas modificaciones. Deshacer el último cambio del laboratorio restaura tus reglas anteriores.
+Apply saves these overrides. Turn on overrides in the Lab to use them. Undo restores your previous rules.	Aplicar guarda estas modificaciones. Actívalas en el laboratorio para usarlas. Deshacer restaura tus reglas anteriores.
+This preset isn't available for your installed TikTok version.	Este ajuste no está disponible para tu versión instalada de TikTok.
+Preset applied. Restart TikTok to use it.	Ajuste aplicado. Reinicia TikTok para usarlo.
+Preset saved. Turn on overrides in the Lab to use it.	Ajuste guardado. Activa las modificaciones en el laboratorio para usarlo.
+This preset doesn't match the installed gates. Nothing changed.	Este ajuste no coincide con las opciones instaladas. No se cambió nada.

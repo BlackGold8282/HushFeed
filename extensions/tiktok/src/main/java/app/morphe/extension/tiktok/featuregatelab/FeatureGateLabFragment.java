@@ -1196,6 +1196,7 @@ public final class FeatureGateLabFragment extends Fragment {
                 // than overrides: the master switch, the acknowledgement and the recordings.
                 L10n.t(getContext(), "Remove all overrides"),
                 L10n.t(getContext(), "Clear all Lab data (overrides, switch, recordings)"),
+                L10n.t(getContext(), "Reviewed presets"),
                 L10n.t(getContext(), "Undo last Lab change"),
         };
         final int undoItem = labels.length - 1;
@@ -1234,6 +1235,7 @@ public final class FeatureGateLabFragment extends Fragment {
                         case 2: chooseLoadedValuesFile(); break;
                         case 3: reset(false); break;
                         case 4: reset(true); break;
+                        case 5: showPresets(); break;
                         default:
                             runLabChange(FeatureGateLabUndo::undo, L10n.t(getContext(),
                                     "Lab settings put back. Restart TikTok to apply this."));
@@ -1243,6 +1245,85 @@ public final class FeatureGateLabFragment extends Fragment {
                 .create();
         menu.setOnShowListener(ignored -> SettingsUi.styleStandardAlertDialog(menu));
         menu.show();
+    }
+
+    private void showPresets() {
+        if (getActivity() == null) return;
+        try {
+            JSONObject presets = FeatureGateLabStore.reviewedPresets();
+            List<String> builds = new ArrayList<>();
+            List<String> ids = new ArrayList<>();
+            List<String> labels = new ArrayList<>();
+            java.util.Iterator<String> versions = presets.keys();
+            while (versions.hasNext()) {
+                String build = versions.next();
+                JSONObject version = presets.getJSONObject(build);
+                java.util.Iterator<String> names = version.keys();
+                while (names.hasNext()) {
+                    String id = names.next();
+                    builds.add(build);
+                    ids.add(id);
+                    String title = version.getJSONObject(id).getString("title");
+                    labels.add(L10n.t(getContext(), title)
+                            + " (TikTok " + build + ")");
+                }
+            }
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(L10n.t(getContext(), "Reviewed presets"))
+                    .setItems(labels.toArray(new String[0]),
+                            (ignored, index) -> showPreset(builds.get(index), ids.get(index)))
+                    .setNegativeButton(L10n.t(getContext(), "Cancel"), null).create();
+            showStyled(dialog);
+        } catch (Exception error) {
+            Logger.printException(() -> "Could not read bundled Lab presets", error);
+            postToast(L10n.t(getContext(), "The presets couldn't load. Open the Lab again."));
+        }
+    }
+
+    private void showPreset(String build, String id) {
+        if (getActivity() == null) return;
+        if (snapshot == null) {
+            postToast(L10n.t(getContext(), "Loaded values are still being read. Try again in a moment."));
+            return;
+        }
+        try {
+            JSONObject preset = FeatureGateLabStore.reviewedPresets().getJSONObject(build).getJSONObject(id);
+            String title = preset.getString("title");
+            StringBuilder preview = new StringBuilder(L10n.f(getContext(),
+                    "Reviewed for TikTok %1$s", build));
+            boolean compatible = build.equals(app.morphe.extension.shared.BuildNames.runningBuild());
+            if (compatible) {
+                FeatureGateLabStore.ImportReview review = FeatureGateLabStore.reviewPreset(build, id, snapshot.byIdentity);
+                for (FeatureGateLabStore.Rule rule : review.accepted) {
+                    FeatureGateLabStore.Rule existing = FeatureGateLabStore.rule(rule.manager, rule.key, rule.type);
+                    FeatureGateCatalog.Entry gate = snapshot.byIdentity.get(rule.manager + "\n" + rule.key);
+                    String before = existing != null && existing.enabled ? existing.value
+                            : gate.loaded ? gate.currentValue : L10n.t(getContext(), "Not seen yet");
+                    preview.append("\n\n").append(rule.key).append("\n")
+                            .append(rule.manager).append(" / ").append(rule.type).append("\n")
+                            .append(L10n.f(getContext(), "Value: %1$s to %2$s", before, rule.value));
+                }
+                preview.append("\n\n").append(L10n.t(getContext(), FeatureGateLabStore.masterEnabled()
+                        ? "Apply enables these overrides. Undo last Lab change restores your previous rules."
+                        : "Apply saves these overrides. Turn on overrides in the Lab to use them. Undo restores your previous rules."));
+            } else {
+                preview.append("\n\n").append(L10n.t(getContext(),
+                        "This preset isn't available for your installed TikTok version."));
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                    .setTitle(L10n.t(getContext(), title))
+                    .setMessage(preview)
+                    .setNegativeButton(L10n.t(getContext(), "Cancel"), null);
+            if (compatible) builder.setPositiveButton(L10n.t(getContext(), "Apply"), (ignored, which) ->
+                    runLabChange(() -> FeatureGateLabUndo.applyPreset(build, id, snapshot.byIdentity),
+                            L10n.t(getContext(), FeatureGateLabStore.masterEnabled()
+                                    ? "Preset applied. Restart TikTok to use it."
+                                    : "Preset saved. Turn on overrides in the Lab to use it.")));
+            showStyled(builder.create());
+        } catch (Exception error) {
+            Logger.printException(() -> "Could not review a bundled Lab preset", error);
+            postToast(L10n.t(getContext(), "This preset doesn't match the installed gates. Nothing changed."));
+        }
     }
 
     private void exportLoadedValues() {

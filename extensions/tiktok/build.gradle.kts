@@ -47,6 +47,7 @@ val trackedScreenshots = mapOf(
     "settings/inbox.png" to "pages/dark/inbox.png",
     "settings/interface.png" to "pages/dark/interface.png",
     "settings/lab.png" to "pages/dark/lab.png",
+    "settings/lab-preset.png" to "pages/dark/lab-preset.png",
     "settings/playback-light.png" to "pages/light/playback.png",
     "settings/playback-sound-light.png" to "pages/light/playback-sound.png",
     "settings/playback-sound.png" to "pages/dark/playback-sound.png",

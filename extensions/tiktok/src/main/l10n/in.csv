@@ -1298,3 +1298,14 @@ Allow storage for TikTok in Android settings to save the live photo's clip,Izink
 "Not a handle or id, so ignored: %1$s","Bukan nama akun atau id, jadi diabaikan: %1$s"
 What's new,Yang baru
 Changes in Hushfeed %1$s,Perubahan di Hushfeed %1$s
+Reviewed presets,Preset teruji
+Show See translation,Tampilkan Lihat terjemahan
+Reviewed for TikTok %1$s,Diuji untuk TikTok %1$s
+Value: %1$s to %2$s,Nilai: %1$s menjadi %2$s
+The presets couldn't load. Open the Lab again.,Preset tidak dapat dimuat. Buka Lab lagi.
+Apply enables these overrides. Undo last Lab change restores your previous rules.,Terapkan mengaktifkan penggantian ini. Urungkan perubahan Lab terakhir memulihkan aturan sebelumnya.
+Apply saves these overrides. Turn on overrides in the Lab to use them. Undo restores your previous rules.,Terapkan menyimpan penggantian ini. Aktifkan penggantian di Lab untuk menggunakannya. Urungkan memulihkan aturan sebelumnya.
+This preset isn't available for your installed TikTok version.,Preset ini tidak tersedia untuk versi TikTok yang terpasang.
+Preset applied. Restart TikTok to use it.,Preset diterapkan. Mulai ulang TikTok untuk menggunakannya.
+Preset saved. Turn on overrides in the Lab to use it.,Preset disimpan. Aktifkan penggantian di Lab untuk menggunakannya.
+This preset doesn't match the installed gates. Nothing changed.,Preset ini tidak cocok dengan gate yang terpasang. Tidak ada perubahan.

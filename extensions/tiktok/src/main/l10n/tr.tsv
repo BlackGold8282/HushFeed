@@ -1297,3 +1297,14 @@ This is the video's own sound, so YouTube Music won't have it	Bu videonun kendi 
 Not a handle or id, so ignored: %1$s	Hesap adı veya kimlik değil, bu yüzden yok sayıldı: %1$s
 What's new	Yenilikler
 Changes in Hushfeed %1$s	Hushfeed %1$s sürümündeki değişiklikler
+Reviewed presets	Doğrulanmış hazır ayarlar
+Show See translation	Çeviriyi gör seçeneğini göster
+Reviewed for TikTok %1$s	TikTok %1$s için doğrulandı
+Value: %1$s to %2$s	Değer: %1$s yerine %2$s
+The presets couldn't load. Open the Lab again.	Hazır ayarlar yüklenemedi. Laboratuvarı yeniden açın.
+Apply enables these overrides. Undo last Lab change restores your previous rules.	Uygula bu geçersiz kılmaları etkinleştirir. Son laboratuvar değişikliğini geri al, önceki kurallarınızı geri yükler.
+Apply saves these overrides. Turn on overrides in the Lab to use them. Undo restores your previous rules.	Uygula bu geçersiz kılmaları kaydeder. Kullanmak için laboratuvarda geçersiz kılmaları açın. Geri al, önceki kurallarınızı geri yükler.
+This preset isn't available for your installed TikTok version.	Bu hazır ayar, yüklü TikTok sürümünüz için kullanılamıyor.
+Preset applied. Restart TikTok to use it.	Hazır ayar uygulandı. Kullanmak için TikTok'u yeniden başlatın.
+Preset saved. Turn on overrides in the Lab to use it.	Hazır ayar kaydedildi. Kullanmak için laboratuvarda geçersiz kılmaları açın.
+This preset doesn't match the installed gates. Nothing changed.	Bu hazır ayar, yüklü özelliklerle eşleşmiyor. Hiçbir şey değişmedi.
