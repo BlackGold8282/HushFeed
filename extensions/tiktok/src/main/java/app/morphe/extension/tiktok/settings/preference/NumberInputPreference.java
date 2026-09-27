@@ -68,7 +68,8 @@ public class NumberInputPreference extends EditTextPreference {
         setKey(setting.key);
         setValue(String.valueOf(clamp(setting.savedValue())));
         getEditText().setInputType(InputType.TYPE_CLASS_NUMBER);
-        getEditText().setHint(L10n.t(context, "Enter a number"));
+        // The range as the placeholder: "Enter a number" said nothing the empty field did not.
+        getEditText().setHint(L10n.f(context, "%1$s to %2$s", displayValue(minValue), displayValue(maxValue)));
     }
 
     /**

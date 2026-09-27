@@ -147,7 +147,8 @@ public class RangeValuePreference extends DialogPreference {
         // accepts 1.5M has to be typeable.
         minEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         minEditText.setSingleLine(true);
-        minEditText.setHint(L10n.t(context, "Minimum"));
+        // What an empty field means, not its name again: the heading above says that.
+        minEditText.setHint(java.text.NumberFormat.getInstance().format(0));
         minEditText.setText(minValue);
         SettingsUi.styleEditText(minEditText);
         SettingsUi.labelEditor(min, minEditText);
@@ -167,7 +168,7 @@ public class RangeValuePreference extends DialogPreference {
         EditText maxEditText = new EditText(context);
         maxEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         maxEditText.setSingleLine(true);
-        maxEditText.setHint(L10n.t(context, "Maximum"));
+        maxEditText.setHint(L10n.t(context, "No limit"));
         maxEditText.setText(Long.toString(Long.MAX_VALUE).equals(maxValue) ? "" : maxValue);
         SettingsUi.styleEditText(maxEditText);
         SettingsUi.labelEditor(max, maxEditText);

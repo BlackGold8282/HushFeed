@@ -21,10 +21,6 @@
 %1$s (custom, unverified)	%1$s (benutzerdefiniert, ungeprüft)
 %1$s (override returned)	%1$s (Überschreibung zurückgegeben)
 %1$s (will be returned when requested)	%1$s (wird bei der Abfrage zurückgegeben)
-%1$s / current cache only	%1$s / nur aktueller Cache
-%1$s / generated registry	%1$s / generiertes Register
-%1$s / generated registry and current cache	%1$s / generiertes Register und aktueller Cache
-%1$s / local catalog	%1$s / lokaler Katalog
 %1$s and above	Ab %1$s
 %1$s appears more than once in this file.	%1$s kommt in dieser Datei mehrmals vor.
 %1$s changed	%1$s geändert
@@ -43,6 +39,10 @@
 %1$s videos left	Noch %1$s Videos
 %1$s videos were recorded before each account kept its own list. They hide nothing until you add them here.	%1$s Videos wurden aufgezeichnet, bevor jedes Konto eine eigene Liste hatte. Sie blenden nichts aus, bis du sie hier hinzufügst.
 %1$s was rejected. %2$s	%1$s wurde abgelehnt. %2$s
+%1$s · Hushfeed's list only	%1$s · nur in der Liste von Hushfeed
+%1$s · current value only	%1$s · nur aktueller Wert
+%1$s · declared by TikTok	%1$s · von TikTok deklariert
+%1$s · declared by TikTok, with a current value	%1$s · von TikTok deklariert, mit aktuellem Wert
 %1$s%%	%1$s %%
 %1$s, %2$s, %3$s, %4$s, %5$s	%1$s, %2$s, %3$s, %4$s, %5$s
 %1$s, selected	%1$s, ausgewählt
@@ -81,6 +81,8 @@ Added %1$s older seen videos to this account	%1$s ältere gesehene Videos zu die
 Added one older seen video to this account	Ein älteres gesehenes Video zu diesem Konto hinzugefügt
 Added to this account.	Zu diesem Konto hinzugefügt.
 Couldn't add the older seen videos. Try again.	Die älteren gesehenen Videos konnten nicht hinzugefügt werden. Versuche es erneut.
+Couldn't copy the report. Use Save report instead.	Der Bericht ließ sich nicht kopieren. Nutze stattdessen „Bericht speichern“.
+Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.	TikToks aktuelle Werte ließen sich nicht lesen (%1$s). Aktualisiere die Werte über das Menü, um es erneut zu versuchen.
 Couldn't restart TikTok. Close it and open it again.	TikTok konnte nicht neu starten. Schließ die App und öffne sie wieder.
 Couldn't undo that. Try again.	Rückgängig machen hat nicht geklappt. Versuch es noch einmal.
 Count a video as seen after	Video als gesehen zählen nach
@@ -91,13 +93,19 @@ Got it	Verstanden
 How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.	Wie viel eines Videos du ansiehst, bevor es beim nächsten Mal ausgeblendet wird. Bei null zählt es nach wenigen Sekunden.
 Later	Später
 Leave when TikTok says time is up	Die App verlassen, wenn TikTok sagt, die Zeit ist um
+Loading the gate list and TikTok's current values…	Gate-Liste und TikToks aktuelle Werte werden geladen …
+New value	Neuer Wert
 No app on this phone opens that file	Keine App auf diesem Handy öffnet diese Datei
 One video was recorded before each account kept its own list. It hides nothing until you add it here.	Ein Video wurde aufgezeichnet, bevor jedes Konto eine eigene Liste hatte. Es blendet nichts aus, bis du es hier hinzufügst.
 Open	Öffnen
+Preview shortened. Save report keeps the full report.	Vorschau gekürzt. „Bericht speichern“ behält den vollständigen Bericht.
+Refreshing TikTok's current values…	TikToks aktuelle Werte werden aktualisiert …
 Restart TikTok to apply this	TikTok neu starten, damit das gilt
+Save report	Bericht speichern
 Stay on the video in full screen	Im Vollbild beim Video bleiben
 That creator pattern could stall the feed, so it was skipped: %1$s	Dieses Kreator-Muster könnte den Feed aufhalten und wurde übersprungen: %1$s
 That creator pattern could stall the feed, so it wasn't added: %1$s	Dieses Kreator-Muster könnte den Feed aufhalten und wurde nicht hinzugefügt: %1$s
+This key isn't in Hushfeed's list, so its type can't be checked. Reset the override.	Dieser Schlüssel steht nicht in der Liste von Hushfeed, deshalb lässt sich sein Typ nicht prüfen. Setze die Überschreibung zurück.
 This key touches account safety. Forcing it can change login, region, payment or security checks.	Dieser Schlüssel betrifft den Kontoschutz. Ihn zu erzwingen kann Anmelde-, Regions-, Zahlungs- oder Sicherheitsprüfungen verändern.
 Activity	Aktivität
 Activity center (PIA)	Activity Center (PIA)
@@ -253,7 +261,6 @@ Copy the sound link	Soundlink kopieren
 Copy the video link	Videolink kopieren
 Couldn't change the Lab settings. Try again.	Die Lab-Einstellungen ließen sich nicht ändern. Versuch es noch einmal.
 Couldn't clear the suggested accounts. Reopen the Inbox and try again.	Die Kontovorschläge ließen sich nicht entfernen. Öffne den Posteingang noch einmal und versuch es erneut.
-Couldn't copy the report. Use Save JSON instead.	Der Bericht ließ sich nicht kopieren. Nutze stattdessen „JSON speichern“.
 Couldn't open settings search. Reopen settings and try again.	Die Einstellungssuche ließ sich nicht öffnen. Öffne die Einstellungen noch einmal und versuch es erneut.
 Couldn't open that settings section. Reopen settings and try again.	Dieser Einstellungsbereich ließ sich nicht öffnen. Öffne die Einstellungen noch einmal und versuch es erneut.
 Couldn't open the file picker to export. Try again.	Die Dateiauswahl zum Exportieren ließ sich nicht öffnen. Versuch es noch einmal.
@@ -278,7 +285,6 @@ Creators and sounds	Creator und Sounds
 Creators you hid from a video. Search the list and remove one at a time.	Creator, die du bei einem Video ausgeblendet hast. Durchsuche die Liste und entferne einzelne Einträge.
 Current	Aktuell
 Current %1$s	Aktuell %1$s
-Current cache unavailable: %1$s	Aktueller Cache nicht verfügbar: %1$s
 Current state	Aktueller Zustand
 Current: %1$s	Aktuell: %1$s
 Custom SIM details	Eigene SIM-Angaben
@@ -332,7 +338,6 @@ Enabled	Eingeschaltet
 Enter a JSON object or array.	Gib ein JSON-Objekt oder -Array ein.
 Enter a creator handle or id	Gib einen Creator-Handle oder eine ID ein
 Enter a finite number.	Gib eine endliche Zahl ein.
-Enter a number	Gib eine Zahl ein
 Enter a number.	Gib eine Zahl ein.
 Enter a valid structured value.	Gib einen gültigen strukturierten Wert ein.
 Enter a valid two-letter country code	Gib einen gültigen Ländercode aus zwei Buchstaben ein
@@ -584,7 +589,6 @@ Loaded current values. Loading all known gates…	Aktuelle Werte geladen. Alle b
 Loaded values are still being read. Try again in a moment.	Die geladenen Werte werden noch gelesen. Versuche es gleich noch einmal.
 Loaded-value file export failed	Der Export der geladenen Werte ist fehlgeschlagen
 Loading gates…	Schalter werden geladen …
-Loading local catalog and current TikTok cache…	Lokaler Katalog und aktueller TikTok-Cache werden geladen …
 Creators hidden on this phone	Auf diesem Gerät ausgeblendete Creator
 Lock today's budget	Heutiges Budget sperren
 Logging, hook status and reports	Protokolle, Hook-Status und Berichte
@@ -613,6 +617,8 @@ Comments range	Spanne der Kommentare
 Favorites range	Spanne der Favoriten
 Likes range	Spanne der Likes
 Shares range	Spanne der Shares
+Use Save report for this large report	Nutze für diesen großen Bericht „Bericht speichern“
+Video player settings	Einstellungen des Videoplayers
 Views range	Spanne der Aufrufe
 Minimum	Minimum
 More options	Weitere Optionen
@@ -725,14 +731,12 @@ Pick the buttons to take off the column. The rest stay where they are.	Wähle di
 Play videos TikTok has classified without the overlay asking to be tapped through first.	Von TikTok eingestufte Videos abspielen, ohne dass erst eine Warnung weggetippt werden muss.
 Playback	Wiedergabe
 Player	Wiedergabe
-Player config	Player-Konfiguration
 Playlist posts	Playlist-Beiträge
 Popular	Beliebt
 Popups	Pop-ups
 Press and hold a profile picture to save the full size original to your photo destination.	Ein Profilbild gedrückt halten, um das Original in voller Größe im Fotoordner zu speichern.
 Press and hold a story to save it. Stories have no save button of their own, and holding one is how TikTok pauses it, so this takes that gesture over.	Eine Story gedrückt halten, um sie zu speichern. Stories haben keinen eigenen Speicher-Button, und Halten pausiert bei TikTok, also übernimmt das diese Geste.
 Press and hold the left or right third of the screen to jump back or forward. The middle third keeps the Long press action.	Halte das linke oder rechte Drittel des Bildschirms gedrückt, um zurück oder vorwärts zu springen. Im mittleren Drittel gilt weiterhin die Aktion für langes Drücken.
-Preview shortened. Save JSON includes the full report.	Vorschau gekürzt. JSON speichern enthält den vollständigen Bericht.
 Privacy	Datenschutz
 Privacy and system	Datenschutz und System
 Profile	Profil
@@ -754,7 +758,6 @@ Recording gate reads. Use a feature, then return here to stop.	Gate-Zugriffe wer
 Put back the settings saved before the last restore or reset.	Die Einstellungen zurückholen, die vor der letzten Wiederherstellung oder Zurücksetzung gespeichert wurden.
 Recovered an interrupted settings change. Restart TikTok to apply this.	Eine unterbrochene Einstellungsänderung wurde wiederhergestellt. TikTok neu starten, damit das gilt.
 Refresh values	Werte aktualisieren
-Refreshing current TikTok cache…	Aktueller TikTok-Cache wird aktualisiert …
 Region	Region
 Country filters	Länderfilter
 Remember the last speed	Letzte Geschwindigkeit merken
@@ -806,7 +809,6 @@ SIM country preset	SIM-Ländervorgabe
 STEM	STEM
 Sanitize sharing links	Teilen-Links bereinigen
 Save	Speichern
-Save JSON	JSON speichern
 Save SRT files with the video. Paired saves use Movies on Android 11+, Download on Android 10, and your video folder on older versions.	SRT-Dateien zusammen mit dem Video speichern. Gemeinsame Speicherungen nutzen Movies ab Android 11, Download auf Android 10 und deinen Videoordner auf älteren Versionen.
 Save a profile picture on a long press	Profilbild per langem Druck speichern
 Save a story on a long press	Story per langem Druck speichern
@@ -1037,7 +1039,6 @@ This file has more loaded values than the Lab takes at once.	Diese Datei enthäl
 This file has no loaded values in it.	Diese Datei enthält keine geladenen Werte.
 This file isn't a loaded-values export from the Feature Gate Lab.	Diese Datei ist kein Export geladener Werte aus dem Feature Gate Lab.
 This gate type isn't supported.	Dieser Gate-Typ wird nicht unterstützt.
-This key isn't in the local catalog, so its type can't be checked. Reset the override.	Dieser Schlüssel steht nicht im lokalen Katalog, deshalb lässt sich sein Typ nicht prüfen. Setze die Überschreibung zurück.
 This line opens a rule and doesn't finish it: %1$s. Write two phrases as "a" & "b" for both, or "a" !& "b" for the first without the second.	Diese Zeile beginnt eine Regel und beendet sie nicht: %1$s. Schreib zwei Wendungen als "a" & "b" für beide oder als "a" !& "b" für die erste ohne die zweite.
 This phone has no file picker, so there's no way to choose a file here	Dieses Telefon hat keine Dateiauswahl, hier lässt sich also keine Datei wählen
 This phone has no folder picker. Type the folder into the row instead.	Dieses Telefon hat keine Ordnerauswahl. Den Ordner stattdessen in die Zeile eintippen.
@@ -1114,7 +1115,6 @@ Undoing the last change	Die letzte Änderung wird rückgängig gemacht
 Until you choose here, this sheet follows your choices under Hide share actions.	Bis du hier eine Auswahl triffst, folgt dieses Menü deinen Einstellungen unter „Share-Aktionen ausblenden“.
 Up to %1$d speeds from %2$s to %3$s, separated by commas. Example: 0.5, 1, 1.5, 2, 2.5, 3. Leave empty for TikTok's list. Restart TikTok to apply this.	Bis zu %1$d Geschwindigkeiten von %2$s bis %3$s, durch Kommas getrennt. Beispiel: 0.5, 1, 1.5, 2, 2.5, 3. Leer lassen für TikToks Liste. TikTok neu starten, damit das gilt.
 Use 0 for TikTok's size, or %1$d to %2$d. Applies to the next caption.	0 für TikToks Größe, sonst %1$d bis %2$d. Gilt ab dem nächsten Untertitel.
-Use Save JSON for this large report	Nutze für diesen großen Bericht „JSON speichern“
 Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another.	TikToks eigene Geste „Halten, nach unten ziehen, loslassen“ verwenden, um bei der Geschwindigkeit zu bleiben, die beim Halten gilt. Das ist 2x, sofern unter Wiedergabe keine andere eingestellt ist.
 Use a default playback speed	Standardgeschwindigkeit verwenden
 Use non-personalized search	Nicht personalisierte Suche verwenden

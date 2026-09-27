@@ -19,10 +19,6 @@ source,target
 "%1$s (custom, unverified)","%1$s (custom, unverified)"
 %1$s (override returned),%1$s (override returned)
 %1$s (will be returned when requested),%1$s (will be returned when requested)
-%1$s / current cache only,%1$s / current cache only
-%1$s / generated registry,%1$s / generated registry
-%1$s / generated registry and current cache,%1$s / generated registry and current cache
-%1$s / local catalog,%1$s / local catalog
 %1$s and above,%1$s and above
 %1$s appears more than once in this file.,%1$s appears more than once in this file.
 %1$s changed,%1$s changed
@@ -62,6 +58,10 @@ source,target
 %1$s views per comment,%1$s views per comment
 %1$s views per like,%1$s views per like
 %1$s was rejected. %2$s,%1$s was rejected. %2$s
+%1$s · Hushfeed's list only,%1$s · Hushfeed's list only
+%1$s · current value only,%1$s · current value only
+%1$s · declared by TikTok,%1$s · declared by TikTok
+"%1$s · declared by TikTok, with a current value","%1$s · declared by TikTok, with a current value"
 %1$s%%,%1$s%%
 "%1$s, %2$s or %3$s","%1$s, %2$s or %3$s"
 "%1$s, %2$s, %3$s or %4$s","%1$s, %2$s, %3$s or %4$s"
@@ -279,12 +279,13 @@ Couldn't change the Lab settings. Try again.,Couldn't change the Lab settings. T
 Couldn't clear the suggested accounts. Reopen the Inbox and try again.,Couldn't clear the suggested accounts. Reopen the Inbox and try again.
 Couldn't confirm the block for %1$s. Open their profile to check.,Couldn't confirm the block for %1$s. Open their profile to check.
 Couldn't confirm the unblock for %1$s. Open their profile to check.,Couldn't confirm the unblock for %1$s. Open their profile to check.
-Couldn't copy the report. Use Save JSON instead.,Couldn't copy the report. Use Save JSON instead.
+Couldn't copy the report. Use Save report instead.,Couldn't copy the report. Use Save report instead.
 Couldn't open settings search. Reopen settings and try again.,Couldn't open settings search. Reopen settings and try again.
 Couldn't open that settings section. Reopen settings and try again.,Couldn't open that settings section. Reopen settings and try again.
 Couldn't open the file picker to export. Try again.,Couldn't open the file picker to export. Try again.
 Couldn't open the file picker to import. Try again.,Couldn't open the file picker to import. Try again.
 Couldn't put back the diagnostic data. Try again.,Couldn't put back the diagnostic data. Try again.
+Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.,Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.
 Couldn't read who posted this comment. Open their profile and block them there.,Couldn't read who posted this comment. Open their profile and block them there.
 Couldn't reset this override. Try again.,Couldn't reset this override. Try again.
 Couldn't restart TikTok. Close it and open it again.,Couldn't restart TikTok. Close it and open it again.
@@ -311,7 +312,6 @@ Creators you hid from a video. Search the list and remove one at a time.,Creator
 Crop the video until it covers the whole window. On a tall phone the black strip TikTok leaves under a video goes and so does a little of each side.,Crop the video until it covers the whole window. On a tall phone the black strip TikTok leaves under a video goes and so does a little of each side.
 Current,Current
 Current %1$s,Current %1$s
-Current cache unavailable: %1$s,Current cache unavailable: %1$s
 Current state,Current state
 Current: %1$s,Current: %1$s
 Custom SIM details,Custom SIM details
@@ -356,7 +356,6 @@ Enabled,Enabled
 Enter a JSON object or array.,Enter a JSON object or array.
 Enter a creator handle or id,Enter a creator handle or id
 Enter a finite number.,Enter a finite number.
-Enter a number,Enter a number
 Enter a number.,Enter a number.
 Enter a valid structured value.,Enter a valid structured value.
 Enter a valid two-letter country code,Enter a valid two-letter country code
@@ -648,7 +647,7 @@ Loaded current values. Loading all known gates…,Loaded current values. Loading
 Loaded values are still being read. Try again in a moment.,Loaded values are still being read. Try again in a moment.
 Loaded-value file export failed,Loaded-value file export failed
 Loading gates…,Loading gates…
-Loading local catalog and current TikTok cache…,Loading local catalog and current TikTok cache…
+Loading the gate list and TikTok's current values…,Loading the gate list and TikTok's current values…
 Location-tagged videos,Location-tagged videos
 Lock the hold speed with a pull down,Lock the hold speed with a pull down
 Lock today's budget,Lock today's budget
@@ -681,6 +680,7 @@ Move up,Move up
 Music disc,Music disc
 Nearby,Nearby
 Never from these countries,Never from these countries
+New value,New value
 No,No
 No app on this phone opens that file,No app on this phone opens that file
 No creator to block on this video,No creator to block on this video
@@ -792,7 +792,6 @@ Pick the buttons to take off the column. The rest stay where they are.,Pick the 
 Play videos TikTok has classified without the overlay asking to be tapped through first.,Play videos TikTok has classified without the overlay asking to be tapped through first.
 Playback,Playback
 Player,Player
-Player config,Player config
 Playlist posts,Playlist posts
 Popular,Popular
 Popups,Popups
@@ -801,7 +800,7 @@ Preset,Preset
 Press and hold a profile picture to save the full size original to your photo destination.,Press and hold a profile picture to save the full size original to your photo destination.
 "Press and hold a story to save it. Stories have no save button of their own, and holding one is how TikTok pauses it, so this takes that gesture over.","Press and hold a story to save it. Stories have no save button of their own, and holding one is how TikTok pauses it, so this takes that gesture over."
 Press and hold the left or right third of the screen to jump back or forward. The middle third keeps the Long press action.,Press and hold the left or right third of the screen to jump back or forward. The middle third keeps the Long press action.
-Preview shortened. Save JSON includes the full report.,Preview shortened. Save JSON includes the full report.
+Preview shortened. Save report keeps the full report.,Preview shortened. Save report keeps the full report.
 Privacy,Privacy
 Privacy and system,Privacy and system
 Profile,Profile
@@ -823,7 +822,7 @@ Recorded gate reads (%1$d),Recorded gate reads (%1$d)
 "Recording gate reads. Use a feature, then return here to stop.","Recording gate reads. Use a feature, then return here to stop."
 Recovered an interrupted settings change. Restart TikTok to apply this.,Recovered an interrupted settings change. Restart TikTok to apply this.
 Refresh values,Refresh values
-Refreshing current TikTok cache…,Refreshing current TikTok cache…
+Refreshing TikTok's current values…,Refreshing TikTok's current values…
 Region,Region
 Remember the last speed,Remember the last speed
 Remind me every,Remind me every
@@ -872,7 +871,6 @@ STEM,STEM
 Sanitize sharing links,Sanitize sharing links
 Save,Save
 Save Hushfeed settings and Feature Gate Lab rules to a JSON file.,Save Hushfeed settings and Feature Gate Lab rules to a JSON file.
-Save JSON,Save JSON
 "Save SRT files with the video. Paired saves use Movies on Android 11+, Download on Android 10, and your video folder on older versions.","Save SRT files with the video. Paired saves use Movies on Android 11+, Download on Android 10, and your video folder on older versions."
 Save a profile picture on a long press,Save a profile picture on a long press
 Save a story on a long press,Save a story on a long press
@@ -880,6 +878,7 @@ Save a story on a long press,Save a story on a long press
 Save field values,Save field values
 Save full report,Save full report
 Save media,Save media
+Save report,Save report
 Save subtitles beside videos,Save subtitles beside videos
 Save the latest available TikTok crash report for diagnostic export.,Save the latest available TikTok crash report for diagnostic export.
 Save the original sound,Save the original sound
@@ -1130,7 +1129,7 @@ This file has no loaded values in it.,This file has no loaded values in it.
 This file isn't a loaded-values export from the Feature Gate Lab.,This file isn't a loaded-values export from the Feature Gate Lab.
 This gate type isn't supported.,This gate type isn't supported.
 "This is the video's own sound, so YouTube Music won't have it","This is the video's own sound, so YouTube Music won't have it"
-"This key isn't in the local catalog, so its type can't be checked. Reset the override.","This key isn't in the local catalog, so its type can't be checked. Reset the override."
+"This key isn't in Hushfeed's list, so its type can't be checked. Reset the override.","This key isn't in Hushfeed's list, so its type can't be checked. Reset the override."
 "This key touches account safety. Forcing it can change login, region, payment or security checks.","This key touches account safety. Forcing it can change login, region, payment or security checks."
 "This line opens a rule and doesn't finish it: %1$s. Write two phrases as ""a"" & ""b"" for both, or ""a"" !& ""b"" for the first without the second.","This line opens a rule and doesn't finish it: %1$s. Write two phrases as ""a"" & ""b"" for both, or ""a"" !& ""b"" for the first without the second."
 "This phone has no file picker, so there's no way to choose a file here","This phone has no file picker, so there's no way to choose a file here"
@@ -1214,7 +1213,7 @@ Undoing the last change,Undoing the last change
 "Up to %1$d speeds from %2$s to %3$s, separated by commas. Example: 0.5, 1, 1.5, 2, 2.5, 3. Leave empty for TikTok's list. Restart TikTok to apply this.","Up to %1$d speeds from %2$s to %3$s, separated by commas. Example: 0.5, 1, 1.5, 2, 2.5, 3. Leave empty for TikTok's list. Restart TikTok to apply this."
 "Use 0 for TikTok's size, or %1$d to %2$d. Applies to the next caption.","Use 0 for TikTok's size, or %1$d to %2$d. Applies to the next caption."
 Use Calm feed,Use Calm feed
-Use Save JSON for this large report,Use Save JSON for this large report
+Use Save report for this large report,Use Save report for this large report
 "Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another.","Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another."
 Use a default playback speed,Use a default playback speed
 Use non-personalized search,Use non-personalized search
@@ -1238,6 +1237,7 @@ Video download quality,Video download quality
 Video filename,Video filename
 Video info,Video info
 Video playback quality,Video playback quality
+Video player settings,Video player settings
 Video saved,Video saved
 "Video saved in %1$s, but only %2$s of %3$s subtitles came with it","Video saved in %1$s, but only %2$s of %3$s subtitles came with it"
 Video saved with %1$s subtitles in %2$s,Video saved with %1$s subtitles in %2$s

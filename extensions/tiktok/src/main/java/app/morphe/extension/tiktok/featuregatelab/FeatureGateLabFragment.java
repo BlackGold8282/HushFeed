@@ -646,8 +646,8 @@ public final class FeatureGateLabFragment extends Fragment {
 
     private void load(boolean refresh) {
         count.setText(L10n.t(getContext(), refresh
-                ? "Refreshing current TikTok cache…"
-                : "Loading local catalog and current TikTok cache…"));
+                ? "Refreshing TikTok's current values…"
+                : "Loading the gate list and TikTok's current values…"));
         FeatureGateCatalog.loadAsync(refresh, new FeatureGateCatalog.Callback() {
             @Override
             public void onLoaded(FeatureGateCatalog.Snapshot loaded) {
@@ -667,7 +667,7 @@ public final class FeatureGateLabFragment extends Fragment {
             public void onError(String message) {
                 if (!isAdded() || getView() == null) return;
                 count.setText(
-                        L10n.f(getContext(), "Current cache unavailable: %1$s", message));
+                        L10n.f(getContext(), "Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.", message));
                 FeatureGateCatalog.Snapshot cached = FeatureGateCatalog.cachedSnapshot();
                 if (cached != null) {
                     snapshot = cached;

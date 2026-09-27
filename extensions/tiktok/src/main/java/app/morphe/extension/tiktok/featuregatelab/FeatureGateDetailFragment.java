@@ -760,7 +760,7 @@ public final class FeatureGateDetailFragment extends Fragment {
     private void showCustomValue() {
         EditText input = new EditText(getActivity());
         input.setSingleLine(!"STRING".equals(entry.type));
-        input.setHint(L10n.t(getContext(), "Value"));
+        input.setHint(L10n.t(getContext(), "New value"));
         input.setText(rule == null ? "" : rule.value);
         SettingsUi.styleEditText(input);
         LinearLayout dialogBody = new LinearLayout(getActivity());
@@ -1013,7 +1013,7 @@ public final class FeatureGateDetailFragment extends Fragment {
                 } else if ("JSON".equals(kind)) {
                     hint = L10n.t(root.getContext(), "Advanced JSON value");
                 } else {
-                    hint = L10n.t(root.getContext(), "Value");
+                    hint = L10n.t(root.getContext(), "New value");
                 }
                 input.setHint(hint);
                 input.setSingleLine(!kind.startsWith("LIST_") && !"JSON".equals(kind));

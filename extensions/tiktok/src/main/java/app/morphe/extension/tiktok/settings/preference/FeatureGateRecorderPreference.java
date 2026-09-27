@@ -87,7 +87,7 @@ public final class FeatureGateRecorderPreference extends Preference implements I
         String shown = report.length() <= GateReportExport.MAX_CLIPBOARD_CHARS ? report
                 : report.substring(0, GateReportExport.MAX_CLIPBOARD_CHARS) + "\n\n"
                         + L10n.t(context,
-                                "Preview shortened. Save JSON includes the full report.");
+                                "Preview shortened. Save report keeps the full report.");
         // Nothing read is a sentence, not a JSON object with an empty array to puzzle over.
         text.setText(empty
                 ? L10n.t(context, "No gate reads were recorded. Use a TikTok feature while recording.")
@@ -121,7 +121,7 @@ public final class FeatureGateRecorderPreference extends Preference implements I
                 .setView(scroll)
                 .setNegativeButton(L10n.t(context, "Close"), null);
         if (!empty) {
-            builder.setPositiveButton(L10n.t(context, "Save JSON"), null);
+            builder.setPositiveButton(L10n.t(context, "Save report"), null);
             if (report.length() <= GateReportExport.MAX_CLIPBOARD_CHARS) {
                 builder.setNeutralButton(L10n.t(context, "Copy report"), null);
             }
