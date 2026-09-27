@@ -34,6 +34,7 @@ source,target
 "%1$s hid everything TikTok sent, %2$d times in a row. Turn it off if that's not what you wanted.","%1$s hid everything TikTok sent, %2$d times in a row. Turn it off if that's not what you wanted."
 %1$s is a kind of value the Lab can't override.,%1$s is a kind of value the Lab can't override.
 %1$s is already hidden,%1$s is already hidden
+"%1$s is too long for a settings backup. Shorten it, then save the backup again.","%1$s is too long for a settings backup. Shorten it, then save the backup again."
 "%1$s isn't a country code, so no video would ever match it. Use two letters, like GB, IE or US.","%1$s isn't a country code, so no video would ever match it. Use two letters, like GB, IE or US."
 %1$s isn't in this Lab catalog.,%1$s isn't in this Lab catalog.
 %1$s isn't installed or doesn't take links,%1$s isn't installed or doesn't take links

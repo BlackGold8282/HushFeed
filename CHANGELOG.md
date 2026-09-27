@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** On a phone whose blocked creators, hidden creators, creator exceptions or blocked caption words list grew past the limits added on 2026-09-14, restoring a backup, resetting settings and undoing now work again. Before, all three failed with the generic try-again message. Saving a backup names the list that's too long instead of writing a file no restore would accept.
 * **TikTok:** The Feature Gate Lab works from the TikTok build you have installed. It shows that build's own gate list and names it in exports and backups. When TikTok updates, it keeps the overrides whose gates didn't change, turns the rest off and tells you how many. Before, it treated 47.1.3 as 47.0.3 and carried every override across unchecked.
 * **TikTok:** The Lab's "first caller" and its SettingsManager observations name the right code again. Reads without a default had stopped being recorded after the first read with one.
 * **TikTok:** The diagnostic report has a LIVE BUTTON section that says what decided the LIVE button in the feed's corner each time: the Hide the LIVE button switch, TikTok hiding it because LIVE has a bottom or top tab, or Hushfeed keeping it because that tab was taken off (#28).

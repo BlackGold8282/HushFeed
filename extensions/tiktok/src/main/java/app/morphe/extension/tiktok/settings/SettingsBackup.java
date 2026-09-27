@@ -161,9 +161,15 @@ public final class SettingsBackup {
     }
 
     public static void restore(Context context, String text, boolean saveUndo) throws Exception {
+        restore(context, text, saveUndo, true);
+    }
+
+    /** With holdRuleLists false for the device's own undo copy, whose lists are already in effect. */
+    private static void restore(Context context, String text, boolean saveUndo, boolean holdRuleLists)
+            throws Exception {
         Snapshot next;
         try {
-            next = parse(text);
+            next = decode(text, holdRuleLists);
         } catch (Exception error) {
             throw RestoreException.rejected(error);
         }
@@ -197,7 +203,7 @@ public final class SettingsBackup {
             // back rather than the value it replaced, whose record would be gone by then.
             BudgetChanges.applyDue(SessionBudget.now());
             String previousText = create(false);
-            Snapshot previous = parse(previousText);
+            Snapshot previous = parseForJournal(previousText);
             Map<String, ?> previousPreferences = new LinkedHashMap<>(
                     Setting.preferences.preferences.getAll());
             if (saveUndo) writeUndo(context, previousText);
@@ -217,7 +223,7 @@ public final class SettingsBackup {
                 operation.complete();
                 closed = true;
             } catch (Exception error) {
-                try { Setting.saveAll(previous.values); } catch (Exception rollback) { error.addSuppressed(rollback); }
+                try { Setting.saveAll(previous.values, true); } catch (Exception rollback) { error.addSuppressed(rollback); }
                 // Only put the Lab back when the apply above reached it. Writing the same
                 // rules again is not free: it raises a restart notice for a store the failed
                 // restore never touched.
@@ -248,7 +254,7 @@ public final class SettingsBackup {
 
     /** Restores the undo copy and returns its text, so the caller can report what it held. */
     public static String undo(Context context) throws Exception {
-        return restoreFrom(context, readableUndoFile(context).openRead(), false);
+        return restoreFrom(context, readableUndoFile(context).openRead(), false, false);
     }
 
     /**
@@ -257,13 +263,18 @@ public final class SettingsBackup {
      */
     public static String restoreFrom(Context context, InputStream input, boolean saveUndo)
             throws Exception {
+        return restoreFrom(context, input, saveUndo, true);
+    }
+
+    private static String restoreFrom(Context context, InputStream input, boolean saveUndo,
+            boolean holdRuleLists) throws Exception {
         String text;
         try {
             text = read(input);
         } catch (Exception error) {
             throw RestoreException.rejected(error);
         }
-        restore(context, text, saveUndo);
+        restore(context, text, saveUndo, holdRuleLists);
         return text;
     }
     /**
@@ -324,7 +335,7 @@ public final class SettingsBackup {
         AtomicFile file = readableUndoFile(context);
         if (!hasAtomicFile(file)) return false;
         try (InputStream input = file.openRead()) {
-            parse(read(input));
+            parseForJournal(read(input));
             return true;
         } catch (Exception error) {
             return false;
@@ -362,7 +373,7 @@ public final class SettingsBackup {
         // back what an interrupted change found is none of those, so it writes everything.
         BudgetChanges.Split budget = puttingBack
                 ? null : BudgetChanges.forRestore(snapshot.values, SessionBudget.now());
-        Setting.saveAll(budget == null ? snapshot.values : budget.apply);
+        Setting.saveAll(budget == null ? snapshot.values : budget.apply, snapshot.deviceState || puttingBack);
         // A backup from another TikTok build carries no rules that mean anything here, so the
         // Lab is left as it was rather than emptied.
         if (snapshot.labIncluded) {
@@ -391,8 +402,56 @@ public final class SettingsBackup {
         }
     }
 
+    /**
+     * A file from outside: an import, or the defaults a reset writes. Its feed rule lists are
+     * held to the limits a save enforces, so a hand-edited or foreign file can't load more than
+     * the filter can keep.
+     */
     private static Snapshot parse(String text) throws JSONException, IOException {
-        return parseForJournal(text);
+        return decode(text, true);
+    }
+
+    /**
+     * The device's own state: the snapshot a restore takes of what it replaces, the undo copy
+     * made from that snapshot, and the journal's records. Those are already in effect, so the
+     * rule-list limits aren't held to them. A list kept from before the 2026-09-14 limits made
+     * every restore, reset and undo on that phone fail with the generic message, since each one
+     * reads the device's own snapshot first.
+     */
+    static Snapshot parseForJournal(String text) throws JSONException, IOException {
+        return decode(text, false);
+    }
+
+    /** A feed rule list longer than a backup may carry, named by the setting's title. */
+    public static final class RuleListTooLarge extends IOException {
+        public final String listTitle;
+
+        RuleListTooLarge(String listTitle) {
+            super(listTitle + " exceeds its storage limit");
+            this.listTitle = listTitle;
+        }
+    }
+
+    /**
+     * The backup the Save row writes. A list kept from before the 2026-09-14 limits would give
+     * a file every restore refuses, so the save is refused instead, naming the list to shorten.
+     */
+    public static String export() throws JSONException, IOException {
+        Settings.REGION_SPOOF.get();
+        for (Setting<?> setting : Setting.allLoadedSettings()) {
+            if (included(setting) && feedRuleProblem(setting, setting.savedValue()) != null) {
+                throw new RuleListTooLarge(ruleListTitle(setting));
+            }
+        }
+        return create(false);
+    }
+
+    /** The settings row each feed rule list is edited on. */
+    private static String ruleListTitle(Setting<?> setting) {
+        if (setting == Settings.BLOCKED_CAPTION_WORDS) return "Blocked caption words";
+        if (setting == Settings.BLOCKED_CREATORS) return "Blocked creators";
+        if (setting == Settings.LOCAL_HIDDEN_CREATORS) return "Creators hidden on this phone";
+        return "Creator exceptions";
     }
 
     static boolean matchesForJournal(Snapshot expected) {
@@ -447,7 +506,7 @@ public final class SettingsBackup {
         return base.isFile() || new File(base.getPath() + ".bak").isFile();
     }
 
-    static Snapshot parseForJournal(String text) throws JSONException, IOException {
+    private static Snapshot decode(String text, boolean holdRuleLists) throws JSONException, IOException {
         if (text == null || text.getBytes(StandardCharsets.UTF_8).length > MAX_BYTES) {
             throw new RejectedBackup(Reason.SIZE, "Invalid backup size");
         }
@@ -518,7 +577,7 @@ public final class SettingsBackup {
             if (!included(setting)) continue;
             if (values.has(setting.key)) {
                 Object converted = convert(setting.defaultValue, values.get(setting.key), setting.key);
-                if (feedRuleProblem(setting, converted) != null) {
+                if (holdRuleLists && feedRuleProblem(setting, converted) != null) {
                     throw new RejectedBackup(Reason.RULE_LIST,
                             "Feed rule list exceeds its storage limit");
                 }
@@ -535,7 +594,9 @@ public final class SettingsBackup {
         if (!labApplies) {
             // Leaving the Lab exactly as it is, rather than clearing it: the backup says nothing
             // about this TikTok build, so it is not evidence that the user wanted no rules.
-            return new Snapshot(updates, null, false, false, false, absent);
+            Snapshot snapshot = new Snapshot(updates, null, false, false, false, absent);
+            snapshot.deviceState = !holdRuleLists;
+            return snapshot;
         }
         // Refused by name before the rules are read, so the reader hears what was wrong with
         // the file rather than the unexplained rejection a parse failure would give.
@@ -543,8 +604,10 @@ public final class SettingsBackup {
         if (labRules != null && labRules.length() > FeatureGateLabStore.MAX_RULES) {
             throw new RejectedBackup(Reason.LAB_RULES, "Too many Feature Gate Lab rules");
         }
-        return new Snapshot(updates, FeatureGateLabStore.parseSettings(lab),
+        Snapshot snapshot = new Snapshot(updates, FeatureGateLabStore.parseSettings(lab),
                 lab.getBoolean("master"), lab.getBoolean("acknowledged"), true, absent);
+        snapshot.deviceState = !holdRuleLists;
+        return snapshot;
     }
 
     private static String feedRuleProblem(Setting<?> setting, Object value) {
@@ -616,6 +679,12 @@ public final class SettingsBackup {
         final boolean labIncluded;
         /** Included settings the file did not carry, kept at whatever the device already held. */
         final int absent;
+
+        /**
+         * Read as the device's own state (an undo copy, the snapshot a restore replaces, a journal
+         * record), so writing it back keeps a value a newer bound would refuse.
+         */
+        boolean deviceState;
 
         Snapshot(Map<Setting<?>, Object> values, List<FeatureGateLabStore.Rule> rules,
                 boolean master, boolean acknowledged, boolean labIncluded, int absent) {

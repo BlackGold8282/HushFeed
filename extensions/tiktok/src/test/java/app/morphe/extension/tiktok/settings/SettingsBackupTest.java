@@ -214,6 +214,51 @@ public class SettingsBackupTest {
         }
     }
 
+    /**
+     * A list stored before the 2026-09-14 limits: load() keeps what an older build saved, and the
+     * bound only runs on save. Every restore reads the device's own state first, so reading that
+     * with the limits made restore, reset and undo on such a phone all fail with the generic
+     * message. The save row refuses instead, naming the list, since every restore would refuse
+     * the file it wrote.
+     */
+    @Test public void aListKeptFromBeforeTheLimitsLeavesRestoreResetAndUndoWorking() throws Exception {
+        android.content.Context context = RuntimeEnvironment.getApplication();
+        String backup = SettingsBackup.create(false);
+        String oversized = ruleEntries(FeedRuleLimits.MAX_ENTRIES + 1);
+        storedByAnOlderBuild(Settings.BLOCKED_CREATORS, oversized);
+        assertEquals(oversized, Settings.BLOCKED_CREATORS.get());
+
+        SettingsBackup.restore(context, backup, true);
+        assertEquals("a file that carries the list replaces it", "", Settings.BLOCKED_CREATORS.get());
+        SettingsBackup.undo(context);
+        assertEquals("the way back puts the older list back as it was", oversized, Settings.BLOCKED_CREATORS.get());
+
+        JSONObject without = new JSONObject(backup);
+        without.getJSONObject("settings").remove(Settings.BLOCKED_CREATORS.key);
+        JSONArray keys = without.getJSONArray("setting_keys");
+        for (int index = keys.length() - 1; index >= 0; index--) {
+            if (Settings.BLOCKED_CREATORS.key.equals(keys.getString(index))) keys.remove(index);
+        }
+        SettingsBackup.restore(context, without.toString(), false);
+        assertEquals("a file without the list leaves it alone", oversized, Settings.BLOCKED_CREATORS.get());
+
+        SettingsBackup.reset(context);
+        assertEquals("", Settings.BLOCKED_CREATORS.get());
+
+        storedByAnOlderBuild(Settings.LOCAL_HIDDEN_CREATORS, oversized);
+        SettingsBackup.RuleListTooLarge refused =
+                assertThrows(SettingsBackup.RuleListTooLarge.class, SettingsBackup::export);
+        assertEquals("Creators hidden on this phone", refused.listTitle);
+        storedByAnOlderBuild(Settings.LOCAL_HIDDEN_CREATORS, "");
+        assertEquals(SettingsBackup.create(false), SettingsBackup.export());
+    }
+
+    /** Writes a value the way an older build left it, past the bound a save applies. */
+    private static void storedByAnOlderBuild(app.morphe.extension.shared.settings.StringSetting setting, String value) {
+        Setting.preferences.preferences.edit().putString(setting.key, value).commit();
+        org.robolectric.util.ReflectionHelpers.callInstanceMethod(setting, "load");
+    }
+
     private static String ruleEntries(int count) {
         StringBuilder value = new StringBuilder(count * 8);
         for (int index = 0; index < count; index++) {

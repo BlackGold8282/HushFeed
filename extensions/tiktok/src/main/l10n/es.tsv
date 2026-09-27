@@ -27,6 +27,7 @@
 %1$s changed	%1$s cambiados
 %1$s is already hidden	%1$s ya está oculto
 %1$s destinations must start with %2$s	Los destinos de %1$s deben empezar por %2$s
+%1$s is too long for a settings backup. Shorten it, then save the backup again.	%1$s es demasiado larga para una copia de seguridad de ajustes. Acórtala y vuelve a guardar la copia.
 %1$s needs fixing. %2$s	Hay que corregir %1$s. %2$s
 %1$s is a kind of value the Lab can't override.	%1$s es un tipo de valor que el Lab no puede sustituir.
 %1$s has type %2$s, but the file says %3$s.	%1$s tiene el tipo %2$s, pero el archivo indica %3$s.

@@ -167,7 +167,7 @@ public final class SettingsBackupPreference extends Preference
             int keptAsTheyWere = 0;
             try {
                 if (action == EXPORT) {
-                    byte[] bytes = SettingsBackup.create(false).getBytes(StandardCharsets.UTF_8);
+                    byte[] bytes = SettingsBackup.export().getBytes(StandardCharsets.UTF_8);
                     try (var output = context.getContentResolver().openOutputStream(uri, "wt")) {
                         if (output == null) throw new IOException("Could not open destination");
                         output.write(bytes);
@@ -220,6 +220,11 @@ public final class SettingsBackupPreference extends Preference
                                 : labRulesSkipped
                                 ? "Last change put back. The Feature Gate Lab rules were for another TikTok version and were left out. Restart TikTok to apply all changes."
                                 : "Last change put back. Restart TikTok to apply all changes."));
+            } catch (SettingsBackup.RuleListTooLarge tooLarge) {
+                // Named, since a backup with it in would be refused by every restore.
+                Utils.showToastLong(L10n.f(
+                        "%1$s is too long for a settings backup. Shorten it, then save the backup again.",
+                        L10n.t(tooLarge.listTitle)));
             } catch (Exception error) {
                 Logger.printException(() -> "Settings backup operation failed", error);
                 Utils.showToastLong(L10n.t(failureMessage(action, error)));
