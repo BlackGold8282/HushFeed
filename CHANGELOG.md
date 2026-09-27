@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The Feature Gate Lab leaves more room for gates on small screens (#42). Its title fits in the toolbar, the warning opens from the icon beside Apply overrides, and tabs can scroll sideways at larger text sizes. Search and the override switch stay on screen.
+
 * **TikTok:** The Feature Gate Lab now has Reviewed presets in its menu. The first restores See translation on 47.1.3 by setting both required gates together. You can review the values before applying and undo the whole change. A preset for another TikTok version won't apply.
 
 * **TikTok:** New patch, Mute feed videos. It adds a movable button beside the block control, and a switch under Playback, that play the feed without sound while the phone's volume stays where it is. Music from another app keeps playing while the feed is muted, since TikTok no longer takes the audio over for it. DMs, stories and LIVE keep their sound, and the button says Muted or Sound on to a screen reader.

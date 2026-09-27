@@ -251,17 +251,31 @@ public final class FeatureGateLabFragment extends Fragment {
         // One row, one screen-reader stop: the row is the switch. It used to be two stops that
         // both read "Apply overrides", and only the 44dp switch answered a tap.
         LinearLayout masterRow = FeatureGateLabUi.switchRow(context,
-                L10n.t(context, "Apply overrides"),
-                L10n.t(context, "Replace values when TikTok asks for them"), master);
-        controls.addView(masterRow, FeatureGateLabUi.matchWrap());
-
-        View warning = SettingsUi.inlineNotice(context,
-                L10n.t(context, "A forced value applies to this copy of TikTok whichever account is signed in. It can't get past a check the server makes."),
-                SettingsUi.attentionColor());
-        LinearLayout.LayoutParams warningParams = FeatureGateLabUi.matchWrap();
-        int noticeMargin = FeatureGateLabUi.dp(context, SettingsUi.NOTICE_MARGIN);
-        warningParams.setMargins(0, noticeMargin, 0, noticeMargin);
-        controls.addView(warning, warningParams);
+                L10n.t(context, "Apply overrides"), null, master);
+        masterRow.setPadding(FeatureGateLabUi.dp(context, 12), FeatureGateLabUi.dp(context, 8),
+                FeatureGateLabUi.dp(context, 12), FeatureGateLabUi.dp(context, 8));
+        LinearLayout masterControls = new LinearLayout(context);
+        masterControls.setGravity(Gravity.CENTER_VERTICAL);
+        masterControls.addView(masterRow, new LinearLayout.LayoutParams(0, -2, 1f));
+        TextView help = FeatureGateLabUi.text(context, SettingsUi.ATTENTION_GLYPH, 20,
+                SettingsUi.attentionColor(), Typeface.NORMAL);
+        SettingsUi.styleTextAction(help, false);
+        help.setTextColor(SettingsUi.attentionColor());
+        help.setTag("feature_gate_help");
+        help.setContentDescription(L10n.t(context, "About overrides"));
+        help.setOnClickListener(view -> {
+            if (getActivity() == null) return;
+            AlertDialog notice = new AlertDialog.Builder(getActivity())
+                    .setTitle(L10n.t(context, "About overrides"))
+                    .setMessage(L10n.t(context, "Replace values when TikTok asks for them") + "\n\n"
+                            + L10n.t(context, "A forced value applies to this copy of TikTok whichever account is signed in. It can't get past a check the server makes."))
+                    .setPositiveButton(L10n.t(context, "Close"), null).create();
+            showStyled(notice);
+        });
+        masterControls.addView(help, new LinearLayout.LayoutParams(FeatureGateLabUi.dp(context, 48), -2));
+        LinearLayout.LayoutParams masterParams = FeatureGateLabUi.matchWrap();
+        masterParams.bottomMargin = FeatureGateLabUi.dp(context, 8);
+        controls.addView(masterControls, masterParams);
 
         LinearLayout searchRow = new LinearLayout(context);
         searchRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -342,6 +356,7 @@ public final class FeatureGateLabFragment extends Fragment {
                     Typeface.BOLD
             );
             tab.setGravity(Gravity.CENTER);
+            tab.setSingleLine(true);
             tab.setMinWidth(FeatureGateLabUi.dp(context, 72));
             tab.setMinHeight(FeatureGateLabUi.dp(context, 46));
             tab.setPadding(
@@ -361,7 +376,7 @@ public final class FeatureGateLabFragment extends Fragment {
             ));
             sourceTabs.addView(tabContainer, new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
-                    FeatureGateLabUi.dp(context, 48)
+                    ViewGroup.LayoutParams.WRAP_CONTENT
             ));
         }
         sourceScroller.addView(sourceTabs, new HorizontalScrollView.LayoutParams(
@@ -390,7 +405,9 @@ public final class FeatureGateLabFragment extends Fragment {
             TextView tab = FeatureGateLabUi.text(context, L10n.t(context, VIEW_LABELS[i]), 14,
                     SettingsUi.textSecondary(), Typeface.BOLD);
             tab.setGravity(Gravity.CENTER);
+            tab.setSingleLine(true);
             tab.setMinHeight(FeatureGateLabUi.dp(context, 46));
+            tab.setMinWidth(FeatureGateLabUi.dp(context, 72));
             tab.setPadding(
                     FeatureGateLabUi.dp(context, 14), 0,
                     FeatureGateLabUi.dp(context, 14), 0);
@@ -402,10 +419,14 @@ public final class FeatureGateLabFragment extends Fragment {
             tabContainer.addView(indicator, new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     FeatureGateLabUi.dp(context, 2)));
-            viewTabs.addView(tabContainer, new LinearLayout.LayoutParams(0,
-                    FeatureGateLabUi.dp(context, 48), 1f));
+            viewTabs.addView(tabContainer, new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
-        controls.addView(viewTabs, FeatureGateLabUi.matchWrap());
+        HorizontalScrollView viewScroller = new HorizontalScrollView(context);
+        viewScroller.setFillViewport(false);
+        viewScroller.setHorizontalScrollBarEnabled(false);
+        viewScroller.addView(viewTabs, new HorizontalScrollView.LayoutParams(-2, -2));
+        controls.addView(viewScroller, FeatureGateLabUi.matchWrap());
 
         LinearLayout resultRow = new LinearLayout(context);
         resultRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -413,7 +434,8 @@ public final class FeatureGateLabFragment extends Fragment {
         count = SettingsUi.resultCount(context, "feature_gate_result_count");
         count.setText(L10n.t(context, "Loading gates…"));
         count.setGravity(Gravity.CENTER_VERTICAL);
-        resultRow.addView(count, new LinearLayout.LayoutParams(0, FeatureGateLabUi.dp(context, 44), 1f));
+        count.setMinHeight(FeatureGateLabUi.dp(context, 48));
+        resultRow.addView(count, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
         filterButton = FeatureGateLabUi.text(context, "", 14, SettingsUi.textPrimary(), Typeface.BOLD);
         filterButton.setTag("feature_gate_filter");
         SettingsUi.styleTextAction(filterButton, false);
@@ -430,7 +452,7 @@ public final class FeatureGateLabFragment extends Fragment {
         filterButton.setOnClickListener(view -> showFilterPicker());
         resultRow.addView(filterButton, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-                FeatureGateLabUi.dp(context, 44)
+                ViewGroup.LayoutParams.WRAP_CONTENT
         ));
         controls.addView(resultRow, FeatureGateLabUi.matchWrap());
 

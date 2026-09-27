@@ -376,7 +376,9 @@ Feature Gate Lab saves its master switch immediately. Its menu can reset overrid
 
 The Lab can also bring back a missing See translation link. On TikTok 47.1.3, open the Lab menu, choose Reviewed presets, then Show See translation. The preview lists both values before you apply them. Turn on the Lab's overrides switch and restart TikTok to use the preset. Undo last Lab change restores the previous rules. This preset is only available for the version it was checked on. On the test account, `feed_translation_reverse` and `cla_translate_button_weaken_v2` were both 1; setting both to 0 brought the link back, and either one alone didn't.
 
-<img src="assets/settings/lab.png" alt="Feature Gate Lab with immediate master control and settings menu" width="300" />
+The Lab uses a compact toolbar so more gates fit on small screens. Tap the warning icon beside Apply overrides for the explanation and account warning. Source and view tabs scroll sideways when larger text needs more room.
+
+<img src="assets/settings/lab.png" alt="Feature Gate Lab with compact controls and a scrollable gate list" width="300" />
 <img src="assets/settings/lab-preset.png" alt="See translation preset showing both gate changes before applying" width="300" />
 
 <br>
