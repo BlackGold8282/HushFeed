@@ -253,7 +253,7 @@ public final class CameraMicIndicator {
     }
 
     private static int dp(Context context, int value) {
-        return Math.round(value * context.getResources().getDisplayMetrics().density);
+        return SettingsUi.dp(context, value);
     }
 
     /**
