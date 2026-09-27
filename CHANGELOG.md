@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The block symbol Block from comment puts beside a comment's heart is easier to hit. It was about 40 by 24 dp, and a tap now counts anywhere in a 48 dp square around it where the row has blank space. A tap meant for the heart, the comment text or the next comment still goes there, and Larger comment Like target keeps working beside it.
 * **TikTok:** Ghost mode also holds back the play report TikTok sends when a story plays (#39). Every story view went out twice: once as a story view, which Ghost mode already blocked, and once as an ordinary play count carrying the story's id, which it didn't, and a second account could still see you in its viewer list. Feed videos still send their play reports as before. This hasn't been checked with two accounts yet, so the diagnostic report now has a "story play stats" line saying whether the report was held back.
 * **TikTok:** Hide videos you have already seen has a new row, Count a video as seen after. Set a percent and a video only counts once you've watched that much of it, so five seconds of a ten-minute video no longer hides it at 50%. Zero, the default, keeps the old rule of a few seconds. A video TikTok gives no length for still counts after two seconds, and a short clip never needs its last second.
 * **TikTok:** The settings search and the Feature Gate Lab search match text the same way now: case, accents and punctuation don't matter in either, so "pre roll" finds "Pre-roll".
