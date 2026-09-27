@@ -435,6 +435,37 @@ public class CreatorExceptionsTest {
         }
     }
 
+    /**
+     * The same page marked where TikTok parses it and not yet stamped, which is how 47.x's advance
+     * request and feed author preload read someone else's profile: on a phone, a minimum view
+     * count emptied a small creator's grid page by page. Unmarked, the page is the feed's again.
+     */
+    @Test
+    public void aProfilesListMarkedWhereItIsParsedKeepsItsPostsBeforeTheStamp() {
+        List<Case> cases = new ArrayList<>(subjectiveCases());
+        for (Case which : hardCases()) if (!which.filter.equals("AdsFilter")) cases.add(which);
+        for (Case which : cases) {
+            quiet();
+            which.enable.run();
+            FeedItemList parsed = page(tripped("post", which), stranger("plain"));
+            FeedItemsFilter.markProfileResponse(parsed);
+            assertEquals(which.filter + " hid a post from a profile page read before its stamp",
+                    List.of("post", "plain"), survivors(parsed));
+            assertEquals(which.filter + " did not run on an unmarked page, so the marked case proves nothing",
+                    List.of("plain"), survivors(page(tripped("post", which), stranger("plain"))));
+        }
+        quiet();
+        Settings.REMOVE_ADS.save(true);
+        Item ad = new Item("ad");
+        ad.ad = true;
+        FeedItemList parsed = page(ad, stranger("plain"));
+        FeedItemsFilter.markProfileResponse(parsed);
+        assertEquals("a marked profile page still loses its ads", List.of("plain"), survivors(parsed));
+        // Whatever else the parse returns (a user, a search result) passes through untouched.
+        FeedItemsFilter.markProfileResponse(null);
+        FeedItemsFilter.markProfileResponse("{}");
+    }
+
     @Test
     public void aProfilesListStillLosesItsAds() {
         Settings.REMOVE_ADS.save(true);

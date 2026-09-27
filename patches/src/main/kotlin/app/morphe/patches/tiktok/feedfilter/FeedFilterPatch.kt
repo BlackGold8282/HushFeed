@@ -157,6 +157,28 @@ val feedFilterPatch = bytecodePatch(
                 "$EXTENSION_CLASS_DESCRIPTOR->filterOnRead(Lcom/ss/android/ugc/aweme/feed/model/FeedItemList;)V",
         )
 
+        // A profile's list is read before its model stamps dataUserId on it (the advance request
+        // and the feed author preload read getItems first), so it is marked where it is parsed.
+        // Unmarked, the feed's preferences emptied someone else's profile page by page, and each
+        // empty page made TikTok load the next.
+        ProfileApiExecuteFingerprint.method.let { method ->
+            val returnIndices = method.implementationOrPatchException("Feed filter").instructions.withIndex()
+                .filter { it.value.opcode == Opcode.RETURN_OBJECT }
+                .map { it.index }
+                .toList()
+            if (returnIndices.isEmpty()) {
+                throw PatchException("Feed filter: apiExecuteGetJSONObject returns nothing to mark")
+            }
+            returnIndices.asReversed().forEach { returnIndex ->
+                val register = (method.getInstruction(returnIndex) as OneRegisterInstruction).registerA
+                method.addInstructionsAtControlFlowLabel(
+                    returnIndex,
+                    "invoke-static/range {v$register .. v$register}, " +
+                        "$EXTENSION_CLASS_DESCRIPTOR->markProfileResponse(Ljava/lang/Object;)V",
+                )
+            }
+        }
+
         FollowFeedFingerprint.method.let { method ->
             val returnIndices =
                 method.implementation!!.instructions.withIndex()
