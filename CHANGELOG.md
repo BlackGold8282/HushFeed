@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The diagnostic report has a LIVE BUTTON section that says what decided the LIVE button in the feed's corner each time: the Hide the LIVE button switch, TikTok hiding it because LIVE has a bottom or top tab, or Hushfeed keeping it because that tab was taken off (#28).
 * **TikTok:** New patch, Stay on the video in full screen. When a video ends in TikTok's full-screen viewer, you stay on that video instead of being moved to the next one, and the next-video countdown doesn't show. Turn it on in Hushfeed settings > Playback. Swiping still moves on. The viewer has an auto-next of its own, which Auto-advance and Stop video looping never reached.
 * **TikTok:** People and apps hidden from the share sheet one per line are hidden from its contact row too. That row only split the list on commas, while the rest of the sheet also split it on line breaks.
 * **TikTok:** Share sheet tools looks through TikTok's screens once per layout pass instead of four times. It runs on every layout of the main screen, share sheet open or not.
