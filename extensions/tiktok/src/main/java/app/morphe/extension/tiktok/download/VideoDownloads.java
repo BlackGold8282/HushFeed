@@ -69,7 +69,8 @@ final class VideoDownloads {
         List<String> videoUrls = List.copyOf(selectedUrls);
         boolean dash = selected != null && Boolean.TRUE.equals(Reflect.invoke(video, "hasDashBitrate"));
         List<String> audioUrls = dash ? List.copyOf(audioUrls(video, selected)) : Collections.emptyList();
-        if (videoUrls.isEmpty() || (dash && !muted && audioUrls.isEmpty())) {
+        boolean unavailable = videoUrls.isEmpty() || (dash && !muted && audioUrls.isEmpty());
+        if (unavailable && !checkSaved) {
             if (extras) {
                 Utils.showToastLong(L10n.t("This video isn't available as a complete file. Try again later."));
                 return true;
@@ -107,6 +108,13 @@ final class VideoDownloads {
         List<SubtitleDownloads.Track> captionSnapshot = List.copyOf(captions);
         if (!ACTIVE.add(id)) return true;
         Runnable save = () -> {
+            // A source is needed for a new copy, but a remembered file can still be opened
+            // after TikTok stops supplying a download address for this post.
+            if (unavailable) {
+                ACTIVE.remove(id);
+                Utils.showToastLong(L10n.t("This video isn't available as a complete file. Try again later."));
+                return;
+            }
             Utils.showToastShort(L10n.f("Saving video to %1$s", path));
             List<File> temporary = new ArrayList<>();
             // The video, the sound beside it when wanted, then each subtitle track. From three

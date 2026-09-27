@@ -172,6 +172,36 @@ public class SavedVideoArchiveTest {
         assertTrue(new File(root, "alice/123.mp4").isFile());
     }
 
+    @Test public void aSavedFileIsOfferedEvenWhenThePostHasLostItsDownloadSource() throws Exception {
+        assertTrue(VideoDownloads.start(new Post(), owner.get()));
+        awaitJobs();
+        File first = new File(root, "alice/123.mp4");
+        Post unavailable = new Post();
+        unavailable.video = null;
+        assertTrue(VideoDownloads.start(unavailable, owner.get()));
+        awaitJobs();
+        AlertDialog choice = (AlertDialog) ShadowDialog.getLatestDialog();
+        assertNotNull("A missing download source hid the existing file", choice);
+        assertTrue(choice.isShowing());
+        assertEquals("Open", choice.getButton(AlertDialog.BUTTON_NEGATIVE).getText().toString());
+        assertEquals(1, requests.get());
+
+        choice.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
+        Shadows.shadowOf(Looper.getMainLooper()).idle();
+        awaitJobs();
+        assertEquals("This video isn't available as a complete file. Try again later.",
+                org.robolectric.shadows.ShadowToast.getTextOfLatestToast());
+        assertEquals(1, requests.get());
+        assertArrayEquals(VIDEO, Files.readAllBytes(first.toPath()));
+        assertEquals("123.mp4", SavedVideoArchive.find(owner.get(), "123").name);
+
+        // Refusing Save again must release this post so the saved file remains reachable.
+        assertTrue(VideoDownloads.start(unavailable, owner.get()));
+        awaitJobs();
+        assertNotSame(choice, ShadowDialog.getLatestDialog());
+        assertTrue(ShadowDialog.getLatestDialog().isShowing());
+    }
+
     @Test public void openUsesTheSavedUriAndCancelReleasesThePendingSave() throws Exception {
         AtomicInteger again = new AtomicInteger(), released = new AtomicInteger();
         Uri uri = Uri.parse("content://media/external/video/media/77");
@@ -246,7 +276,7 @@ public class SavedVideoArchiveTest {
     }
 
     public static final class Post extends DownloadDetailsTest.Post {
-        public final Video video = new Video();
+        public Video video = new Video();
         Post() { super("alice", "123"); desc = "A saved caption"; }
         public Video getVideo() { return video; }
     }

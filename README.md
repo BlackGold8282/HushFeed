@@ -348,7 +348,7 @@ Start **Video filename** with `{creator}/` to give each creator a folder under y
 
 With `Advanced downloads`, **Save details beside the video** writes a TXT file containing the caption, creator handle, source link and publication date. Android 10 and later put the video and its details in Download or Documents, keeping the chosen subfolder, because Android won't accept a TXT file in DCIM. Older Android versions keep the chosen video folder. Subtitles saved with a details file use that same folder.
 
-**Check for already-saved videos** remembers up to 10,000 successful video saves made while it's on. Saving one again offers Open or Save again if the file is still available. Deleted files can be downloaded again. The record stays on the phone. Both switches start off and apply to Hushfeed's saves, including video stories, rather than links handed to another app.
+**Check for already-saved videos** remembers up to 10,000 successful video saves made while it's on. Saving one again offers Open or Save again if the file is still available, even if TikTok no longer supplies its download link. Deleted files can be downloaded again. The record stays on the phone. Both switches start off and apply to Hushfeed's saves, including video stories, rather than links handed to another app.
 
 <img src="assets/settings/already-saved.png" alt="Already-saved video choices in the dark theme" width="300" /> <img src="assets/settings/already-saved-light.png" alt="Already-saved video choices in the light theme" width="300" />
 
