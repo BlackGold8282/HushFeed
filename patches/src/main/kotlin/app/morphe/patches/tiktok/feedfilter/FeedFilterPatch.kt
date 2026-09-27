@@ -61,10 +61,11 @@ val feedFilterPatch = bytecodePatch(
         "labeled videos, location-tagged videos, verified accounts, series, mini dramas, playlists, " +
         "the playlist bar, the floating event badge and inserted cards. Videos can also be " +
         "filtered by your own caption words, creator handles or patterns, sound names, length, " +
-        "the country they were posted from and their view, like, comment, favorite and share " +
-        "counts. A short list of creator exceptions lets chosen accounts through the filters on " +
-        "the kind of post, its labels, age, length and counts. Ads, blocked creators, words, " +
-        "sounds and countries, paid and Shop content, LIVE and seen videos still apply to them. " +
+        "the country they were posted from, the language of their original caption and their " +
+        "view, like, comment, favorite and share counts. A short list of creator exceptions lets " +
+        "chosen accounts through the filters on the kind of post, its labels, age, length and " +
+        "counts. Ads, blocked creators, words, sounds, countries and caption languages, paid and " +
+        "Shop content, LIVE and seen videos still apply to them. " +
         "Sponsored cards are dropped from the profile video viewer, the search grids " +
         "and the Friends tab as well as the feed, and so are the mid-roll ads TikTok splices " +
         "into a video pager after the list has loaded and the ads a creator's video pager asks " +
