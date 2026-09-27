@@ -24,6 +24,7 @@
 %1$s is already hidden	%1$s já está escondido
 %1$s destinations must start with %2$s	Os destinos de %1$s precisam começar com %2$s
 %1$s is too long for a settings backup. Shorten it, then save the backup again.	%1$s é longa demais para um backup de configurações. Encurte a lista e salve o backup de novo.
+%1$s isn't a language code, so no video would ever match it. Use two letters, like en, es or de.	%1$s não é um código de idioma, então nenhum vídeo combinaria. Use duas letras, como en, es ou de.
 %1$s needs fixing. %2$s	%1$s precisa ser corrigido. %2$s
 %1$s is a kind of value the Lab can't override.	%1$s é um tipo de valor que o Lab não consegue substituir.
 %1$s has type %2$s, but the file says %3$s.	%1$s tem o tipo %2$s, mas o arquivo informa %3$s.
@@ -77,6 +78,9 @@ Add older seen videos to this account	Adicionar vídeos vistos anteriores a esta
 Added %1$s older seen videos to this account	%1$s vídeos vistos anteriores adicionados a esta conta
 Added one older seen video to this account	Um vídeo visto anterior adicionado a esta conta
 Added to this account.	Adicionados a esta conta.
+Caption languages	Idiomas de legenda
+Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds, countries and caption languages, and seen videos still apply.	Nomes de conta ou ids de usuário separados por vírgula. Os vídeos deles ficam quando só um filtro por tipo de publicação, rótulos, idade, duração ou números os esconderia. Anúncios, criadores, palavras, sons, países e idiomas de legenda bloqueados e vídeos já vistos continuam valendo.
+Comma separated language codes, like en, es. A video whose original caption is in another language is hidden. Videos with no caption, or only translated ones, always stay.	Códigos de idioma separados por vírgula, como en, es. Um vídeo cuja legenda original está em outro idioma é ocultado. Vídeos sem legenda, ou só com legendas traduzidas, sempre ficam.
 Couldn't add the older seen videos. Try again.	Não foi possível adicionar os vídeos vistos anteriores. Tente de novo.
 Couldn't copy the report. Use Save report instead.	Não foi possível copiar o relatório. Use “Salvar relatório”.
 Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.	Não foi possível ler os valores atuais do TikTok (%1$s). Atualize os valores pelo menu para tentar de novo.
@@ -94,6 +98,7 @@ Loading the gate list and TikTok's current values…	Carregando a lista de gates
 New value	Novo valor
 No app on this phone opens that file	Nenhum app neste celular abre esse arquivo
 One video was recorded before each account kept its own list. It hides nothing until you add it here.	Um vídeo foi registrado antes de cada conta ter sua própria lista. Ele não oculta nada até você adicioná-lo aqui.
+Only these caption languages	Só estes idiomas de legenda
 Open	Abrir
 Photos can't be saved to the folder in that file, so your photo folder was kept	Fotos não podem ser salvas na pasta desse arquivo, então sua pasta de fotos foi mantida
 Preview shortened. Save report keeps the full report.	Prévia encurtada. “Salvar relatório” mantém o relatório completo.
@@ -1149,7 +1154,7 @@ When TikTok requests this key, return the selected value below	Quando o TikTok p
 When a video ends in full screen, stay on it instead of moving to the next one. Swiping still moves on.	Quando um vídeo termina em tela cheia, fica nele em vez de passar para o próximo. Deslizar ainda avança.
 While diagnostic logging is on, a message names the part of Hushfeed that failed. Off keeps failures in the report only.	Enquanto o registro de diagnóstico estiver ligado, uma mensagem indica a parte do Hushfeed que falhou. Desligado, as falhas ficam só no relatório.
 Window width needed to enable the layout. Restart TikTok to apply this.	Largura de janela necessária para ligar o layout. Reinicie o TikTok para aplicar.
-Words and countries	Palavras e países
+Words, countries and languages	Palavras, países e idiomas
 Write the video's sound beside it as an .m4a. Android 10 and later file audio separately, so it lands in Music under the same folder name as your videos.	Escrever o som do vídeo ao lado dele como um .m4a. O Android 10 e posteriores arquivam o áudio à parte, então ele vai para Music, numa pasta com o mesmo nome da dos seus vídeos.
 YTDLnis background mode	Modo em segundo plano do YTDLnis
 YTDLnis download type	Tipo de download do YTDLnis
@@ -1271,7 +1276,6 @@ Saved %1$s of %2$s, the rest ran out of time	%1$s de %2$s salvos, o restante fic
 Live photo clip saved to %1$s	Clipe da foto ao vivo salvo em %1$s
 The live photo's clip couldn't be saved. Try again.	O clipe da foto ao vivo não pôde ser salvo. Tente novamente.
 Creator exceptions	Exceções de criadores
-Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds and countries, and seen videos still apply.	Nomes de conta ou ids de usuário separados por vírgula. Os vídeos deles ficam quando só um filtro por tipo de publicação, rótulos, idade, duração ou números os esconderia. Anúncios, criadores, palavras, sons e países bloqueados e vídeos já vistos continuam valendo.
 An exception names one creator, so a pattern can't be one: %1$s	Uma exceção nomeia um criador, então um padrão não pode ser uma: %1$s
 An exception takes a handle or id, not a display name: %1$s	Uma exceção recebe um nome de conta ou id, não um nome de exibição: %1$s
 Also on a block list, so still hidden: %1$s	Também está numa lista de bloqueio, então continua escondido: %1$s

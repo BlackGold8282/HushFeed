@@ -23,6 +23,7 @@
 %1$s changed	%1$s değişti
 %1$s destinations must start with %2$s	%1$s hedefleri %2$s ile başlamalı
 %1$s is too long for a settings backup. Shorten it, then save the backup again.	%1$s bir ayar yedeği için çok uzun. Kısaltın, ardından yedeği yeniden kaydedin.
+%1$s isn't a language code, so no video would ever match it. Use two letters, like en, es or de.	%1$s bir dil kodu değil, bu yüzden hiçbir video eşleşmez. en, es veya de gibi iki harf kullan.
 %1$s needs fixing. %2$s	%1$s düzeltilmeli. %2$s
 %1$s is a kind of value the Lab can't override.	%1$s, Lab'in geçersiz kılamayacağı bir değer türü.
 %1$s has type %2$s, but the file says %3$s.	%1$s türü %2$s, ama dosyada %3$s yazıyor.
@@ -77,6 +78,9 @@ Add older seen videos to this account	Eski görülen videoları bu hesaba ekle
 Added %1$s older seen videos to this account	%1$s eski görülen video bu hesaba eklendi
 Added one older seen video to this account	Bu hesaba daha önce görülen bir video eklendi
 Added to this account.	Bu hesaba eklendi.
+Caption languages	Altyazı dilleri
+Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds, countries and caption languages, and seen videos still apply.	Virgülle ayrılmış hesap adları veya kullanıcı kimlikleri. Videoları, yalnızca gönderi türü, etiketleri, yaşı, süresi veya sayılarıyla ilgili bir filtre onları gizleyecekse kalır. Reklamlar, engellenen içerik üreticiler, kelimeler, sesler, ülkeler ve altyazı dilleri ile izlenmiş videolar geçerli olmaya devam eder.
+Comma separated language codes, like en, es. A video whose original caption is in another language is hidden. Videos with no caption, or only translated ones, always stay.	Virgülle ayrılmış dil kodları, örneğin en, es. Özgün altyazısı başka bir dilde olan video gizlenir. Altyazısı olmayan ya da yalnızca çevrilmiş altyazısı olan videolar her zaman kalır.
 Couldn't add the older seen videos. Try again.	Eski görülen videolar eklenemedi. Tekrar dene.
 Couldn't copy the report. Use Save report instead.	Rapor kopyalanamadı. Bunun yerine "Raporu kaydet"i kullan.
 Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.	TikTok'un geçerli değerleri okunamadı (%1$s). Yeniden denemek için menüden değerleri yenile.
@@ -94,6 +98,7 @@ Loading the gate list and TikTok's current values…	Gate listesi ve TikTok'un g
 New value	Yeni değer
 No app on this phone opens that file	Bu telefonda o dosyayı açan bir uygulama yok
 One video was recorded before each account kept its own list. It hides nothing until you add it here.	Her hesabın kendi listesi olmadan önce bir video kaydedildi. Buraya ekleyene kadar hiçbir şeyi gizlemez.
+Only these caption languages	Yalnızca bu altyazı dilleri
 Open	Aç
 Photos can't be saved to the folder in that file, so your photo folder was kept	Fotoğraflar o dosyadaki klasöre kaydedilemiyor, bu yüzden fotoğraf klasörün korundu
 Preview shortened. Save report keeps the full report.	Önizleme kısaltıldı. "Raporu kaydet" raporun tamamını saklar.
@@ -1185,7 +1190,7 @@ When TikTok requests this key, return the selected value below	TikTok bu anahtar
 When a video ends in full screen, stay on it instead of moving to the next one. Swiping still moves on.	Tam ekranda bir video bittiğinde bir sonrakine geçmek yerine onda kalır. Kaydırmak yine ilerletir.
 While diagnostic logging is on, a message names the part of Hushfeed that failed. Off keeps failures in the report only.	Tanılama günlüğü açıkken bir mesaj, Hushfeed'in hata veren bölümünün adını söyler. Kapalıyken hatalar yalnızca raporda kalır.
 Window width needed to enable the layout. Restart TikTok to apply this.	Düzeni etkinleştirmek için gereken pencere genişliği. Bunu uygulamak için TikTok'u yeniden başlat.
-Words and countries	Kelimeler ve ülkeler
+Words, countries and languages	Kelimeler, ülkeler ve diller
 Working	Çalışıyor
 Write the video's sound beside it as an .m4a. Android 10 and later file audio separately, so it lands in Music under the same folder name as your videos.	Videonun sesini .m4a olarak videonun yanına yaz. Android 10 ve sonrası ses dosyalarını ayrı tutar, bu yüzden dosya Music altında, videolarınla aynı adlı klasöre gider.
 YTDLnis background mode	YTDLnis arka plan modu
@@ -1271,7 +1276,6 @@ Saved %1$s of %2$s, the rest ran out of time	%2$s dosyadan %1$s kaydedildi, kala
 Live photo clip saved to %1$s	Canlı fotoğraf klibi %1$s konumuna kaydedildi
 The live photo's clip couldn't be saved. Try again.	Canlı fotoğrafın klibi kaydedilemedi. Tekrar deneyin.
 Creator exceptions	İçerik üretici istisnaları
-Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds and countries, and seen videos still apply.	Virgülle ayrılmış hesap adları veya kullanıcı kimlikleri. Videoları, yalnızca gönderi türü, etiketleri, yaşı, süresi veya sayılarıyla ilgili bir filtre onları gizleyecekse kalır. Reklamlar, engellenen içerik üreticiler, kelimeler, sesler ve ülkeler ile izlenmiş videolar geçerli olmaya devam eder.
 An exception names one creator, so a pattern can't be one: %1$s	Bir istisna tek bir içerik üreticiyi adlandırır, bu yüzden bir kalıp istisna olamaz: %1$s
 An exception takes a handle or id, not a display name: %1$s	Bir istisna hesap adı veya kimlik alır, görünen ad değil: %1$s
 Also on a block list, so still hidden: %1$s	Bir engelleme listesinde de var, bu yüzden gizli kalır: %1$s

@@ -32,6 +32,7 @@ source,target
 %1$s is already hidden,%1$s is already hidden
 "%1$s is too long for a settings backup. Shorten it, then save the backup again.","%1$s is too long for a settings backup. Shorten it, then save the backup again."
 "%1$s isn't a country code, so no video would ever match it. Use two letters, like GB, IE or US.","%1$s isn't a country code, so no video would ever match it. Use two letters, like GB, IE or US."
+"%1$s isn't a language code, so no video would ever match it. Use two letters, like en, es or de.","%1$s isn't a language code, so no video would ever match it. Use two letters, like en, es or de."
 %1$s isn't in this Lab catalog.,%1$s isn't in this Lab catalog.
 %1$s isn't installed or doesn't take links,%1$s isn't installed or doesn't take links
 %1$s left,%1$s left
@@ -206,6 +207,7 @@ Camera in use,Camera in use
 Cancel,Cancel
 Caption above comments,Caption above comments
 Caption background,Caption background
+Caption languages,Caption languages
 Caption text size,Caption text size
 Captions,Captions
 "Captions, gestures and on-screen controls","Captions, gestures and on-screen controls"
@@ -238,10 +240,11 @@ Clearing,Clearing
 Clearing suggested accounts,Clearing suggested accounts
 "Clearing, %1$d so far","Clearing, %1$d so far"
 Close,Close
-"Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds and countries, and seen videos still apply.","Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds and countries, and seen videos still apply."
+"Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds, countries and caption languages, and seen videos still apply.","Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds, countries and caption languages, and seen videos still apply."
 "Comma separated account handles or user ids. Videos from these accounts are always hidden. An entry between slashes, like /^news_/, is a pattern matched against the handle and the display name.","Comma separated account handles or user ids. Videos from these accounts are always hidden. An entry between slashes, like /^news_/, is a pattern matched against the handle and the display name."
 "Comma separated country codes, like GB, IE. Videos posted from anywhere else are hidden. Leave empty for all countries.","Comma separated country codes, like GB, IE. Videos posted from anywhere else are hidden. Leave empty for all countries."
 "Comma separated country codes. Videos posted from these are hidden, whatever the list above says.","Comma separated country codes. Videos posted from these are hidden, whatever the list above says."
+"Comma separated language codes, like en, es. A video whose original caption is in another language is hidden. Videos with no caption, or only translated ones, always stay.","Comma separated language codes, like en, es. A video whose original caption is in another language is hidden. Videos with no caption, or only translated ones, always stay."
 "Comma separated list of any other Inbox row titles to hide, matched exactly. Use this for anything not listed above.","Comma separated list of any other Inbox row titles to hide, matched exactly. Use this for anything not listed above."
 "Comma separated names exactly as the share sheet shows them: friends in the Send to row, share targets such as Facebook, and actions such as Create group or Repost. Stable keys such as copy, save and dislike also work before the sheet opens.","Comma separated names exactly as the share sheet shows them: friends in the Send to row, share targets such as Facebook, and actions such as Create group or Repost. Stable keys such as copy, save and dislike also work before the sheet opens."
 Comma separated sound ids recorded by the player's sound button. Remove one to unblock it.,Comma separated sound ids recorded by the player's sound button. Remove one to unblock it.
@@ -748,6 +751,7 @@ Only bottom tabs TikTok has loaded on this device are shown here. This doesn't f
 Only fields the Lab can check and copy safely are shown.,Only fields the Lab can check and copy safely are shown.
 Only from these countries,Only from these countries
 Only tabs TikTok has loaded on this device are shown here. This doesn't force unavailable tabs to appear.,Only tabs TikTok has loaded on this device are shown here. This doesn't force unavailable tabs to appear.
+Only these caption languages,Only these caption languages
 Open,Open
 Open TikTok on,Open TikTok on
 "Open a share sheet once, then return here to choose its actions.","Open a share sheet once, then return here to choose its actions."
@@ -1256,7 +1260,7 @@ What's new,What's new
 "When a video ends in full screen, stay on it instead of moving to the next one. Swiping still moves on.","When a video ends in full screen, stay on it instead of moving to the next one. Swiping still moves on."
 "While diagnostic logging is on, a message names the part of Hushfeed that failed. Off keeps failures in the report only.","While diagnostic logging is on, a message names the part of Hushfeed that failed. Off keeps failures in the report only."
 Window width needed to enable the layout. Restart TikTok to apply this.,Window width needed to enable the layout. Restart TikTok to apply this.
-Words and countries,Words and countries
+"Words, countries and languages","Words, countries and languages"
 Working,Working
 "Write the video's sound beside it as an .m4a. Android 10 and later file audio separately, so it lands in Music under the same folder name as your videos.","Write the video's sound beside it as an .m4a. Android 10 and later file audio separately, so it lands in Music under the same folder name as your videos."
 YTDLnis background mode,YTDLnis background mode

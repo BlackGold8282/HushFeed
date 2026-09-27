@@ -186,6 +186,8 @@ public class Settings extends BaseSettings {
     public static final StringSetting CREATOR_FILTER_EXCEPTIONS =
             new FeedRuleStringSetting("creator_filter_exceptions", true);
     public static final StringSetting REGION_ONLY_FROM = new StringSetting("region_only_from", "", true);
+    /** Caption languages to keep, by the video's original caption track; empty keeps every language. */
+    public static final StringSetting CAPTION_LANGUAGES = new StringSetting("caption_languages", "");
     public static final StringSetting REGION_NEVER_FROM = new StringSetting("region_never_from", "", true);
     public static final IntegerSetting MAX_VIDEO_SECONDS =
             new IntegerSetting("max_video_seconds", 0).withRange(0, 86400);

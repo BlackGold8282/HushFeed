@@ -60,6 +60,7 @@ public final class FeedItemsFilter {
         new AdvancedFeedRules.PromotionalMusicFilter(),
         new AdvancedFeedRules.LiveReplayFilter(),
         new RegionFilter(),
+        new CaptionLanguageFilter(),
         new AdvancedFeedRules.PublicationAgeFilter(),
         new AdvancedFeedRules.QualityFilter()
     );
