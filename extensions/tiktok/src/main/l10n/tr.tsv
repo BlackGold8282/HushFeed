@@ -95,11 +95,13 @@ New value	Yeni değer
 No app on this phone opens that file	Bu telefonda o dosyayı açan bir uygulama yok
 One video was recorded before each account kept its own list. It hides nothing until you add it here.	Her hesabın kendi listesi olmadan önce bir video kaydedildi. Buraya ekleyene kadar hiçbir şeyi gizlemez.
 Open	Aç
+Photos can't be saved to the folder in that file, so your photo folder was kept	Fotoğraflar o dosyadaki klasöre kaydedilemiyor, bu yüzden fotoğraf klasörün korundu
 Preview shortened. Save report keeps the full report.	Önizleme kısaltıldı. "Raporu kaydet" raporun tamamını saklar.
 Refreshing TikTok's current values…	TikTok'un geçerli değerleri yenileniyor…
 Restart TikTok to apply this	Bunu uygulamak için TikTok'u yeniden başlat
 Save report	Raporu kaydet
 Stay on the video in full screen	Tam ekranda videoda kal
+Stickers can't be saved to the folder in that file, so your sticker folder was kept	Çıkartmalar o dosyadaki klasöre kaydedilemiyor, bu yüzden çıkartma klasörün korundu
 That creator pattern could stall the feed, so it was skipped: %1$s	Bu içerik üreticisi kalıbı akışı kilitleyebileceği için atlandı: %1$s
 That creator pattern could stall the feed, so it wasn't added: %1$s	Bu içerik üreticisi kalıbı akışı kilitleyebileceği için eklenmedi: %1$s
 This key isn't in Hushfeed's list, so its type can't be checked. Reset the override.	Bu anahtar Hushfeed listesinde yok, bu yüzden türü denetlenemiyor. Geçersiz kılmayı sıfırla.
@@ -643,6 +645,7 @@ TikTok's own daily screen-time reminder sends the app to the background instead 
 Try a different word or clear the search. Switches from patches you didn't tick in Morphe Manager aren't listed.	Başka bir kelime dene ya da aramayı temizle. Morphe Manager'da işaretlemediğin yamaların anahtarları burada görünmez.
 Use Save report for this large report	Bu büyük rapor için "Raporu kaydet"i kullan
 Video player settings	Video oynatıcı ayarları
+Videos can't be saved to the folder in that file, so your video folder was kept	Videolar o dosyadaki klasöre kaydedilemiyor, bu yüzden video klasörün korundu
 Views range	Görüntülenme aralığı
 Minimum	Minimum
 More options	Diğer seçenekler

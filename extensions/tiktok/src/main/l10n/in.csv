@@ -93,11 +93,13 @@ Later,Nanti
 Loading the gate list and TikTok's current values…,Memuat daftar gate dan nilai TikTok saat ini…
 New value,Nilai baru
 One video was recorded before each account kept its own list. It hides nothing until you add it here.,Satu video direkam sebelum setiap akun punya daftarnya sendiri. Video itu tidak menyembunyikan apa pun sampai kamu menambahkannya di sini.
+"Photos can't be saved to the folder in that file, so your photo folder was kept","Foto tidak bisa disimpan ke folder di file itu, jadi folder fotomu tetap dipakai"
 Preview shortened. Save report keeps the full report.,Pratinjau dipersingkat. Simpan laporan menyimpan laporan lengkap.
 Refreshing TikTok's current values…,Memperbarui nilai TikTok saat ini…
 Restart TikTok to apply this,Mulai ulang TikTok agar berlaku
 Save report,Simpan laporan
 Stay on the video in full screen,Tetap di video saat layar penuh
+"Stickers can't be saved to the folder in that file, so your sticker folder was kept","Stiker tidak bisa disimpan ke folder di file itu, jadi folder stikermu tetap dipakai"
 "That creator pattern could stall the feed, so it was skipped: %1$s","Pola kreator itu bisa membuat feed macet, jadi dilewati: %1$s"
 "That creator pattern could stall the feed, so it wasn't added: %1$s","Pola kreator itu bisa membuat feed macet, jadi tidak ditambahkan: %1$s"
 "This key isn't in Hushfeed's list, so its type can't be checked. Reset the override.","Kunci ini tidak ada di daftar Hushfeed, jadi jenisnya tidak bisa diperiksa. Setel ulang penggantian."
@@ -616,6 +618,7 @@ Likes range,Rentang suka
 Shares range,Rentang bagikan
 Use Save report for this large report,Gunakan Simpan laporan untuk laporan besar ini
 Video player settings,Setelan pemutar video
+"Videos can't be saved to the folder in that file, so your video folder was kept","Video tidak bisa disimpan ke folder di file itu, jadi folder videomu tetap dipakai"
 Views range,Rentang tayangan
 Minimum,Minimum
 More options,Opsi lainnya

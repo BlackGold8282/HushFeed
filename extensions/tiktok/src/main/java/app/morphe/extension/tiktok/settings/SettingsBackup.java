@@ -15,6 +15,7 @@ import app.morphe.extension.tiktok.wellbeing.SessionBudget;
 import app.morphe.extension.tiktok.feedfilter.FeedRuleLimits;
 import app.morphe.extension.shared.settings.SettingsJson;
 import app.morphe.extension.tiktok.featuregatelab.FeatureGateLabStore;
+import app.morphe.extension.tiktok.download.DownloadDestination;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +24,8 @@ import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -591,11 +594,14 @@ public final class SettingsBackup {
             absent++;
         }
         absent -= migrateDownloadPath(values, updates);
+        List<DownloadDestination.Kind> keptFolders = holdRuleLists
+                ? keepUsableFolders(updates) : Collections.<DownloadDestination.Kind>emptyList();
         if (!labApplies) {
             // Leaving the Lab exactly as it is, rather than clearing it: the backup says nothing
             // about this TikTok build, so it is not evidence that the user wanted no rules.
             Snapshot snapshot = new Snapshot(updates, null, false, false, false, absent);
             snapshot.deviceState = !holdRuleLists;
+            snapshot.keptFolders = keptFolders;
             return snapshot;
         }
         // Refused by name before the rules are read, so the reader hears what was wrong with
@@ -607,7 +613,44 @@ public final class SettingsBackup {
         Snapshot snapshot = new Snapshot(updates, FeatureGateLabStore.parseSettings(lab),
                 lab.getBoolean("master"), lab.getBoolean("acknowledged"), true, absent);
         snapshot.deviceState = !holdRuleLists;
+        snapshot.keptFolders = keptFolders;
         return snapshot;
+    }
+
+    /**
+     * A download folder that can't hold its kind keeps the one the device has. Saving would have
+     * gone to DCIM/TikTok instead without a word (DownloadDestination.resolve), so a file naming
+     * Pictures for videos, which a backup from before the folder split does for all three, looked
+     * restored while videos went somewhere else. Only a file from outside is checked: the
+     * device's own copies (the undo copy, the journal) come back exactly as they were.
+     */
+    private static List<DownloadDestination.Kind> keepUsableFolders(Map<Setting<?>, Object> updates) {
+        List<DownloadDestination.Kind> kept = new ArrayList<>();
+        keepUsableFolder(updates, Settings.DOWNLOAD_VIDEO_PATH, DownloadDestination.Kind.VIDEO, kept);
+        keepUsableFolder(updates, Settings.DOWNLOAD_PHOTO_PATH, DownloadDestination.Kind.PHOTO, kept);
+        keepUsableFolder(updates, Settings.DOWNLOAD_STICKER_PATH, DownloadDestination.Kind.STICKER, kept);
+        return kept;
+    }
+
+    private static void keepUsableFolder(Map<Setting<?>, Object> updates, Setting<?> setting,
+            DownloadDestination.Kind kind, List<DownloadDestination.Kind> kept) {
+        Object value = updates.get(setting);
+        if (!(value instanceof String)) return;
+        try {
+            DownloadDestination.validate((String) value, kind);
+        } catch (IllegalArgumentException unusable) {
+            updates.put(setting, setting.savedValue());
+            kept.add(kind);
+        }
+    }
+
+    /** The download folders restoring this file keeps as the device has them, because the file's can't hold their kind. */
+    public static List<DownloadDestination.Kind> foldersKept(String text) {
+        try {
+            return parse(text).keptFolders;
+        } catch (Exception ignored) {
+            return Collections.emptyList();
+        }
     }
 
     private static String feedRuleProblem(Setting<?> setting, Object value) {
@@ -685,6 +728,9 @@ public final class SettingsBackup {
          * record), so writing it back keeps a value a newer bound would refuse.
          */
         boolean deviceState;
+
+        /** Download folders the file named that can't hold their kind, kept as the device had them. */
+        List<DownloadDestination.Kind> keptFolders = Collections.emptyList();
 
         Snapshot(Map<Setting<?>, Object> values, List<FeatureGateLabStore.Rule> rules,
                 boolean master, boolean acknowledged, boolean labIncluded, int absent) {

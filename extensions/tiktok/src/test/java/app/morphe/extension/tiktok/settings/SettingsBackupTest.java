@@ -120,9 +120,34 @@ public class SettingsBackupTest {
         assertEquals(0, SettingsBackup.settingsNotInFile(legacy));
         SettingsBackup.restore(Utils.getContext(), legacy, true);
 
-        assertEquals("Pictures/Saved", Settings.DOWNLOAD_VIDEO_PATH.get());
+        // Pictures holds photos but not videos or stickers: those two keep the device's folder
+        // and the restore names them, instead of saving to DCIM/TikTok while showing Pictures.
+        assertEquals("DCIM/Somewhere", Settings.DOWNLOAD_VIDEO_PATH.get());
         assertEquals("Pictures/Saved", Settings.DOWNLOAD_PHOTO_PATH.get());
-        assertEquals("Pictures/Saved", Settings.DOWNLOAD_STICKER_PATH.get());
+        assertEquals("DCIM/TikTok", Settings.DOWNLOAD_STICKER_PATH.get());
+        assertEquals(java.util.List.of(app.morphe.extension.tiktok.download.DownloadDestination.Kind.VIDEO,
+                        app.morphe.extension.tiktok.download.DownloadDestination.Kind.STICKER),
+                SettingsBackup.foldersKept(legacy));
+    }
+
+    /** A folder that can't hold its kind keeps the device's; the rest restores; undo puts all back. */
+    @Test public void aRestoredFolderThatCantHoldItsKindKeepsTheDevicesAndUndoPutsItAllBack()
+            throws Exception {
+        Settings.DOWNLOAD_VIDEO_PATH.save("Pictures/Clips");
+        Settings.DOWNLOAD_PHOTO_PATH.save("Pictures/Hush");
+        String backup = SettingsBackup.create(false);
+        Settings.DOWNLOAD_VIDEO_PATH.save("Movies/Mine");
+        Settings.DOWNLOAD_PHOTO_PATH.save("DCIM/Before");
+
+        SettingsBackup.restore(Utils.getContext(), backup, true);
+        assertEquals("the file's Pictures folder can't hold videos", "Movies/Mine", Settings.DOWNLOAD_VIDEO_PATH.get());
+        assertEquals("Pictures/Hush", Settings.DOWNLOAD_PHOTO_PATH.get());
+        assertEquals(java.util.List.of(app.morphe.extension.tiktok.download.DownloadDestination.Kind.VIDEO),
+                SettingsBackup.foldersKept(backup));
+
+        SettingsBackup.undo(Utils.getContext());
+        assertEquals("Movies/Mine", Settings.DOWNLOAD_VIDEO_PATH.get());
+        assertEquals("DCIM/Before", Settings.DOWNLOAD_PHOTO_PATH.get());
     }
 
     /** The same file with those keys taken out of both the values and the declared inventory. */
@@ -1196,6 +1221,9 @@ public class SettingsBackupTest {
             activity.findViewById(android.R.id.content).setTag(app.morphe.extension.tiktok.settings.preference.SettingsActionBanner.CONTENT_ROOT_TAG);
             JSONObject backup = new JSONObject(SettingsBackup.create(false));
             backup.getJSONObject("settings").remove(Settings.MAX_VIDEO_SECONDS.key);
+            // Movies holds videos, not stickers: the device's sticker folder stays and is named.
+            String stickerBefore = Settings.DOWNLOAD_STICKER_PATH.get();
+            backup.getJSONObject("settings").put(Settings.DOWNLOAD_STICKER_PATH.key, "Movies/Stick");
             JSONArray keys = backup.getJSONArray("setting_keys");
             for (int index = keys.length() - 1; index >= 0; index--) {
                 if (Settings.MAX_VIDEO_SECONDS.key.equals(keys.getString(index))) keys.remove(index);
@@ -1224,7 +1252,9 @@ public class SettingsBackupTest {
             assertNotNull("the outcome didn't reach the settings banner", banner);
             TextView message = banner.findViewWithTag("hushfeed_settings_action_message");
             assertEquals("1 setting wasn't in that file and was left as it is. "
+                    + "Stickers can't be saved to the folder in that file, so your sticker folder was kept. "
                     + "Settings restored. Restart TikTok to apply all changes.", String.valueOf(message.getText()));
+            assertEquals(stickerBefore, Settings.DOWNLOAD_STICKER_PATH.get());
             assertNotNull("a restore offers the restart", banner.findViewWithTag("hushfeed_settings_action_button"));
             assertEquals("the outcome went to a toast as well", 0, ShadowToast.shownToastCount());
         }

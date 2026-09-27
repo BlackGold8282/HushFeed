@@ -98,11 +98,13 @@ New value	Neuer Wert
 No app on this phone opens that file	Keine App auf diesem Handy öffnet diese Datei
 One video was recorded before each account kept its own list. It hides nothing until you add it here.	Ein Video wurde aufgezeichnet, bevor jedes Konto eine eigene Liste hatte. Es blendet nichts aus, bis du es hier hinzufügst.
 Open	Öffnen
+Photos can't be saved to the folder in that file, so your photo folder was kept	Im Ordner aus dieser Datei lassen sich keine Fotos speichern, deshalb wurde dein Fotoordner beibehalten
 Preview shortened. Save report keeps the full report.	Vorschau gekürzt. „Bericht speichern“ behält den vollständigen Bericht.
 Refreshing TikTok's current values…	TikToks aktuelle Werte werden aktualisiert …
 Restart TikTok to apply this	TikTok neu starten, damit das gilt
 Save report	Bericht speichern
 Stay on the video in full screen	Im Vollbild beim Video bleiben
+Stickers can't be saved to the folder in that file, so your sticker folder was kept	Im Ordner aus dieser Datei lassen sich keine Sticker speichern, deshalb wurde dein Stickerordner beibehalten
 That creator pattern could stall the feed, so it was skipped: %1$s	Dieses Kreator-Muster könnte den Feed aufhalten und wurde übersprungen: %1$s
 That creator pattern could stall the feed, so it wasn't added: %1$s	Dieses Kreator-Muster könnte den Feed aufhalten und wurde nicht hinzugefügt: %1$s
 This key isn't in Hushfeed's list, so its type can't be checked. Reset the override.	Dieser Schlüssel steht nicht in der Liste von Hushfeed, deshalb lässt sich sein Typ nicht prüfen. Setze die Überschreibung zurück.
@@ -619,6 +621,7 @@ Likes range	Spanne der Likes
 Shares range	Spanne der Shares
 Use Save report for this large report	Nutze für diesen großen Bericht „Bericht speichern“
 Video player settings	Einstellungen des Videoplayers
+Videos can't be saved to the folder in that file, so your video folder was kept	Im Ordner aus dieser Datei lassen sich keine Videos speichern, deshalb wurde dein Videoordner beibehalten
 Views range	Spanne der Aufrufe
 Minimum	Minimum
 More options	Weitere Optionen

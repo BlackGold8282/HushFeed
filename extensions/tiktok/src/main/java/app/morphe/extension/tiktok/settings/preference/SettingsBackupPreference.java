@@ -168,6 +168,8 @@ public final class SettingsBackupPreference extends Preference
         boolean accepted = Utils.runOnBackgroundThread(() -> {
             boolean labRulesSkipped = false;
             int keptAsTheyWere = 0;
+            java.util.List<app.morphe.extension.tiktok.download.DownloadDestination.Kind> foldersKept =
+                    java.util.Collections.emptyList();
             try {
                 if (action == EXPORT) {
                     byte[] bytes = SettingsBackup.export().getBytes(StandardCharsets.UTF_8);
@@ -183,6 +185,7 @@ public final class SettingsBackupPreference extends Preference
                             context, context.getContentResolver().openInputStream(uri), true);
                     labRulesSkipped = SettingsBackup.labRulesWereSkipped(text);
                     keptAsTheyWere = SettingsBackup.settingsNotInFile(text);
+                    foldersKept = SettingsBackup.foldersKept(text);
                 } else if (action == RESET) SettingsBackup.reset(context);
                 else {
                     // An undo copy written before a retarget holds Lab rules for the older build,
@@ -221,7 +224,20 @@ public final class SettingsBackupPreference extends Preference
                                 : labRulesSkipped
                                 ? "Last change put back. The Feature Gate Lab rules were for another TikTok version and were left out. Restart TikTok to apply all changes."
                                 : "Last change put back. Restart TikTok to apply all changes.");
-                String message = kept == null ? outcome : kept + ". " + outcome;
+                // A folder the file named that can't hold its kind was kept, which is said next:
+                // downloads would otherwise have gone to DCIM/TikTok while the row showed the file's.
+                StringBuilder notes = new StringBuilder();
+                if (kept != null) notes.append(kept).append(". ");
+                for (app.morphe.extension.tiktok.download.DownloadDestination.Kind kind : foldersKept) {
+                    notes.append(L10n.t(
+                            kind == app.morphe.extension.tiktok.download.DownloadDestination.Kind.VIDEO
+                                    ? "Videos can't be saved to the folder in that file, so your video folder was kept"
+                                    : kind == app.morphe.extension.tiktok.download.DownloadDestination.Kind.PHOTO
+                                    ? "Photos can't be saved to the folder in that file, so your photo folder was kept"
+                                    : "Stickers can't be saved to the folder in that file, so your sticker folder was kept"))
+                            .append(". ");
+                }
+                String message = notes + outcome;
                 if (action == EXPORT) SettingsActionBanner.showNotice(target(window, context), message);
                 else SettingsActionBanner.showRestart(target(window, context), message);
             } catch (SettingsBackup.RuleListTooLarge tooLarge) {

@@ -95,11 +95,13 @@ New value	Nuevo valor
 No app on this phone opens that file	Ninguna app de este teléfono abre ese archivo
 One video was recorded before each account kept its own list. It hides nothing until you add it here.	Se registró un vídeo antes de que cada cuenta tuviera su propia lista. No oculta nada hasta que lo añadas aquí.
 Open	Abrir
+Photos can't be saved to the folder in that file, so your photo folder was kept	Las fotos no se pueden guardar en la carpeta de ese archivo, así que se mantuvo tu carpeta de fotos
 Preview shortened. Save report keeps the full report.	Vista previa acortada. «Guardar informe» conserva el informe completo.
 Refreshing TikTok's current values…	Actualizando los valores actuales de TikTok…
 Restart TikTok to apply this	Reinicia TikTok para que se aplique
 Save report	Guardar informe
 Stay on the video in full screen	Quedarse en el vídeo a pantalla completa
+Stickers can't be saved to the folder in that file, so your sticker folder was kept	Los stickers no se pueden guardar en la carpeta de ese archivo, así que se mantuvo tu carpeta de stickers
 That creator pattern could stall the feed, so it was skipped: %1$s	Ese patrón de creador podría trabar el feed, así que se omitió: %1$s
 That creator pattern could stall the feed, so it wasn't added: %1$s	Ese patrón de creador podría trabar el feed, así que no se añadió: %1$s
 This key isn't in Hushfeed's list, so its type can't be checked. Reset the override.	Esta clave no está en la lista de Hushfeed, así que no se puede comprobar su tipo. Restablece la anulación.
@@ -616,6 +618,7 @@ Likes range	Rango de me gusta
 Shares range	Rango de veces compartido
 Use Save report for this large report	Usa «Guardar informe» para este informe grande
 Video player settings	Ajustes del reproductor de vídeo
+Videos can't be saved to the folder in that file, so your video folder was kept	Los vídeos no se pueden guardar en la carpeta de ese archivo, así que se mantuvo tu carpeta de vídeos
 Views range	Rango de visualizaciones
 Minimum	Mínimo
 More options	Más opciones

@@ -95,11 +95,13 @@ New value	Novo valor
 No app on this phone opens that file	Nenhum app neste celular abre esse arquivo
 One video was recorded before each account kept its own list. It hides nothing until you add it here.	Um vídeo foi registrado antes de cada conta ter sua própria lista. Ele não oculta nada até você adicioná-lo aqui.
 Open	Abrir
+Photos can't be saved to the folder in that file, so your photo folder was kept	Fotos não podem ser salvas na pasta desse arquivo, então sua pasta de fotos foi mantida
 Preview shortened. Save report keeps the full report.	Prévia encurtada. “Salvar relatório” mantém o relatório completo.
 Refreshing TikTok's current values…	Atualizando os valores atuais do TikTok…
 Restart TikTok to apply this	Reinicie o TikTok para aplicar
 Save report	Salvar relatório
 Stay on the video in full screen	Ficar no vídeo em tela cheia
+Stickers can't be saved to the folder in that file, so your sticker folder was kept	Stickers não podem ser salvos na pasta desse arquivo, então sua pasta de stickers foi mantida
 That creator pattern could stall the feed, so it was skipped: %1$s	Esse padrão de criador pode travar o feed, então foi ignorado: %1$s
 That creator pattern could stall the feed, so it wasn't added: %1$s	Esse padrão de criador pode travar o feed, então não foi adicionado: %1$s
 This key isn't in Hushfeed's list, so its type can't be checked. Reset the override.	Esta chave não está na lista do Hushfeed, então o tipo dela não pode ser verificado. Redefina a substituição.
@@ -616,6 +618,7 @@ Likes range	Faixa de curtidas
 Shares range	Faixa de compartilhamentos
 Use Save report for this large report	Use “Salvar relatório” para este relatório grande
 Video player settings	Configurações do player de vídeo
+Videos can't be saved to the folder in that file, so your video folder was kept	Vídeos não podem ser salvos na pasta desse arquivo, então sua pasta de vídeos foi mantida
 Views range	Faixa de visualizações
 Minimum	Mínimo
 More options	Mais opções
