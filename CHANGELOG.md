@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The camera and microphone indicator stays up for as long as TikTok records. Before, the orange diamond only flashed at the start of a story recording, because TikTok records a story's sound in its own native code, which the patch never saw. On Android 11 and newer the mark now also reads what Android itself reports for TikTok's camera and microphone, the same thing the status bar's privacy dots show. On older Android it works as before.
 * **TikTok:** On a TikTok version where a patch's hook can't be written the way the patch asks, that patch now stops with a message naming the method, instead of applying and then doing nothing. Morphe's patcher could leave a hook call out without a word when a method has more than 16 registers. It never happened on 47.0.3 or 47.1.3, and now it can't happen silently on a later version either.
 * **TikTok:** Save story works again when you press and hold a story. It looked up TikTok's story player by names from TikTok 46.2.3, and neither 47.0.3 nor 47.1.3 has them, so holding a story showed "Open the story again and try once more" and saved nothing. It finds the story by TikTok's own class names now, which don't change between versions.
 
