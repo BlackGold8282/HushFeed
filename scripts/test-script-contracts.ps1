@@ -1808,6 +1808,26 @@ try {
             $free = Invoke-ChildPush
             Assert-True ($LASTEXITCODE -eq 0) "The child push failed with the gate lock free: $free"
 
+            # A commit on the pushed branch while the gate runs. Over HTTPS git reads the branch
+            # again after the hook, so the new commit would go out unchecked. The stub build
+            # commits to the branch in this repository while it builds the worktree; the tree is
+            # dirty so the build runs in the worktree and nothing else notices.
+            $mover = Join-Path $hookRoot 'gate-wrapper-commits.ps1'
+            Set-Content -LiteralPath $mover -Encoding UTF8 -Value @(
+                'param([string]$ProjectDir, [string[]]$Tasks)',
+                "& git -C '$gateRepo' commit --quiet --allow-empty -m 'made during the gate'",
+                'exit 0')
+            Set-Content -LiteralPath (Join-Path $gateRepo 'README.md') -Value 'uncommitted' -Encoding ASCII
+            $env:HUSHFEED_BUILD_WRAPPER = $mover
+            try {
+                Assert-Throws { & $prePushScript -Root $gateRepo -PushedRefs "refs/heads/main $fixed refs/heads/main $broken" 6> $null } `
+                    '*refs/heads/main moved from*' 'A branch that moved while the gate ran was pushed with its unchecked commit.'
+            } finally {
+                $env:HUSHFEED_BUILD_WRAPPER = $gateStub
+                & git -C $gateRepo update-ref refs/heads/main $fixed
+                Remove-Item -LiteralPath (Join-Path $gateRepo 'README.md') -Force -ErrorAction SilentlyContinue
+            }
+
             # The release facts half checks the files a push carries as well. A stub check, committed
             # the way the real one is, fails on a README that says broken and records where it ran
             # and whether it read test results. Its own commit is never in a pushed range, so no

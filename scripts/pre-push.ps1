@@ -53,6 +53,9 @@ $zeroObject = '0' * 40
 # The commits this push carries, peeled, filled in by Get-PushedPaths. The build gate builds each
 # of these, and never whatever else the working tree holds.
 $script:pushedCommits = New-Object System.Collections.Generic.List[string]
+# Each pushed local ref with the object the gates were given for it, checked again at the end.
+# Not $pushedRefs: variable names ignore case, and that one is a parameter of this script.
+$script:checkedRefs = New-Object System.Collections.Generic.List[object]
 
 function Write-Step {
     param([string]$Message)
@@ -114,6 +117,7 @@ function Get-PushedPaths {
         foreach ($name in @((@($names) -join "`n") -split "`0")) {
             if (-not [string]::IsNullOrWhiteSpace($name)) { [void]$paths.Add($name.Trim()) }
         }
+        $script:checkedRefs.Add([pscustomobject]@{ LocalRef = $parts[0]; LocalSha = $localSha })
         $commit = Invoke-GitQuietly @('rev-parse', '--verify', "$localSha^{commit}")
         if ($LASTEXITCODE -eq 0 -and $commit -and -not $script:pushedCommits.Contains(([string]$commit).Trim())) {
             $script:pushedCommits.Add(([string]$commit).Trim())
@@ -689,6 +693,18 @@ try {
 
     if (-not $touchesScripts -and -not $touchesCode -and -not $touchesRelease) {
         Write-Step 'no code or published file changed'
+    }
+    # Over HTTPS git starts send-pack only after this hook returns, and send-pack reads a named
+    # branch again then. Commits made on it while the gates ran went out unchecked on 2026-09-27
+    # (55556b10 to 64d2844e, behind a gate that had checked abda9b30), with the tracking ref
+    # still saying abda9b30. So every pushed branch still has to name what was checked.
+    foreach ($pushed in $script:checkedRefs) {
+        if ($pushed.LocalRef -notlike 'refs/*') { continue }
+        $now = ([string](Invoke-GitQuietly @('rev-parse', '--verify', '--quiet', $pushed.LocalRef))).Trim()
+        if ($now -ne $pushed.LocalSha) {
+            throw ("$($pushed.LocalRef) moved from $($pushed.LocalSha) to $now while the checks ran, and git " +
+                'would push the new commits unchecked. Push again, and leave the branch alone until the push ends.')
+        }
     }
     Write-Step 'ok'
     exit 0

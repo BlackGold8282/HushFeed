@@ -98,7 +98,9 @@ so work that isn't part of the push can neither fail it nor pass it. An in-place
 tree again when it finishes, even after a build failure, and stops the push if anything changed
 meanwhile: a tree that moved during a build invalidates the result whether it passed or failed.
 Each commit is checked by its own copy of the check script, so a renamed or removed helper
-cannot cause one commit's check to run through another commit's code. The one exception
+cannot cause one commit's check to run through another commit's code. Don't commit to the branch
+you're pushing until the push ends: git reads the branch again after the hook, so a commit made
+meanwhile would go out unchecked, and the hook refuses the push when it sees the branch moved. The one exception
 is the push that rewrites `patches-bundle.json`: it's checked against the bundle and test results
 this checkout built, so it has to come from a clean checkout of the commit it pushes.
 
