@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The block symbol that stands in for the thumbs down on comments is drawn in the same grey as the comment's name and time, so it shows on TikTok's dark comment sheet. It used to take its colour from the phone's theme, which TikTok's own dark mode doesn't follow, and came out almost black on black.
 * **TikTok:** Hide videos you have already seen keeps a separate record for each TikTok account on the phone. Before, a second account inherited everything the first one had watched, and could have seen that list. Clear seen videos now names the account it forgets for. The record from before this update doesn't say whose it was, so it hides nothing until you add it to an account with the new Add older seen videos to this account row, which shows up while there's anything to add.
 * **TikTok:** Saves refuse a download address in any block the internet's registry sets aside for testing, documentation, benchmarking or network equipment, not just private and local ones. TikTok's servers never use those, so a link that points there is not a TikTok file. On a mobile network that only has IPv6, saves from IPv4-only servers keep working.
 * **TikTok:** Your own profile shows your newest posts again (#35). TikTok loads a profile's posts in the same kind of list as the feed, so the feed rules reached profile grids too. With Filter location-tagged videos on, recent posts with a place tag were taken off your own grid and only older ones were left. Your own posts now stay wherever TikTok shows them.
