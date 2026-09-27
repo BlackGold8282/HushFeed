@@ -2,7 +2,9 @@
 
 Every Hushfeed release, newest first.
 
-## Unreleased
+## 0.61.0 (2026-09-26)
+
+A large release. Hushfeed supports TikTok 47.1.3 as well as 47.0.3 now, and it carries every fix made since 0.60.0. Copy comments without username works from the comment menu again, folding a foldable no longer jumps to another video, and sticker saves read TikTok's own sticker data. The settings screens also had a long polish pass.
 
 * **TikTok:** Save media on a sticker's sheet lightens while you hold it, like TikTok's own Share and Save next to it. It used to be the one button there that showed no press.
 * **TikTok:** Save media on a comment sticker reads the sticker from TikTok's own sticker data now, which keeps its names from one version to the next. It used to look first for a field and a class that neither 47.0.3 nor 47.1.3 has, and only reached the sticker through its last fallback. It saves the picture the sheet shows, and if a later TikTok renames that data, Hook status says so.
