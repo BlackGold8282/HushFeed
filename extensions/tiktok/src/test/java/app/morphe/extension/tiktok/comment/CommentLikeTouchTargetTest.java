@@ -279,6 +279,22 @@ public class CommentLikeTouchTargetTest {
         }
     }
 
+    /** On the S22 a zero-height container sits right under the controls; it takes no room. */
+    @Test public void anEmptyViewBelowTheControlTakesNoRoom() {
+        boolean before = Settings.BLOCK_FROM_COMMENT.get();
+        Settings.BLOCK_FROM_COMMENT.save(true);
+        try (Row f = new Row()) {
+            View empty = new View(f.activity);
+            f.add(f.row, empty, 0, 184, 480, 0);
+            f.layout();
+            f.blockHalo();
+            f.tap(390, 193);
+            assertEquals("9dp below it, past the empty view", 1, f.blocks);
+        } finally {
+            Settings.BLOCK_FROM_COMMENT.save(before);
+        }
+    }
+
     @Test public void theBlockHaloFollowsItsSwitchAndLeavesWithTheControl() {
         boolean before = Settings.BLOCK_FROM_COMMENT.get();
         try (Row f = new Row()) {

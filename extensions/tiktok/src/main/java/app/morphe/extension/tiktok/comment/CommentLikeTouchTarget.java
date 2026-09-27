@@ -306,6 +306,9 @@ public final class CommentLikeTouchTarget {
                 for (int i = 0; i < parent.getChildCount(); i++) {
                     View sibling = parent.getChildAt(i);
                     if (sibling == current || sibling.getVisibility() != View.VISIBLE) continue;
+                    // An empty container takes no room. On 47.1.3 a zero-height view sits right under
+                    // every comment's controls and held the block's halo to the control's own height.
+                    if (sibling.getWidth() == 0 || sibling.getHeight() == 0) continue;
                     Rect occupied = new Rect(0, 0, sibling.getWidth(), sibling.getHeight());
                     candidate.offsetDescendantRectToMyCoords(sibling, occupied);
                     if (occupied.top < original.bottom && occupied.bottom > original.top) {
