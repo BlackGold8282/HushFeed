@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A bounded local record of successful video saves, checked off the UI thread.
@@ -44,10 +45,11 @@ public final class SavedVideoArchive {
     /** Moved on by every forget. A save records only into the generation it started in. */
     private static final AtomicLong GENERATION = new AtomicLong();
     /**
-     * What the latest forget took, for its Undo. Written under {@link #LOCK} and never written out;
-     * volatile so the settings row can ask about it without waiting on a save's database write.
+     * What the latest forget took, for its Undo. Set under {@link #LOCK} and never written out.
+     * Read and let go of without the lock: the settings row asks about it and its banner expires
+     * it on the main thread, which must not wait on a restore or a save's database write.
      */
-    private static volatile Snapshot undo;
+    private static final AtomicReference<Snapshot> UNDO = new AtomicReference<>();
 
     public enum ForgetResult { FORGOTTEN, NOTHING_SAVED, FAILED }
 
@@ -152,7 +154,7 @@ public final class SavedVideoArchive {
             if (forgotten != null && forgotten.length > 0) forgotten[0] = generation;
             // A newer forget replaces an older Undo: putting that one back now would restore rows
             // the reader has since chosen to forget again.
-            undo = rows.isEmpty() ? null : new Snapshot(generation, Collections.unmodifiableList(rows));
+            UNDO.set(rows.isEmpty() ? null : new Snapshot(generation, Collections.unmodifiableList(rows)));
             return rows.isEmpty() ? ForgetResult.NOTHING_SAVED : ForgetResult.FORGOTTEN;
         }
     }
@@ -164,7 +166,7 @@ public final class SavedVideoArchive {
      */
     public static UndoResult undo(Context context, long generation) {
         synchronized (LOCK) {
-            Snapshot held = undo;
+            Snapshot held = UNDO.get();
             if (held == null || held.generation != generation) return UndoResult.EXPIRED;
             try (Database helper = new Database(context)) {
                 SQLiteDatabase db = helper.getWritableDatabase();
@@ -190,22 +192,22 @@ public final class SavedVideoArchive {
                 Logger.printException(() -> "Could not put the saved videos back", failure);
                 return UndoResult.FAILED;
             }
-            undo = null;
+            // Unless the banner let go of it meanwhile, or a newer forget replaced it.
+            UNDO.compareAndSet(held, null);
             return UndoResult.RESTORED;
         }
     }
 
     /** Whether the forget of {@code generation} can still be undone. */
     public static boolean canUndo(long generation) {
-        Snapshot held = undo;
+        Snapshot held = UNDO.get();
         return held != null && held.generation == generation;
     }
 
     /** Lets go of the rows the forget of {@code generation} took, once its Undo is gone. */
     public static void discardUndo(long generation) {
-        synchronized (LOCK) {
-            if (undo != null && undo.generation == generation) undo = null;
-        }
+        Snapshot held = UNDO.get();
+        if (held != null && held.generation == generation) UNDO.compareAndSet(held, null);
     }
 
     static MediaFileWriter.Saved find(Context context, String id) {
@@ -284,7 +286,7 @@ public final class SavedVideoArchive {
     /** Forgets the in-memory Undo and the generation, as a new process would. Tests only. */
     static void resetForTests() {
         synchronized (LOCK) {
-            undo = null;
+            UNDO.set(null);
             GENERATION.set(0);
         }
     }
