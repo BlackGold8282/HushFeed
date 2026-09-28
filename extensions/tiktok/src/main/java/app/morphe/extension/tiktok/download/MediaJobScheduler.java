@@ -39,8 +39,13 @@ final class MediaJobScheduler {
             new ThreadPoolExecutor.AbortPolicy());
     /** Accepted jobs that are not over yet, waiting or running: how far back a new one starts. */
     private static final AtomicInteger ADMITTED = new AtomicInteger();
-    /** The live job under each key a saver named, so a second request can say what the first is doing. */
-    private static final Map<String, Job> BY_KEY = new ConcurrentHashMap<>();
+    /**
+     * The live job under each key a saver named, so a second request can say what the first is
+     * doing. Typed to the concrete class, not {@link Map}: its two-argument {@code remove} is a
+     * plain method on {@link ConcurrentHashMap} since API 1, but a default method on {@code Map}
+     * since API 24, and a call resolves by the reference's declared type, not the object's.
+     */
+    private static final ConcurrentHashMap<String, Job> BY_KEY = new ConcurrentHashMap<>();
 
     private MediaJobScheduler() {}
 
