@@ -2,7 +2,7 @@
 
 Every Hushfeed release, newest first.
 
-## Unreleased
+## 0.64.0 (2026-09-28)
 
 * **TikTok:** Hiding buttons in the right column now works on videos opened from a creator's profile, a hashtag or a sound too (#47). Those play in a screen of their own, which the hides never reached, so only the feed lost its Like, Save or Share button.
 * **TikTok:** Hide TikTok Shop also hides a LIVE that is selling while it streams (#46). Only Hide LIVE videos took those away before, and that hides every LIVE.
