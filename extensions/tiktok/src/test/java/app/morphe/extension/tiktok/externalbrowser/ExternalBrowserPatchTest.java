@@ -42,7 +42,7 @@ public class ExternalBrowserPatchTest {
                         "aweme://webview?url=https%3A%2F%2Fexample.com%2Fpath").toString());
         assertEquals("https://example.com/path",
                 ExternalBrowserPatch.resolveTarget(
-                        "https://redirect.example/?target=https%3A%2F%2Fexample.com%2Fpath").toString());
+                        "https://www.tiktok.com/link//?aid=1233&lang=en&scene=bio_url&jumper_version=1&target=https%3A%2F%2Fexample.com%2Fpath").toString());
     }
 
     @Test public void resolverRefusesNonWebSchemesMissingHostsAndWrapperLoops() {
