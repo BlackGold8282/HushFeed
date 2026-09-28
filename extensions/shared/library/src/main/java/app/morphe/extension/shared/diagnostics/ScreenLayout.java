@@ -126,15 +126,20 @@ public final class ScreenLayout {
         List<View> roots = new ArrayList<>();
         if (decor != null) roots.add(decor);
         // Dialogs, popups and sheets are windows of their own, and a floating points badge or a
-        // promotion sheet is exactly what a reader asks to hide. Another screen's own window is
-        // behind this one even while it is still drawn (a translucent screen over it), so only the
-        // screen in front keeps its base window.
+        // promotion sheet is exactly what a reader asks to hide. Only the screen in front's own:
+        // a dialog belongs to its activity's token and a popup to the activity window's, and
+        // another screen's windows (its dialog still up behind this one included) are left out.
+        android.os.IBinder activityToken = activity.getWindow() == null
+                ? null : activity.getWindow().getAttributes().token;
+        android.os.IBinder windowToken = decor == null ? null : decor.getWindowToken();
         for (View root : otherWindows()) {
             if (root == decor || !root.isShown()) continue;
             ViewGroup.LayoutParams params = root.getLayoutParams();
-            if (params instanceof WindowManager.LayoutParams
-                    && ((WindowManager.LayoutParams) params).type
-                    == WindowManager.LayoutParams.TYPE_BASE_APPLICATION) continue;
+            if (!(params instanceof WindowManager.LayoutParams)) continue;
+            WindowManager.LayoutParams window = (WindowManager.LayoutParams) params;
+            if (window.type == WindowManager.LayoutParams.TYPE_BASE_APPLICATION) continue;
+            if (window.token == null
+                    || (window.token != activityToken && window.token != windowToken)) continue;
             roots.add(root);
         }
 
@@ -219,17 +224,15 @@ public final class ScreenLayout {
         }
     }
 
+    /**
+     * The window's root class and its type. Not its title: a dialog's title is the text it shows
+     * (Dialog.setTitle writes it there), which is exactly what a layout must not carry.
+     */
     private static String windowName(View root) {
         ViewGroup.LayoutParams params = root.getLayoutParams();
-        if (params instanceof WindowManager.LayoutParams) {
-            CharSequence title = ((WindowManager.LayoutParams) params).getTitle();
-            int type = ((WindowManager.LayoutParams) params).type;
-            // A window's title is its activity or its kind (PopupWindow:..., a toast), never
-            // anything the reader typed or read.
-            return (title == null || title.length() == 0 ? className(root.getClass()) : title)
-                    + " type " + type;
-        }
-        return className(root.getClass());
+        String type = params instanceof WindowManager.LayoutParams
+                ? " type " + ((WindowManager.LayoutParams) params).type : "";
+        return className(root.getClass()) + type;
     }
 
     /** Every window root view in the process, or none when the platform won't say. */

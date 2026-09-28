@@ -186,12 +186,16 @@ public class ScreenLayoutTest {
     }
 
     @Test @Config(sdk = 35)
-    public void aDialogOverTheScreenIsRecordedAsItsOwnWindow() {
+    public void aDialogOverTheScreenIsRecordedAsItsOwnWindowWithoutItsTitle() {
+        // A dialog left up on the settings screen behind belongs to that screen, not this one.
+        AlertDialog behind = new AlertDialog.Builder(settings).setTitle("Settings dialog").create();
+        behind.show();
         TargetActivity target = Robolectric.buildActivity(TargetActivity.class).setup().get();
-        AlertDialog sheet = new AlertDialog.Builder(target).setMessage("Buy now for $4.99").create();
+        // Dialog.setTitle writes the title into the window's own title, which a layout line
+        // used to print: a promotion sheet's headline is on-screen text.
+        AlertDialog sheet = new AlertDialog.Builder(target).setTitle("Earn 500 points now")
+                .setMessage("Buy now for $4.99").create();
         sheet.show();
-        // The settings screen's window is still drawn here (Robolectric doesn't hide a screen
-        // that went behind another), and only the screen in front and its dialog belong.
         idle(0);
         ScreenLayout.start(settings, results::add);
         idle(ScreenLayout.DELAY_MS);
@@ -199,8 +203,11 @@ public class ScreenLayoutTest {
         String all = String.join("\n", ScreenLayout.lines());
         int windows = all.split("\nwindow: ", -1).length - 1;
         assertEquals(all, 2, windows);
-        assertFalse(all, all.contains("Buy now"));
+        for (String leaked : new String[]{"Buy now", "Earn 500", "points", "Settings dialog"}) {
+            assertFalse("the layout carries on-screen text: " + leaked + "\n" + all, all.contains(leaked));
+        }
         sheet.dismiss();
+        behind.dismiss();
     }
 
     @Test public void frameworkClassesAreShortAndTikToksAreInFull() {
