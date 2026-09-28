@@ -3,6 +3,7 @@ package app.morphe.extension.tiktok.blockauthor;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import android.preference.PreferenceActivity;
 
@@ -64,6 +65,53 @@ public class CurrentVideoAuthorTest {
             this.uid = uid;
             this.uniqueId = uid;
         }
+    }
+
+    /**
+     * One long video playing past the time budget starts the hold without a swipe. The notice
+     * and the hold used to be claimed only when a different video came on screen.
+     */
+    @Test
+    public void theHoldStartsWhenTheBudgetRunsOutMidVideo() throws Exception {
+        java.util.concurrent.atomic.AtomicLong now = new java.util.concurrent.atomic.AtomicLong(1_790_000_000_000L);
+        Class<?> clockType = Class.forName(
+                "app.morphe.extension.tiktok.wellbeing.SessionBudget$Clock");
+        Object clock = java.lang.reflect.Proxy.newProxyInstance(clockType.getClassLoader(),
+                new Class<?>[]{clockType}, (proxy, method, args) ->
+                        "now".equals(method.getName()) ? now.get() : null);
+        try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
+            Utils.setContext(controller.get());
+            budgetForTests("awaitWritesForTests");
+            org.robolectric.util.ReflectionHelpers.callStaticMethod(
+                    app.morphe.extension.tiktok.wellbeing.SessionBudget.class, "setClockForTests",
+                    org.robolectric.util.ReflectionHelpers.ClassParameter.from(clockType, clock));
+            budgetForTests("resetForTests");
+            app.morphe.extension.tiktok.settings.Settings.SESSION_BUDGET_MINUTES.save(1);
+            app.morphe.extension.tiktok.settings.Settings.SESSION_BUDGET_LOCK_MINUTES.save(10);
+
+            CurrentVideoAuthor.update(new Params("long_clip", "creator_one"));
+            CurrentVideoAuthor.onPlaying("long_clip");
+            for (int second = 0; second < 70; second++) {
+                now.addAndGet(1_000L);
+                CurrentVideoAuthor.onPlaying("long_clip");
+            }
+            assertTrue("a minute of one video ran past the budget with no hold",
+                    app.morphe.extension.tiktok.wellbeing.SessionBudget.isLocked());
+        } finally {
+            org.robolectric.util.ReflectionHelpers.callStaticMethod(
+                    app.morphe.extension.tiktok.wellbeing.SessionBudget.class, "setClockForTests",
+                    org.robolectric.util.ReflectionHelpers.ClassParameter.from(clockType, null));
+            budgetForTests("awaitWritesForTests");
+            budgetForTests("resetForTests");
+            app.morphe.extension.tiktok.settings.Settings.SESSION_BUDGET_MINUTES.resetToDefault();
+            app.morphe.extension.tiktok.settings.Settings.SESSION_BUDGET_LOCK_MINUTES.resetToDefault();
+            app.morphe.extension.tiktok.settings.Settings.SESSION_BUDGET_STATE.resetToDefault();
+        }
+    }
+
+    private static void budgetForTests(String method) {
+        org.robolectric.util.ReflectionHelpers.callStaticMethod(
+                app.morphe.extension.tiktok.wellbeing.SessionBudget.class, method);
     }
 
     @Test

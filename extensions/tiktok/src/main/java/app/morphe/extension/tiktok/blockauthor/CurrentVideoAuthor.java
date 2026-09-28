@@ -115,8 +115,10 @@ public final class CurrentVideoAuthor {
         }
 
         // Before the early return: this is the only signal that arrives while a video plays,
-        // so it is the only thing that can measure how long the feed has been running.
-        SessionBudget.noteWatching();
+        // so it is the only thing that can measure how long the feed has been running. The time
+        // budget can run out halfway through a video, and the notice and the hold are due then:
+        // left to the next video change, a long or looping one played on past the budget.
+        if (SessionBudget.noteWatching() && SessionBudget.claimNotice()) SessionBudgetNotice.show();
         SessionLockOverlay.ensureRunning();
         // Follows the budget rather than a clock of its own, so it is redrawn from the same
         // signal that measures the budget. Switched off, which is the default, it returns on

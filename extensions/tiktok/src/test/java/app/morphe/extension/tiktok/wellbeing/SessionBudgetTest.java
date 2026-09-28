@@ -180,6 +180,33 @@ public class SessionBudgetTest {
         assertTrue(SessionBudget.reachedLimit());
     }
 
+    /**
+     * The report that runs the time budget out says so, once, so the hold can start in the middle
+     * of a long video rather than at the next one (S22, 2026-09-28: a 2-minute budget read
+     * "Today: 4 minutes" with no hold while one video played on).
+     */
+    @Test public void theReportThatRunsTheTimeBudgetOutSaysSoOnce() {
+        Settings.SESSION_BUDGET_MINUTES.save(1);
+        assertFalse(SessionBudget.noteWatching());
+        int crossings = 0;
+        int crossedAt = -1;
+        for (int tick = 1; tick <= 45; tick++) {
+            now.addAndGet(2_000L);
+            if (SessionBudget.noteWatching()) {
+                crossings++;
+                crossedAt = tick;
+            }
+        }
+        assertEquals("the budget ran out more than once, or never", 1, crossings);
+        assertEquals("it said so on the report that reached the minute", 30, crossedAt);
+
+        // A video budget is judged on video changes, as before: time alone says nothing of it.
+        Settings.SESSION_BUDGET_MINUTES.save(0);
+        Settings.SESSION_BUDGET_VIDEOS.save(1);
+        now.addAndGet(2_000L);
+        assertFalse(SessionBudget.noteWatching());
+    }
+
     @Test public void timeTheAppSpentAwayIsNotWatching() {
         Settings.SESSION_BUDGET_MINUTES.save(60);
         SessionBudget.noteWatching();
