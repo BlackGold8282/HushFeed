@@ -1804,6 +1804,60 @@ try {
             & $prePushScript -Root $hookRoot -ChangedPaths @('gradle/libs.versions.toml') 6> $null
             Assert-True ((Get-ApplyCalls).Count -eq 2) 'A patcher pin change applied nothing to the fixtures.'
 
+            # A first push lists the branch's whole tree, which holds patches-bundle.json as well as
+            # the patch sources. The release check's half of that is covered above; this is the
+            # patching half. A fresh repository with both, pushed as a new branch, must still build
+            # the bundle and apply it to each declared build, since the index it holds is unchanged.
+            Reset-Apply
+            $firstPatchRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("hushfeed-first-patch-" + [guid]::NewGuid().ToString('N'))
+            $firstPatchWrapper = Join-Path $hookRoot 'first-patch-wrapper.ps1'
+            try {
+                New-Item -ItemType Directory -Path (Join-Path $firstPatchRoot 'scripts'),
+                    (Join-Path $firstPatchRoot (Split-Path -Parent $patchSource)) -Force | Out-Null
+                # Tracked, because the hook runs its checks from the pushed commit's tree.
+                foreach ($script in @('validate-release-facts.ps1', 'test-script-contracts.ps1', 'verify-all-patches.ps1')) {
+                    Copy-Item -LiteralPath (Join-Path $hookRoot "scripts/$script") -Destination (Join-Path $firstPatchRoot 'scripts')
+                }
+                Copy-Item -LiteralPath $stubCatalog -Destination (Join-Path $firstPatchRoot 'patches-list.json')
+                Set-Content -LiteralPath (Join-Path $firstPatchRoot 'patches-bundle.json') -Encoding UTF8 -Value '{}'
+                Set-Content -LiteralPath (Join-Path $firstPatchRoot $patchSource) -Encoding UTF8 -Value '// patch'
+                # As in the repository: the build's output is not part of the tree the hook checks.
+                Set-Content -LiteralPath (Join-Path $firstPatchRoot '.gitignore') -Encoding UTF8 -Value 'build/'
+                # The bundle goes where the hook will look for it: under the tree it was handed.
+                Set-Content -LiteralPath $firstPatchWrapper -Encoding UTF8 -Value @(
+                    'param([string]$ProjectDir, [string[]]$Tasks)',
+                    "Set-Content -LiteralPath '$wrapperMarker' -Value (`"dir=`$ProjectDir tasks=`" + (`$Tasks -join ','))",
+                    'if ($Tasks -contains '':patches:buildAndroid'') {',
+                    '    $release = Join-Path $ProjectDir ''patches/build/release''',
+                    '    New-Item -ItemType Directory -Path $release -Force | Out-Null',
+                    '    Set-Content -LiteralPath (Join-Path $release ''patches-9.9.9.mpp'') -Value ''bundle'' -Encoding ASCII',
+                    '}',
+                    'exit 0')
+                $env:HUSHFEED_BUILD_WRAPPER = $firstPatchWrapper
+                & git -C $firstPatchRoot init --quiet
+                $firstPatchGitDir = (& git -C $firstPatchRoot rev-parse --absolute-git-dir).Trim()
+                Assert-True ([IO.Path]::GetFullPath($firstPatchGitDir).TrimEnd('\', '/') -ieq
+                    [IO.Path]::GetFullPath((Join-Path $firstPatchRoot '.git')).TrimEnd('\', '/')) `
+                    'The first-push patching fixture resolved outside its temporary repository; refusing to write.'
+                & git -C $firstPatchRoot config user.name 'Hook Contract'
+                & git -C $firstPatchRoot config user.email 'hook@example.invalid'
+                & git -C $firstPatchRoot add -A
+                & git -C $firstPatchRoot commit --quiet -m 'first'
+                $firstPatchHead = (& git -C $firstPatchRoot rev-parse HEAD).Trim()
+                $firstPatchBranch = (& git -C $firstPatchRoot symbolic-ref HEAD).Trim()
+                $global:LASTEXITCODE = 0
+                & $prePushScript -Root $firstPatchRoot -PushedRefs "$firstPatchBranch $firstPatchHead refs/heads/first $('0' * 40)" 6> $null
+                Assert-True ($LASTEXITCODE -eq 0) "A first push with patch sources failed with every stub passing (exit $LASTEXITCODE)."
+                Assert-True ((Get-Content -LiteralPath $wrapperMarker -Raw).Trim() -like '*,:patches:buildAndroid') `
+                    'A first push with patch sources did not build the bundle.'
+                $firstCalls = @(Get-ApplyCalls | ForEach-Object { ($_ -split ' ')[0] })
+                Assert-True (($firstCalls -join ',') -eq 'apk=com.zhiliaoapp.musically_1.0.3-100_apkmirror.com.apk,apk=tiktok-1.1.3.apk') `
+                    ("A first push with patch sources did not apply the bundle to each declared build once: " + ((Get-ApplyCalls) -join '; '))
+            } finally {
+                $env:HUSHFEED_BUILD_WRAPPER = $wrapperStub
+                Remove-Item -LiteralPath $firstPatchRoot, $firstPatchWrapper -Recurse -Force -ErrorAction SilentlyContinue
+            }
+
             # The control: extension sources build and test, and apply nothing.
             Reset-Apply
             & $prePushScript -Root $hookRoot -ChangedPaths @('extensions/tiktok/src/main/java/Any.java') 6> $null
