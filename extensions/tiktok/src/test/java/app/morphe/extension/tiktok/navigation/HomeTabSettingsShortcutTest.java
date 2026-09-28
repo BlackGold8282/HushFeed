@@ -112,6 +112,19 @@ public class HomeTabSettingsShortcutTest {
         assertNull(nextStarted());
     }
 
+    /** A tab view whose parent takes the tap would swallow that tap once it is long-clickable. */
+    @Test public void aHomeViewThatDoesNotTakeTheTapIsLeftAlone() {
+        home.setOnClickListener(null);
+        home.setClickable(false);
+        FrameLayout bar = (FrameLayout) home.getParent();
+        bar.setOnClickListener(view -> taps.incrementAndGet());
+        installAndResume();
+
+        assertFalse(home.isLongClickable());
+        assertFalse(home.performLongClick());
+        assertNull(nextStarted());
+    }
+
     @Test public void withoutFeedTabNavigationNothingIsAttached() {
         ReflectionHelpers.setStaticField(SettingsStatus.class, "feedNavigationEnabled", false);
         installAndResume();
@@ -124,6 +137,8 @@ public class HomeTabSettingsShortcutTest {
         FrameLayout bar = (FrameLayout) home.getParent();
         View rebuilt = new View(activity);
         rebuilt.setId(HOME_ID);
+        // A rebuilt tab takes its taps like the one it replaces.
+        rebuilt.setOnClickListener(view -> taps.incrementAndGet());
         bar.removeView(home);
         bar.addView(rebuilt, new FrameLayout.LayoutParams(216, 138));
         layoutPass();

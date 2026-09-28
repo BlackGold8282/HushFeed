@@ -117,6 +117,13 @@ public final class HomeTabSettingsShortcut {
                 Logger.printInfo(() -> "The Home tab has a long press of its own; leaving it to TikTok");
                 return;
             }
+            // A view that isn't the one taking the tap would take the whole press once it is
+            // long-clickable, and the tap its parent handles would be lost.
+            if (!home.isClickable()) {
+                refused = new WeakReference<>(home);
+                Logger.printInfo(() -> "The Home tab view doesn't take the tap itself; no long press");
+                return;
+            }
             home.setOnLongClickListener(OPEN_SETTINGS);
             attached = new WeakReference<>(home);
         } catch (Throwable error) {
