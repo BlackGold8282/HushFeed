@@ -158,7 +158,10 @@ final class UnfinishedSaves {
         private final Context context;
         private final SaveRecords.Report report;
         private WeakReference<Activity> front = new WeakReference<>(null);
-        private boolean scheduled;
+        /** The main activity the pending check is for; null when none is pending. */
+        private WeakReference<Activity> armedFor = new WeakReference<>(null);
+        /** Which pending check is the live one. A later arming makes every earlier one stand down. */
+        private int generation;
         private boolean said;
 
         Watcher(Application application, Context context, SaveRecords.Report report) {
@@ -170,10 +173,14 @@ final class UnfinishedSaves {
         void resumed(Activity activity) {
             front = new WeakReference<>(activity);
             // The main activity only: a splash or a link's screen can be gone inside the wait.
-            if (said || scheduled || activity != Utils.getActivity()) return;
-            scheduled = true;
+            // A main activity recreated inside the wait (a rotation, a theme change) is a new
+            // instance, and it arms a check of its own: the one pending is for a screen that's gone.
+            if (said || activity != Utils.getActivity() || armedFor.get() == activity) return;
+            armedFor = new WeakReference<>(activity);
+            int armed = ++generation;
             Utils.runOnMainThreadDelayed(() -> {
-                scheduled = false;
+                if (armed != generation) return;
+                armedFor = new WeakReference<>(null);
                 if (!said && front.get() == activity && activity == Utils.getActivity() && inFront(activity)) {
                     say(activity);
                 }

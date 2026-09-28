@@ -246,6 +246,31 @@ public class UnfinishedSavesTest {
         assertEquals(1, shown.size());
     }
 
+    /**
+     * The main screen recreated inside the settle, as a rotation or a theme change does it: the
+     * new one is the screen in front, so it's the one told, and only once.
+     */
+    @Test public void aMainScreenRecreatedInsideTheSettleIsStillTold() throws Exception {
+        anEarlierProcessDiedSavingAVideo();
+        UnfinishedSaves.atStart(context);
+        idleFor(10);
+        screen(true);
+        idleFor(UnfinishedSaves.SETTLE_MS / 2);
+
+        ActivityController<Activity> old = screens.remove(screens.size() - 1);
+        old.pause().stop().destroy();
+        Activity recreated = screen(true);
+        idleFor(UnfinishedSaves.SETTLE_MS + 100);
+
+        String expected = "TikTok closed during these saves\nVideo: didn't finish";
+        assertEquals("the recreated main screen wasn't told", List.of(expected), shown);
+        // The banner is up for six seconds, so it's looked for while it is.
+        assertNotNull("the banner isn't on the recreated screen",
+                findText(recreated.findViewById(android.R.id.content), expected));
+        idleFor(10_000);
+        assertEquals("the check armed for the old screen said it again", 1, shown.size());
+    }
+
     /** A start that never shows the main screen (a push, a background job) keeps it for one that does. */
     @Test public void aStartWithNoScreenKeepsTheRecordsForTheNext() throws Exception {
         anEarlierProcessDiedSavingAVideo();
