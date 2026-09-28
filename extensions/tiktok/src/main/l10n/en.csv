@@ -80,6 +80,8 @@ source,target
 %1$s: %2$s of %3$s files might not have finished,%1$s: %2$s of %3$s files might not have finished
 %1$s: didn't finish,%1$s: didn't finish
 %1$s: might not have finished,%1$s: might not have finished
+%1$s: one of %3$s files didn't finish,%1$s: one of %3$s files didn't finish
+%1$s: one of %3$s files might not have finished,%1$s: one of %3$s files might not have finished
 1 field overridden,1 field overridden
 1 field will be overridden when requested,1 field will be overridden when requested
 1 gate selected,1 gate selected

@@ -94,13 +94,22 @@ public class UnfinishedSavesTest {
         assertEquals(String.join("\n", lines), UnfinishedSaves.message(context, report()));
     }
 
+    /** One file of five missing, so the verb agrees with one, not with five. */
+    private void assertOneOfFiveSays(String line) {
+        List<SaveRecords.Unfinished> saves = new ArrayList<>();
+        saves.add(new SaveRecords.Unfinished("a", "original photos", 5, 4, 1, 0));
+        String message = UnfinishedSaves.message(context, new SaveRecords.Report(saves));
+        assertEquals(line, message.substring(message.indexOf('\n') + 1));
+    }
+
     @Test public void englishNamesWhatDidNotFinishAndPromisesNothing() {
         assertSays("TikTok closed during these saves",
                 "Video: didn't finish",
                 "Original photos: 3 of 5 files didn't finish",
-                "Original photos: 1 of 5 files might not have finished",
+                "Original photos: one of 5 files might not have finished",
                 "Story: might not have finished",
                 "And 3 more saves");
+        assertOneOfFiveSays("Original photos: one of 5 files didn't finish");
         String text = UnfinishedSaves.message(context, report()).toLowerCase(Locale.ROOT);
         for (String promise : new String[]{"resum", "automatic", "will ", "continue", "failed"}) {
             assertFalse("the notice says " + promise, text.contains(promise));
@@ -112,9 +121,10 @@ public class UnfinishedSavesTest {
         assertSays("TikTok wurde während dieser Speicherungen geschlossen",
                 "Video: nicht fertig geworden",
                 "Originalfotos: 3 von 5 Dateien nicht fertig geworden",
-                "Originalfotos: 1 von 5 Dateien möglicherweise nicht fertig geworden",
+                "Originalfotos: eine von 5 Dateien möglicherweise nicht fertig geworden",
                 "Story: möglicherweise nicht fertig geworden",
                 "Und 3 weitere Speicherungen");
+        assertOneOfFiveSays("Originalfotos: eine von 5 Dateien nicht fertig geworden");
     }
 
     @Test @Config(qualifiers = "es")
@@ -122,9 +132,10 @@ public class UnfinishedSavesTest {
         assertSays("TikTok se cerró durante estos guardados",
                 "Vídeo: no terminó",
                 "Fotos originales: 3 de 5 archivos no terminaron",
-                "Fotos originales: puede que 1 de 5 archivos no hayan terminado",
+                "Fotos originales: puede que uno de 5 archivos no haya terminado",
                 "Historia: puede que no haya terminado",
                 "Y otros 3 guardados");
+        assertOneOfFiveSays("Fotos originales: uno de 5 archivos no terminó");
     }
 
     @Test @Config(qualifiers = "in-rID")
@@ -135,6 +146,8 @@ public class UnfinishedSavesTest {
                 "Foto asli: 1 dari 5 berkas mungkin tidak selesai",
                 "Story: mungkin tidak selesai",
                 "Dan 3 penyimpanan lain");
+        // Indonesian has no one form: the other form reads right for every count.
+        assertOneOfFiveSays("Foto asli: 1 dari 5 berkas tidak selesai");
     }
 
     @Test @Config(qualifiers = "pt-rBR")
@@ -142,9 +155,10 @@ public class UnfinishedSavesTest {
         assertSays("O TikTok fechou durante estes salvamentos",
                 "Vídeo: não terminou",
                 "Fotos originais: 3 de 5 arquivos não terminaram",
-                "Fotos originais: 1 de 5 arquivos podem não ter terminado",
+                "Fotos originais: um de 5 arquivos pode não ter terminado",
                 "Story: pode não ter terminado",
                 "E mais 3 salvamentos");
+        assertOneOfFiveSays("Fotos originais: um de 5 arquivos não terminou");
     }
 
     @Test @Config(qualifiers = "tr")
@@ -152,9 +166,10 @@ public class UnfinishedSavesTest {
         assertSays("TikTok bu kayıtlar sırasında kapandı",
                 "Video: tamamlanmadı",
                 "Orijinal fotoğraflar: 5 dosyadan 3 tanesi tamamlanmadı",
-                "Orijinal fotoğraflar: 5 dosyadan 1 tanesi tamamlanmamış olabilir",
+                "Orijinal fotoğraflar: 5 dosyadan biri tamamlanmamış olabilir",
                 "Hikaye: tamamlanmamış olabilir",
                 "Ve 3 kayıt daha");
+        assertOneOfFiveSays("Orijinal fotoğraflar: 5 dosyadan biri tamamlanmadı");
     }
 
     /** One left over takes the one form, and every kind has a name of its own. */

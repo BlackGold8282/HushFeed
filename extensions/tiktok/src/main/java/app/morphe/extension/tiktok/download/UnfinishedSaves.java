@@ -80,14 +80,18 @@ final class UnfinishedSaves {
         String kind = kindLabel(context, save.kind);
         String files = String.valueOf(save.files);
         List<String> said = new ArrayList<>();
+        // The count picks the form, so the verb agrees with it: Spanish and Portuguese put it in
+        // the plural for "3 of 5" and the singular for "one of 5".
         if (save.unfinished > 0) {
             said.add(save.files == 1 ? L10n.f(context, "%1$s: didn't finish", kind)
-                    : L10n.f(context, "%1$s: %2$s of %3$s files didn't finish",
+                    : L10n.quantity(context, save.unfinished, "%1$s: one of %3$s files didn't finish",
+                            "%1$s: %2$s of %3$s files didn't finish",
                             kind, String.valueOf(save.unfinished), files));
         }
         if (save.uncertain > 0) {
             said.add(save.files == 1 ? L10n.f(context, "%1$s: might not have finished", kind)
-                    : L10n.f(context, "%1$s: %2$s of %3$s files might not have finished",
+                    : L10n.quantity(context, save.uncertain, "%1$s: one of %3$s files might not have finished",
+                            "%1$s: %2$s of %3$s files might not have finished",
                             kind, String.valueOf(save.uncertain), files));
         }
         return said;
