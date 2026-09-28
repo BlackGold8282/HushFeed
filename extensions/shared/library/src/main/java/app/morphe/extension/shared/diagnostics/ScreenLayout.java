@@ -127,20 +127,28 @@ public final class ScreenLayout {
         if (decor != null) roots.add(decor);
         // Dialogs, popups and sheets are windows of their own, and a floating points badge or a
         // promotion sheet is exactly what a reader asks to hide. Only the screen in front's own:
-        // a dialog belongs to its activity's token and a popup to the activity window's, and
-        // another screen's windows (its dialog still up behind this one included) are left out.
-        android.os.IBinder activityToken = activity.getWindow() == null
-                ? null : activity.getWindow().getAttributes().token;
-        android.os.IBinder windowToken = decor == null ? null : decor.getWindowToken();
-        for (View root : otherWindows()) {
-            if (root == decor || !root.isShown()) continue;
-            ViewGroup.LayoutParams params = root.getLayoutParams();
-            if (!(params instanceof WindowManager.LayoutParams)) continue;
-            WindowManager.LayoutParams window = (WindowManager.LayoutParams) params;
-            if (window.type == WindowManager.LayoutParams.TYPE_BASE_APPLICATION) continue;
-            if (window.token == null
-                    || (window.token != activityToken && window.token != windowToken)) continue;
-            roots.add(root);
+        // a dialog belongs to its activity's token, a popup to the window it opened from (the
+        // activity's, or a sheet's own), and another screen's windows, its dialog still up behind
+        // this one included, are left out.
+        java.util.Set<android.os.IBinder> owners = new java.util.HashSet<>();
+        if (activity.getWindow() != null && activity.getWindow().getAttributes().token != null) {
+            owners.add(activity.getWindow().getAttributes().token);
+        }
+        if (decor != null && decor.getWindowToken() != null) owners.add(decor.getWindowToken());
+        List<View> others = otherWindows();
+        boolean grew = true;
+        while (grew) {
+            grew = false;
+            for (View root : others) {
+                if (root == decor || roots.contains(root) || !root.isShown()) continue;
+                ViewGroup.LayoutParams params = root.getLayoutParams();
+                if (!(params instanceof WindowManager.LayoutParams)) continue;
+                WindowManager.LayoutParams window = (WindowManager.LayoutParams) params;
+                if (window.type == WindowManager.LayoutParams.TYPE_BASE_APPLICATION) continue;
+                if (window.token == null || !owners.contains(window.token)) continue;
+                roots.add(root);
+                if (root.getWindowToken() != null && owners.add(root.getWindowToken())) grew = true;
+            }
         }
 
         Resources resources = activity.getResources();

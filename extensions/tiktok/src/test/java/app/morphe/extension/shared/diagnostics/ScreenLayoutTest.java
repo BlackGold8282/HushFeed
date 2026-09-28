@@ -197,15 +197,22 @@ public class ScreenLayoutTest {
                 .setMessage("Buy now for $4.99").create();
         sheet.show();
         idle(0);
+        // A menu opened from that sheet takes the sheet's window token, not the activity's.
+        TextView menuItem = new TextView(target);
+        menuItem.setText("Claim now");
+        android.widget.PopupWindow menu = new android.widget.PopupWindow(menuItem, 200, 100);
+        menu.showAtLocation(sheet.getWindow().getDecorView(), android.view.Gravity.CENTER, 0, 0);
+        idle(0);
         ScreenLayout.start(settings, results::add);
         idle(ScreenLayout.DELAY_MS);
 
         String all = String.join("\n", ScreenLayout.lines());
         int windows = all.split("\nwindow: ", -1).length - 1;
-        assertEquals(all, 2, windows);
-        for (String leaked : new String[]{"Buy now", "Earn 500", "points", "Settings dialog"}) {
+        assertEquals("the screen, its sheet and the sheet's menu: " + all, 3, windows);
+        for (String leaked : new String[]{"Buy now", "Earn 500", "points", "Settings dialog", "Claim now"}) {
             assertFalse("the layout carries on-screen text: " + leaked + "\n" + all, all.contains(leaked));
         }
+        menu.dismiss();
         sheet.dismiss();
         behind.dismiss();
     }
