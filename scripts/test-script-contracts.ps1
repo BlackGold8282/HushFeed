@@ -1621,6 +1621,7 @@ try {
 
     # A first push lists the branch's whole tree, and every tree holds patches-bundle.json. That
     # used to route the push as an index push: the strict release check, and no patching at all.
+    # This case sees the release check's mode; the patching half reads the same flag.
     $firstPushRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("hushfeed-first-push-" + [guid]::NewGuid().ToString('N'))
     try {
         New-Item -ItemType Directory -Path (Join-Path $firstPushRoot 'scripts') -Force | Out-Null
