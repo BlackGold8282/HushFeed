@@ -23,8 +23,11 @@ public class ClockHourPreference extends NumberInputPreference {
     /**
      * An hour with or without its ":00": 6, 06, 6:00, 06:00 and 0600 are all six o'clock. Any
      * script's digits, as the plain number parse took before: a time keyboard can type them.
+     * {@code \p{Nd}} rather than a flag: Android's regex is ICU, which refuses
+     * UNICODE_CHARACTER_CLASS where the JVM the tests run on takes it, and the settings screen
+     * crashed opening this row.
      */
-    private static final Pattern HOUR = Pattern.compile("(\\d{1,2})(?::?(\\d\\d))?", Pattern.UNICODE_CHARACTER_CLASS);
+    private static final Pattern HOUR = Pattern.compile("(\\p{Nd}{1,2})(?::?(\\p{Nd}\\p{Nd}))?");
 
     public ClockHourPreference(Context context, String title, String summary, IntegerSetting setting) {
         super(context, title, summary, setting, "", "");
