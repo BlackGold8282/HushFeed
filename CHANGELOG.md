@@ -11,6 +11,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** New row under Downloads, Forget saved videos. It empties the record behind the already-saved check, keeps the files and your settings, and offers Undo while its notice is up. A save that was already running when you forgot doesn't add itself back.
 * **TikTok:** Mute feed videos leaves another app's music playing in two more cases. Turning mute on from the settings page now gives the sound back when you return to the feed, and turning the sound back on while a video is paused makes the feed ask for it when it plays again, rather than playing over the other app. The mute button also stays off stories and LIVE replays, which keep their sound.
 * **TikTok:** Blocking a commenter from the comments is remembered for the account that did it. After switching accounts, someone the first account blocked showed as blocked for the second, and the first tap there sent an unblock. A tap on the row while the banner's Undo is still working no longer sends a second unblock.
+* **TikTok:** Exported diagnostics keep room for the events that matter. Playback quality wrote a line for nearly every video, since gear names and bitrates change each time, and a busy export was almost nothing else. It now writes one line per mode and size ladder.
 
 ## 0.64.0 (2026-09-28)
 
