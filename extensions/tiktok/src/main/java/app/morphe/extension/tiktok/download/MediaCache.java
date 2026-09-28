@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Base64;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.AtomicFile;
 
@@ -329,8 +330,8 @@ public final class MediaCache {
         try {
             uri = Uri.parse(value);
             if (uri == null) return false;
-            try (Cursor cursor = resolver.query(uri,
-                    new String[]{MediaStore.MediaColumns.IS_PENDING}, null, null, null)) {
+            try (Cursor cursor = queryIncludingPending(resolver, uri,
+                    new String[]{MediaStore.MediaColumns.IS_PENDING}, null, null)) {
                 if (cursor == null) return false;
                 if (!cursor.moveToFirst()) return true;
                 int column = cursor.getColumnIndex(MediaStore.MediaColumns.IS_PENDING);
@@ -362,10 +363,10 @@ public final class MediaCache {
     private static boolean reconcilePendingIntent(ContentResolver resolver, String value) {
         PendingIntent intent = decodeIntent(value);
         if (intent == null) return false;
-        try (Cursor cursor = resolver.query(intent.collection,
+        try (Cursor cursor = queryIncludingPending(resolver, intent.collection,
                 new String[]{MediaStore.MediaColumns._ID, MediaStore.MediaColumns.DISPLAY_NAME,
                         MediaStore.MediaColumns.IS_PENDING, MediaStore.MediaColumns.RELATIVE_PATH},
-                MediaStore.MediaColumns.DISPLAY_NAME + "=?", new String[]{intent.displayName}, null)) {
+                MediaStore.MediaColumns.DISPLAY_NAME + "=?", new String[]{intent.displayName})) {
             if (cursor == null) return false;
             int idColumn = cursor.getColumnIndex(MediaStore.MediaColumns._ID);
             int nameColumn = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
@@ -390,6 +391,29 @@ public final class MediaCache {
             Logger.printException(() -> "Could not reconcile pending media insert", error);
             return false;
         }
+    }
+
+    /**
+     * A query that sees this app's own pending rows, which are the ones the sweep is for.
+     * MediaStore hides pending rows from a query, the owner's included, unless it asks: on API 29
+     * with MediaStore.setIncludePending on the URI, from API 30 with QUERY_ARG_MATCH_PENDING set to
+     * MATCH_INCLUDE (which still shows no other app's pending rows). Without asking, every orphan
+     * read as gone, lost its journal entry and stayed in MediaStore for good.
+     */
+    @SuppressWarnings("deprecation")
+    static Cursor queryIncludingPending(ContentResolver resolver, Uri uri, String[] projection,
+            String selection, String[] selectionArgs) {
+        if (Build.VERSION.SDK_INT >= 30) {
+            Bundle arguments = new Bundle();
+            arguments.putInt(MediaStore.QUERY_ARG_MATCH_PENDING, MediaStore.MATCH_INCLUDE);
+            if (selection != null) {
+                arguments.putString(ContentResolver.QUERY_ARG_SQL_SELECTION, selection);
+                arguments.putStringArray(ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS, selectionArgs);
+            }
+            return resolver.query(uri, projection, arguments, null);
+        }
+        Uri asking = Build.VERSION.SDK_INT == 29 ? MediaStore.setIncludePending(uri) : uri;
+        return resolver.query(asking, projection, selection, selectionArgs, null);
     }
 
     /** MediaStore stores a folder with a trailing separator and the callers do not write one. */

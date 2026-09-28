@@ -409,8 +409,8 @@ final class SaveRecords {
      */
     private static Outcome rowOutcome(Context context, Uri uri) {
         if (Build.VERSION.SDK_INT < 29) return Outcome.UNCERTAIN;
-        try (Cursor cursor = context.getContentResolver().query(uri,
-                new String[]{MediaStore.MediaColumns.IS_PENDING}, null, null, null)) {
+        try (Cursor cursor = MediaCache.queryIncludingPending(context.getContentResolver(), uri,
+                new String[]{MediaStore.MediaColumns.IS_PENDING}, null, null)) {
             if (cursor == null) return Outcome.UNCERTAIN;
             if (!cursor.moveToFirst()) return Outcome.MISSING;
             int column = cursor.getColumnIndex(MediaStore.MediaColumns.IS_PENDING);
