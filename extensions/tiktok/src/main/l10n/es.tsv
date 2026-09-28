@@ -165,6 +165,7 @@ Auto translate comments	Traducir comentarios automáticamente
 Auto-advance session limit	Límite de avance automático por sesión
 Automatic	Automático
 Auto-advance	Avance automático
+Staying on a video	Quedarse en un vídeo
 Auto-advance stopped after %1$d videos	El avance automático se detuvo tras %1$d vídeos
 Auto-advance stopped after one video	El avance automático se detuvo tras un vídeo
 Automatic clear display	Ocultar controles automáticamente
@@ -282,6 +283,8 @@ Couldn't put back the diagnostic data. Try again.	No se pudieron recuperar los d
 Couldn't read who posted this comment. Open their profile and block them there.	No se pudo leer quién publicó este comentario. Abre su perfil y bloquéalo desde allí.
 Couldn't reset this override. Try again.	No se pudo restablecer esta sustitución. Inténtalo de nuevo.
 Couldn't restore the settings. Try again.	No se pudieron restaurar los ajustes. Inténtalo de nuevo.
+Couldn't reset the settings. Try again.	No se pudieron restablecer los ajustes. Inténtalo de nuevo.
+Couldn't undo the last change. Try again.	No se pudo deshacer el último cambio. Inténtalo de nuevo.
 Couldn't save the settings backup. Try again.	No se pudo guardar la copia de seguridad de los ajustes. Inténtalo de nuevo.
 Couldn't save this override. Try again.	No se pudo guardar esta sustitución. Inténtalo de nuevo.
 Couldn't send the feedback. Try again in a moment.	No se pudo enviar la valoración. Inténtalo de nuevo en un momento.
@@ -354,6 +357,7 @@ Enter a JSON object or array.	Introduce un objeto o una matriz JSON.
 Enter a creator handle or id	Escribe un nombre de usuario o un id de creador
 Enter a finite number.	Introduce un número finito.
 Enter a number.	Escribe un número.
+Enter an hour, like 6 or 06:00.	Escribe una hora, como 6 o 06:00.
 Enter a valid structured value.	Introduce un valor estructurado válido.
 Enter a valid two-letter country code	Escribe un código de país válido de dos letras
 Enter a whole number, or one like 20K, 1.5M or 2B	Escribe un número entero, o uno como 20K, 1.5M o 2B
@@ -810,6 +814,10 @@ Restart TikTok to apply this.	Reinicia TikTok para que se aplique.
 Restart pending	Reinicio pendiente
 Put every setting back to its default straight away. Your current settings are kept for Undo.	Devolver cada ajuste a su valor de fábrica ahora mismo. Tus ajustes actuales se guardan para Deshacer.
 Restore failed. Some settings may still be changed.	La restauración falló. Puede que algunos ajustes hayan cambiado igualmente.
+Reset didn't finish. Some settings may still be changed. Use Undo to put them back.	El restablecimiento no terminó. Puede que algunos ajustes hayan cambiado igualmente. Usa Deshacer para recuperarlos.
+Reset didn't finish. Some settings may still be changed.	El restablecimiento no terminó. Puede que algunos ajustes hayan cambiado igualmente.
+Undo didn't finish. Some settings may still be changed. Try Undo again.	Deshacer no terminó. Puede que algunos ajustes hayan cambiado igualmente. Vuelve a probar Deshacer.
+Undo didn't finish. Some settings may still be changed.	Deshacer no terminó. Puede que algunos ajustes hayan cambiado igualmente.
 Restore failed. Some settings may still be changed. Use Undo to put them back.	La restauración falló. Puede que algunos ajustes hayan cambiado igualmente. Usa Deshacer para recuperarlos.
 Restore settings	Restaurar los ajustes
 Lab settings put back. Restart TikTok to apply this.	Ajustes del Lab recuperados. Reinicia TikTok para que se aplique.
@@ -825,7 +833,7 @@ SIM country preset	País preestablecido de la SIM
 STEM	STEM
 Sanitize sharing links	Limpiar los enlaces al compartir
 Save	Guardar
-Save SRT files with the video. Paired saves use Movies on Android 11+, Download on Android 10, and your video folder on older versions.	Guardar los archivos SRT junto al vídeo. Los guardados emparejados usan Movies en Android 11 y superior, Download en Android 10, y tu carpeta de vídeos en versiones anteriores.
+Save SRT files with the video. They go to Movies on Android 11+, Download on Android 10, and your video folder on older versions. On Android 11+ with Save details on, the video moves to Download or Documents and the SRT files stay in Movies.	Guardar los archivos SRT junto al vídeo. Van a Movies en Android 11 y superior, a Download en Android 10 y a tu carpeta de vídeos en versiones anteriores. En Android 11 y superior, con Guardar detalles activado, el vídeo pasa a Download o Documents y los archivos SRT se quedan en Movies.
 Save a profile picture on a long press	Guardar una foto de perfil con una pulsación larga
 Save a story on a long press	Guardar una historia con una pulsación larga
 Save every photo in the post as TikTok received it, not as the screen shows it.	Guardar cada foto de la publicación tal como la recibió TikTok, no como la muestra la pantalla.
@@ -1112,6 +1120,7 @@ Transparent	Transparente
 Try a different word or clear the search.	Prueba con otra palabra o borra la búsqueda.
 Try again, or go back to TikTok.	Inténtalo de nuevo o vuelve a TikTok.
 Turn on %1$s first.	Activa antes %1$s.
+Put %1$s in %2$s first.	Escribe antes %1$s en %2$s.
 Turn on overrides	Activar las sustituciones
 Turned off %1$d gates of %2$d. The rest don't take a true or false value. Restart TikTok to apply this.	%1$d interruptores de %2$d apagados. Los demás no aceptan un valor true o false. Reinicia TikTok para aplicar esto.
 Turned off %1$d gates. Restart TikTok to apply this.	%1$d interruptores apagados. Reinicia TikTok para aplicar esto.
@@ -1303,10 +1312,11 @@ Changes in Hushfeed %1$s	Cambios en Hushfeed %1$s
 Reviewed presets	Ajustes verificados
 Show See translation	Mostrar la opción de traducir
 Reviewed for TikTok %1$s	Verificado para TikTok %1$s
+%1$s (TikTok %2$s)	%1$s (TikTok %2$s)
 Value: %1$s to %2$s	Valor: de %1$s a %2$s
 The presets couldn't load. Open the Lab again.	No se pudieron cargar los ajustes. Abre el laboratorio de nuevo.
-Apply enables these overrides. Undo last Lab change restores your previous rules.	Aplicar activa estas modificaciones. Deshacer el último cambio del laboratorio restaura tus reglas anteriores.
-Apply saves these overrides. Turn on overrides in the Lab to use them. Undo restores your previous rules.	Aplicar guarda estas modificaciones. Actívalas en el laboratorio para usarlas. Deshacer restaura tus reglas anteriores.
+Apply enables these overrides. Undo last Lab change puts your previous rules back until you change anything else in the Lab.	Aplicar activa estas modificaciones. Deshacer el último cambio del Lab recupera tus reglas anteriores hasta que cambies otra cosa en el Lab.
+Apply saves these overrides. Turn on overrides in the Lab to use them. Turning them on is a Lab change too, so after that Undo turns them off rather than putting your previous rules back.	Aplicar guarda estas modificaciones. Actívalas en el Lab para usarlas. Activarlas también es un cambio del Lab, así que después Deshacer las desactiva en vez de recuperar tus reglas anteriores.
 This preset isn't available for your installed TikTok version.	Este ajuste no está disponible para tu versión instalada de TikTok.
 Preset applied. Restart TikTok to use it.	Ajuste aplicado. Reinicia TikTok para usarlo.
 Preset saved. Turn on overrides in the Lab to use it.	Ajuste guardado. Activa las modificaciones en el laboratorio para usarlo.

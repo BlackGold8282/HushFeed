@@ -548,6 +548,18 @@ public class SettingsBackupTest {
         return (String) message.invoke(null, 7312 /* IMPORT */, refusal);
     }
 
+    /**
+     * A reset lets go of the setup Calm feed saved. Its card went on offering "Restore setup",
+     * which would have put back what the reset had just cleared.
+     */
+    @Test public void aResetForgetsTheSetupCalmFeedSaved() throws Exception {
+        CalmFeedPreset.apply(Utils.getContext());
+        assertTrue(CalmFeedPreset.hasSnapshot(Utils.getContext()));
+        SettingsBackup.reset(Utils.getContext());
+        assertFalse("the Calm feed card still offers the setup from before the reset",
+                CalmFeedPreset.hasSnapshot(Utils.getContext()));
+    }
+
     @Test public void resetAndUndoRestoreBothStoresAndSurviveAnUnrelatedSettingChange() throws Exception {
         Settings.BLOCKED_CREATORS.save("creator");
         Settings.AUTO_ADVANCE.save(true);

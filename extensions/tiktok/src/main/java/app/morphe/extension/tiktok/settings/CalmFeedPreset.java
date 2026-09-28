@@ -177,6 +177,13 @@ public final class CalmFeedPreset {
         return count;
     }
 
+    /** Lets go of the setup saved before Calm feed was applied, after a reset of every setting. */
+    public static synchronized void forgetSnapshot(Context context) {
+        if (!clearSnapshot(preferences(context))) {
+            app.morphe.extension.shared.Logger.printInfo(() -> "Could not clear the Calm feed snapshot");
+        }
+    }
+
     private static SharedPreferences preferences(Context context) {
         Context app = context.getApplicationContext();
         return (app == null ? context : app).getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);

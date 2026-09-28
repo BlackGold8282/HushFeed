@@ -164,6 +164,7 @@ Auto translate comments,Terjemahkan komentar otomatis
 Auto-advance session limit,Batas lanjut otomatis per sesi
 Automatic,Otomatis
 Auto-advance,Lanjut otomatis
+Staying on a video,Tetap di video
 Auto-advance stopped after %1$d videos,Lanjut otomatis dihentikan setelah %1$d video
 Auto-advance stopped after one video,Lanjut otomatis dihentikan setelah satu video
 Automatic clear display,Tampilan bersih otomatis
@@ -281,6 +282,8 @@ Couldn't put back the diagnostic data. Try again.,Data diagnostik tidak bisa dik
 Couldn't read who posted this comment. Open their profile and block them there.,Tidak bisa membaca siapa yang menulis komentar ini. Buka profilnya dan blokir dari sana.
 Couldn't reset this override. Try again.,Penggantian ini tidak bisa diatur ulang. Coba lagi.
 Couldn't restore the settings. Try again.,Pengaturan tidak bisa dipulihkan. Coba lagi.
+Couldn't reset the settings. Try again.,Pengaturan tidak bisa diatur ulang. Coba lagi.
+Couldn't undo the last change. Try again.,Perubahan terakhir tidak bisa diurungkan. Coba lagi.
 Couldn't save the settings backup. Try again.,Cadangan pengaturan tidak bisa disimpan. Coba lagi.
 Couldn't save this override. Try again.,Penggantian ini tidak bisa disimpan. Coba lagi.
 Couldn't send the feedback. Try again in a moment.,Masukan tidak dapat dikirim. Coba lagi sebentar lagi.
@@ -353,6 +356,7 @@ Enter a JSON object or array.,Masukkan objek atau larik JSON.
 Enter a creator handle or id,Masukkan handle atau ID kreator
 Enter a finite number.,Masukkan angka terbatas.
 Enter a number.,Masukkan angka.
+"Enter an hour, like 6 or 06:00.","Masukkan jam, misalnya 6 atau 06:00."
 Enter a valid structured value.,Masukkan nilai terstruktur yang valid.
 Enter a valid two-letter country code,Masukkan kode negara dua huruf yang sah
 "Enter a whole number, or one like 20K, 1.5M or 2B","Masukkan bilangan bulat, atau seperti 20K, 1.5M atau 2B"
@@ -810,6 +814,10 @@ Restart TikTok to apply this.,Mulai ulang TikTok agar berlaku.
 Restart pending,Menunggu mulai ulang
 Put every setting back to its default straight away. Your current settings are kept for Undo.,Kembalikan setiap pengaturan ke bawaannya sekarang juga. Pengaturanmu yang sekarang disimpan untuk Urungkan.
 Restore failed. Some settings may still be changed.,Pemulihan gagal. Beberapa pengaturan mungkin masih berubah.
+Reset didn't finish. Some settings may still be changed. Use Undo to put them back.,Atur ulang tidak selesai. Beberapa pengaturan mungkin masih berubah. Gunakan Urungkan untuk mengembalikannya.
+Reset didn't finish. Some settings may still be changed.,Atur ulang tidak selesai. Beberapa pengaturan mungkin masih berubah.
+Undo didn't finish. Some settings may still be changed. Try Undo again.,Urungkan tidak selesai. Beberapa pengaturan mungkin masih berubah. Coba Urungkan lagi.
+Undo didn't finish. Some settings may still be changed.,Urungkan tidak selesai. Beberapa pengaturan mungkin masih berubah.
 Restore failed. Some settings may still be changed. Use Undo to put them back.,Pemulihan gagal. Beberapa pengaturan mungkin masih berubah. Gunakan Urungkan untuk mengembalikannya.
 Restore settings,Pulihkan pengaturan
 Lab settings put back. Restart TikTok to apply this.,Pengaturan Lab dikembalikan. Mulai ulang TikTok agar berlaku.
@@ -825,7 +833,7 @@ SIM country preset,Praset negara SIM
 STEM,STEM
 Sanitize sharing links,Bersihkan tautan berbagi
 Save,Simpan
-"Save SRT files with the video. Paired saves use Movies on Android 11+, Download on Android 10, and your video folder on older versions.","Simpan berkas SRT bersama videonya. Penyimpanan berpasangan memakai Movies di Android 11+, Download di Android 10, dan folder videomu di versi lama."
+"Save SRT files with the video. They go to Movies on Android 11+, Download on Android 10, and your video folder on older versions. On Android 11+ with Save details on, the video moves to Download or Documents and the SRT files stay in Movies.","Simpan berkas SRT bersama videonya. Berkas masuk ke Movies di Android 11+, Download di Android 10, dan folder videomu di versi lama. Di Android 11+ dengan Simpan detail aktif, video pindah ke Download atau Documents dan berkas SRT tetap di Movies."
 Save a profile picture on a long press,Simpan foto profil dengan tekan lama
 Save a story on a long press,Simpan Story dengan tekan lama
 "Save every photo in the post as TikTok received it, not as the screen shows it.","Simpan setiap foto dalam unggahan seperti yang diterima TikTok, bukan seperti yang ditampilkan layar."
@@ -1113,6 +1121,7 @@ Transparent,Transparan
 Try a different word or clear the search.,Coba kata lain atau hapus pencarian.
 "Try again, or go back to TikTok.","Coba lagi, atau kembali ke TikTok."
 Turn on %1$s first.,Nyalakan %1$s dulu.
+Put %1$s in %2$s first.,Isi %2$s dengan %1$s dulu.
 Turn on overrides,Nyalakan penimpaan
 Turned off %1$d gates of %2$d. The rest don't take a true or false value. Restart TikTok to apply this.,%1$d dari %2$d gate dimatikan. Sisanya tidak menerima nilai true atau false. Mulai ulang TikTok agar berlaku.
 Turned off %1$d gates. Restart TikTok to apply this.,%1$d gate dimatikan. Mulai ulang TikTok agar berlaku.
@@ -1301,10 +1310,11 @@ Changes in Hushfeed %1$s,Perubahan di Hushfeed %1$s
 Reviewed presets,Preset teruji
 Show See translation,Tampilkan Lihat terjemahan
 Reviewed for TikTok %1$s,Diuji untuk TikTok %1$s
+%1$s (TikTok %2$s),%1$s (TikTok %2$s)
 Value: %1$s to %2$s,Nilai: %1$s menjadi %2$s
 The presets couldn't load. Open the Lab again.,Preset tidak dapat dimuat. Buka Lab lagi.
-Apply enables these overrides. Undo last Lab change restores your previous rules.,Terapkan mengaktifkan penggantian ini. Urungkan perubahan Lab terakhir memulihkan aturan sebelumnya.
-Apply saves these overrides. Turn on overrides in the Lab to use them. Undo restores your previous rules.,Terapkan menyimpan penggantian ini. Aktifkan penggantian di Lab untuk menggunakannya. Urungkan memulihkan aturan sebelumnya.
+Apply enables these overrides. Undo last Lab change puts your previous rules back until you change anything else in the Lab.,Terapkan mengaktifkan penggantian ini. Batalkan perubahan Lab terakhir mengembalikan aturan sebelumnya sampai kamu mengubah hal lain di Lab.
+"Apply saves these overrides. Turn on overrides in the Lab to use them. Turning them on is a Lab change too, so after that Undo turns them off rather than putting your previous rules back.","Terapkan menyimpan penggantian ini. Aktifkan penggantian di Lab untuk menggunakannya. Mengaktifkannya juga perubahan Lab, jadi setelah itu Urungkan mematikannya, bukan mengembalikan aturan sebelumnya."
 This preset isn't available for your installed TikTok version.,Preset ini tidak tersedia untuk versi TikTok yang terpasang.
 Preset applied. Restart TikTok to use it.,Preset diterapkan. Mulai ulang TikTok untuk menggunakannya.
 Preset saved. Turn on overrides in the Lab to use it.,Preset disimpan. Aktifkan penggantian di Lab untuk menggunakannya.

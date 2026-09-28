@@ -15,6 +15,7 @@ source,target
 %1$d settings weren't in that file and were left as they are,%1$d settings weren't in that file and were left as they are
 %1$d unavailable,%1$d unavailable
 %1$s (%2$s),%1$s (%2$s)
+%1$s (TikTok %2$s),%1$s (TikTok %2$s)
 %1$s (TikTok value),%1$s (TikTok value)
 "%1$s (custom, unverified)","%1$s (custom, unverified)"
 %1$s (override returned),%1$s (override returned)
@@ -155,9 +156,9 @@ App AB,App AB
 Appearance,Appearance
 Applies to both video and photo downloads.,Applies to both video and photo downloads.
 Apply,Apply
-Apply enables these overrides. Undo last Lab change restores your previous rules.,Apply enables these overrides. Undo last Lab change restores your previous rules.
+Apply enables these overrides. Undo last Lab change puts your previous rules back until you change anything else in the Lab.,Apply enables these overrides. Undo last Lab change puts your previous rules back until you change anything else in the Lab.
 Apply overrides,Apply overrides
-Apply saves these overrides. Turn on overrides in the Lab to use them. Undo restores your previous rules.,Apply saves these overrides. Turn on overrides in the Lab to use them. Undo restores your previous rules.
+"Apply saves these overrides. Turn on overrides in the Lab to use them. Turning them on is a Lab change too, so after that Undo turns them off rather than putting your previous rules back.","Apply saves these overrides. Turn on overrides in the Lab to use them. Turning them on is a Lab change too, so after that Undo turns them off rather than putting your previous rules back."
 Applying Calm feed,Applying Calm feed
 Around the video,Around the video
 Arrange your feed and bottom tabs,Arrange your feed and bottom tabs
@@ -300,6 +301,7 @@ Couldn't put the saved videos back. Try again.,Couldn't put the saved videos bac
 Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.,Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.
 Couldn't read who posted this comment. Open their profile and block them there.,Couldn't read who posted this comment. Open their profile and block them there.
 Couldn't record the screen's layout. Start again from Diagnostics.,Couldn't record the screen's layout. Start again from Diagnostics.
+Couldn't reset the settings. Try again.,Couldn't reset the settings. Try again.
 Couldn't reset this override. Try again.,Couldn't reset this override. Try again.
 Couldn't restart TikTok. Close it and open it again.,Couldn't restart TikTok. Close it and open it again.
 Couldn't restore the settings. Try again.,Couldn't restore the settings. Try again.
@@ -314,6 +316,7 @@ Couldn't start the settings change. Try again in a moment.,Couldn't start the se
 Couldn't tell which folder to update. Choose it again.,Couldn't tell which folder to update. Choose it again.
 Couldn't undo that. Try again.,Couldn't undo that. Try again.
 Couldn't undo the clear. Try again.,Couldn't undo the clear. Try again.
+Couldn't undo the last change. Try again.,Couldn't undo the last change. Try again.
 Count a video as seen after,Count a video as seen after
 Country and network preferences,Country and network preferences
 Country code,Country code
@@ -376,6 +379,7 @@ Enter a valid structured value.,Enter a valid structured value.
 Enter a valid two-letter country code,Enter a valid two-letter country code
 "Enter a whole number, or one like 20K, 1.5M or 2B","Enter a whole number, or one like 20K, 1.5M or 2B"
 Enter a whole number.,Enter a whole number.
+"Enter an hour, like 6 or 06:00.","Enter an hour, like 6 or 06:00."
 Enter true or false.,Enter true or false.
 Enter up to %1$d comma-separated speeds from %2$s to %3$s,Enter up to %1$d comma-separated speeds from %2$s to %3$s
 Entry %1$d has a field with the wrong data type.,Entry %1$d has a field with the wrong data type.
@@ -848,6 +852,7 @@ Promotional music,Promotional music
 Proof,Proof
 Protect external pages in TikTok's browser,Protect external pages in TikTok's browser
 Pulling down at the top of For You no longer reloads it.,Pulling down at the top of For You no longer reloads it.
+Put %1$s in %2$s first.,Put %1$s in %2$s first.
 Put back the settings saved before the last restore or reset.,Put back the settings saved before the last restore or reset.
 Put every setting back to its default straight away. Your current settings are kept for Undo.,Put every setting back to its default straight away. Your current settings are kept for Undo.
 Putting the saved videos back,Putting the saved videos back
@@ -886,6 +891,8 @@ Reset %1$d gates of %2$d. Restart TikTok to apply this.,Reset %1$d gates of %2$d
 Reset %1$d gates. Restart TikTok to apply this.,Reset %1$d gates. Restart TikTok to apply this.
 Reset 1 gate of %2$d. Restart TikTok to apply this.,Reset 1 gate of %2$d. Restart TikTok to apply this.
 Reset 1 gate. Restart TikTok to apply this.,Reset 1 gate. Restart TikTok to apply this.
+Reset didn't finish. Some settings may still be changed.,Reset didn't finish. Some settings may still be changed.
+Reset didn't finish. Some settings may still be changed. Use Undo to put them back.,Reset didn't finish. Some settings may still be changed. Use Undo to put them back.
 Reset override,Reset override
 Reset position,Reset position
 Reset settings,Reset settings
@@ -915,7 +922,7 @@ STEM,STEM
 Sanitize sharing links,Sanitize sharing links
 Save,Save
 Save Hushfeed settings and Feature Gate Lab rules to a JSON file.,Save Hushfeed settings and Feature Gate Lab rules to a JSON file.
-"Save SRT files with the video. Paired saves use Movies on Android 11+, Download on Android 10, and your video folder on older versions.","Save SRT files with the video. Paired saves use Movies on Android 11+, Download on Android 10, and your video folder on older versions."
+"Save SRT files with the video. They go to Movies on Android 11+, Download on Android 10, and your video folder on older versions. On Android 11+ with Save details on, the video moves to Download or Documents and the SRT files stay in Movies.","Save SRT files with the video. They go to Movies on Android 11+, Download on Android 10, and your video folder on older versions. On Android 11+ with Save details on, the video moves to Download or Documents and the SRT files stay in Movies."
 Save a profile picture on a long press,Save a profile picture on a long press
 Save a story on a long press,Save a story on a long press
 Save again,Save again
@@ -1059,6 +1066,7 @@ Start today over,Start today over
 Start typing,Start typing
 "Start with comments. Hide the comment count, sort and close buttons, plus the suggestion area above them. Use Back or swipe down to close comments.","Start with comments. Hide the comment count, sort and close buttons, plus the suggestion area above them. Use Back or swipe down to close comments."
 Stay on the video in full screen,Stay on the video in full screen
+Staying on a video,Staying on a video
 Sticker,Sticker
 Sticker destination,Sticker destination
 Sticker saved to %1$s,Sticker saved to %1$s
@@ -1276,6 +1284,8 @@ Unblock this commenter,Unblock this commenter
 Unblocked %1$s,Unblocked %1$s
 Undo,Undo
 Undo clearing seen videos,Undo clearing seen videos
+Undo didn't finish. Some settings may still be changed.,Undo didn't finish. Some settings may still be changed.
+Undo didn't finish. Some settings may still be changed. Try Undo again.,Undo didn't finish. Some settings may still be changed. Try Undo again.
 Undo forgetting saved videos,Undo forgetting saved videos
 Undo last Lab change,Undo last Lab change
 Undo last restore or reset,Undo last restore or reset

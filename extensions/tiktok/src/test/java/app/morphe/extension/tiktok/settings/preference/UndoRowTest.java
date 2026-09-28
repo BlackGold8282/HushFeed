@@ -62,10 +62,13 @@ public class UndoRowTest {
         Exception missing = new java.io.FileNotFoundException("hushfeed-settings-undo.json");
         assertTrue("an empty undo reads as a breakage",
                 "Nothing to undo yet.".equals(message.invoke(null, UNDO, missing)));
-        // A reset that really failed still says so.
+        // A reset that really failed still says so, as a reset rather than a restore.
         assertTrue("a real failure was softened into the empty message",
-                "Couldn't restore the settings. Try again.".equals(
+                "Couldn't reset the settings. Try again.".equals(
                         message.invoke(null, RESET, new IllegalStateException("broken"))));
+        assertTrue("a failed undo was reported as a restore",
+                "Couldn't undo the last change. Try again.".equals(
+                        message.invoke(null, UNDO, new IllegalStateException("broken"))));
     }
 
     /** The real Undo row, built the way the Backup and restore page builds it. */

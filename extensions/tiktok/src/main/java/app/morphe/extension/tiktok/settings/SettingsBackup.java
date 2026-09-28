@@ -196,6 +196,9 @@ public final class SettingsBackup {
             operation.abort();
             throw error;
         }
+        // The Calm feed card kept offering "Restore setup" from before the reset, which would
+        // have put back the values the reset had just cleared.
+        CalmFeedPreset.forgetSnapshot(context);
     }
 
     private static void restoreWithOperation(Context context, String text, boolean saveUndo,
