@@ -264,6 +264,8 @@ public final class SettingsBackup {
 
     /** Restores the undo copy and returns its text, so the caller can report what it held. */
     public static String undo(Context context) throws Exception {
+        // As a restore does: a budget change already due belongs to what the undo replaces.
+        BudgetChanges.applyDue(SessionBudget.now());
         String replaced = create(false);
         String text = restoreFrom(context, readableUndoFile(context).openRead(), false, false);
         // What the undo replaced becomes the copy, once it has worked, so a second Undo brings

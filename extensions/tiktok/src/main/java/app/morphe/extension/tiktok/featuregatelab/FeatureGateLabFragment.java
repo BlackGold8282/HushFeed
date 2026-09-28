@@ -1951,6 +1951,13 @@ public final class FeatureGateLabFragment extends Fragment {
             public void onInitializeAccessibilityNodeInfo(
                     View host, android.view.accessibility.AccessibilityNodeInfo info) {
                 super.onInitializeAccessibilityNodeInfo(host, info);
+                // What the list's own delegate would have said: the row's place in the list.
+                ListView gates = list;
+                int position = gates == null ? android.widget.AdapterView.INVALID_POSITION
+                        : gates.getPositionForView(host);
+                if (position != android.widget.AdapterView.INVALID_POSITION) {
+                    gates.onInitializeAccessibilityNodeInfoForItem(host, position, info);
+                }
                 info.setClickable(true);
                 info.setLongClickable(true);
                 info.addAction(android.view.accessibility.AccessibilityNodeInfo

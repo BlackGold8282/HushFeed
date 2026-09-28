@@ -809,6 +809,7 @@ public class FeatureGateLabActionsTest {
             var info = row.createAccessibilityNodeInfo();
             assertTrue("a row offers no click: " + info.getActionList(), info.getActionList().contains(
                     android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK));
+            assertNotNull("a row lost its place in the list", info.getCollectionItemInfo());
 
             assertTrue(row.performAccessibilityAction(
                     android.view.accessibility.AccessibilityNodeInfo.ACTION_LONG_CLICK, null));
