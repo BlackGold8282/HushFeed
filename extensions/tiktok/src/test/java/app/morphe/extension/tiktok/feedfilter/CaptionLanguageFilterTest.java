@@ -56,6 +56,7 @@ public class CaptionLanguageFilterTest {
     /** TikTok tags captions with two letters, so "eng" used to keep no English video at all. */
     @Test public void aThreeLetterCodeIsReadAsItsTwoLetterOne() {
         assertEquals(Set.of("en", "es", "de"), CaptionLanguageFilter.languages("eng, spa, deu"));
+        assertEquals(Set.of("de", "fr", "zh"), CaptionLanguageFilter.languages("ger, fre, chi"));
         assertEquals("a language with no two-letter code keeps its own", "fil",
                 CaptionLanguageFilter.primary("fil"));
         Settings.CAPTION_LANGUAGES.save("eng");

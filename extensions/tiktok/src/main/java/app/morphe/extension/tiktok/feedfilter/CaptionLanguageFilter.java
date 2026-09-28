@@ -52,6 +52,14 @@ public final class CaptionLanguageFilter implements IFilter {
                 // No three-letter form for this one; its two letters are the only spelling.
             }
         }
+        // ISO 639-2 spells twenty of them a second way, the bibliographic codes, which the
+        // platform's tables don't give: "ger" and "fre" are as likely to be typed as "deu".
+        String[][] bibliographic = {{"alb", "sq"}, {"arm", "hy"}, {"baq", "eu"}, {"bur", "my"},
+                {"chi", "zh"}, {"cze", "cs"}, {"dut", "nl"}, {"fre", "fr"}, {"geo", "ka"},
+                {"ger", "de"}, {"gre", "el"}, {"ice", "is"}, {"mac", "mk"}, {"mao", "mi"},
+                {"may", "ms"}, {"per", "fa"}, {"rum", "ro"}, {"slo", "sk"}, {"tib", "bo"},
+                {"wel", "cy"}};
+        for (String[] pair : bibliographic) codes.put(pair[0], pair[1]);
         return codes;
     }
 

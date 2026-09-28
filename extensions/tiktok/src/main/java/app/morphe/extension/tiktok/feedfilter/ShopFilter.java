@@ -39,14 +39,18 @@ public class ShopFilter implements IFilter {
     static boolean sellsInLive(Aweme item) {
         if (Boolean.TRUE.equals(Reflect.readField(item, "isLiveHasProduct"))) return true;
         for (Object room : LiveFilter.rooms(item)) {
-            for (String flag : ROOM_GOODS_FLAGS) {
-                if (Boolean.TRUE.equals(Reflect.readField(room, flag))) return true;
-            }
-            Object products = Reflect.readField(
-                    Reflect.readField(room, "fypCommerceStruct"), "productNum");
-            if (products instanceof Number && ((Number) products).longValue() > 0) return true;
+            if (roomSells(room)) return true;
         }
         return false;
+    }
+
+    /** One room object: a goods flag, or products counted in its feed commerce card. */
+    static boolean roomSells(Object room) {
+        for (String flag : ROOM_GOODS_FLAGS) {
+            if (Boolean.TRUE.equals(Reflect.readField(room, flag))) return true;
+        }
+        Object products = Reflect.readField(Reflect.readField(room, "fypCommerceStruct"), "productNum");
+        return products instanceof Number && ((Number) products).longValue() > 0;
     }
 }
 

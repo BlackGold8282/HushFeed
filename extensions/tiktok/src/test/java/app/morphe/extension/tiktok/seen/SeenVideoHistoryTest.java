@@ -79,9 +79,10 @@ public class SeenVideoHistoryTest {
     @Test public void aClipShorterThanTheFloorIsSeenAtHalfItsLength() {
         assertFalse(SeenVideoHistory.hasReachedSeenThreshold(399, 800));
         assertTrue(SeenVideoHistory.hasReachedSeenThreshold(400, 800));
+        // A clip that does reach a second keeps the second, as before.
         Settings.SEEN_VIDEO_MARK_PERCENT.save(50);
-        assertTrue(SeenVideoHistory.hasReachedSeenThreshold(750, 1_500));
-        assertFalse(SeenVideoHistory.hasReachedSeenThreshold(749, 1_500));
+        assertFalse(SeenVideoHistory.hasReachedSeenThreshold(999, 1_500));
+        assertTrue(SeenVideoHistory.hasReachedSeenThreshold(1_000, 1_500));
         Settings.SEEN_VIDEO_MARK_PERCENT.resetToDefault();
     }
 

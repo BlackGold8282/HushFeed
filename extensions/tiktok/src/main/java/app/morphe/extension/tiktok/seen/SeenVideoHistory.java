@@ -731,7 +731,7 @@ public final class SeenVideoHistory {
 
         // A clip shorter than the second itself never reaches it: its position stops at its
         // length and loops, so the floor is half the clip for those.
-        long floor = Math.min(MIN_MARK_MS, durationMs / 2L);
+        long floor = durationMs < MIN_MARK_MS ? durationMs / 2L : MIN_MARK_MS;
         int chosen = markPercent();
         if (chosen == 0) {
             long percentThreshold = durationMs * MARK_PERCENT / 100L;
