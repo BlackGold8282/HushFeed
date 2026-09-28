@@ -8,6 +8,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** The block control, the mute button and Hushfeed's other buttons over the video now show on a video opened from a creator's profile, a hashtag or a sound, and come back to the feed with you. They stayed on the feed behind that screen, where nobody could see them. Mute feed videos mutes those videos too, so the button means what it says there.
 * **TikTok:** The budget label and the fade before the hold go as soon as you switch to Profile, Inbox or another tab. Only the playing video moved them, so they could stay over those tabs, the fade nearly black. The fade also stops above the tab row now.
 * **TikTok:** When the time budget runs out partway through a long video, the notice and the hold come right then. They waited for the next video, so a long or looping one could play well past the budget.
+* **TikTok:** New row under Downloads, Forget saved videos. It empties the record behind the already-saved check, keeps the files and your settings, and offers Undo while its notice is up. A save that was already running when you forgot doesn't add itself back.
 
 ## 0.64.0 (2026-09-28)
 

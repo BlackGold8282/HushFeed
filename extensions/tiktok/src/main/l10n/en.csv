@@ -290,11 +290,13 @@ Couldn't clear the suggested accounts. Reopen the Inbox and try again.,Couldn't 
 Couldn't confirm the block for %1$s. Open their profile to check.,Couldn't confirm the block for %1$s. Open their profile to check.
 Couldn't confirm the unblock for %1$s. Open their profile to check.,Couldn't confirm the unblock for %1$s. Open their profile to check.
 Couldn't copy the report. Use Save report instead.,Couldn't copy the report. Use Save report instead.
+Couldn't forget the saved videos. Try again.,Couldn't forget the saved videos. Try again.
 Couldn't open settings search. Reopen settings and try again.,Couldn't open settings search. Reopen settings and try again.
 Couldn't open that settings section. Reopen settings and try again.,Couldn't open that settings section. Reopen settings and try again.
 Couldn't open the file picker to export. Try again.,Couldn't open the file picker to export. Try again.
 Couldn't open the file picker to import. Try again.,Couldn't open the file picker to import. Try again.
 Couldn't put back the diagnostic data. Try again.,Couldn't put back the diagnostic data. Try again.
+Couldn't put the saved videos back. Try again.,Couldn't put the saved videos back. Try again.
 Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.,Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.
 Couldn't read who posted this comment. Open their profile and block them there.,Couldn't read who posted this comment. Open their profile and block them there.
 Couldn't record the screen's layout. Start again from Diagnostics.,Couldn't record the screen's layout. Start again from Diagnostics.
@@ -428,12 +430,16 @@ Forced %1$d gates. Restart TikTok to apply this.,Forced %1$d gates. Restart TikT
 Forced 1 gate of %2$d. The rest don't take a true or false value. Restart TikTok to apply this.,Forced 1 gate of %2$d. The rest don't take a true or false value. Restart TikTok to apply this.
 Forced 1 gate. Restart TikTok to apply this.,Forced 1 gate. Restart TikTok to apply this.
 Forced result,Forced result
+Forget saved videos,Forget saved videos
 Forget seen videos after,Forget seen videos after
 Forget the %1$s seen videos.,Forget the %1$s seen videos.
 Forget the %1$s videos @%2$s has seen.,Forget the %1$s videos @%2$s has seen.
 Forget the seen video.,Forget the seen video.
 Forget the video @%2$s has seen.,Forget the video @%2$s has seen.
 Forget what has been counted today and end any hold. The budgets themselves are left alone.,Forget what has been counted today and end any hold. The budgets themselves are left alone.
+"Forget which videos Hushfeed saved here, so the already-saved check starts over. The saved files and your settings stay. Turning the check off doesn't erase this record.","Forget which videos Hushfeed saved here, so the already-saved check starts over. The saved files and your settings stay. Turning the check off doesn't erase this record."
+Forgetting saved videos,Forgetting saved videos
+Forgotten. Tap to put them back.,Forgotten. Tap to put them back.
 Friends,Friends
 "From the next start TikTok runs as if it weren't patched, so you can tell whether a problem comes from Hushfeed. Your settings stay as they are.","From the next start TikTok runs as if it weren't patched, so you can tell whether a problem comes from Hushfeed. Your settings stay as they are."
 Full comment sort options,Full comment sort options
@@ -842,6 +848,7 @@ Protect external pages in TikTok's browser,Protect external pages in TikTok's br
 Pulling down at the top of For You no longer reloads it.,Pulling down at the top of For You no longer reloads it.
 Put back the settings saved before the last restore or reset.,Put back the settings saved before the last restore or reset.
 Put every setting back to its default straight away. Your current settings are kept for Undo.,Put every setting back to its default straight away. Your current settings are kept for Undo.
+Putting the saved videos back,Putting the saved videos back
 Putting the settings back to their defaults,Putting the settings back to their defaults
 Quality,Quality
 "Quality, files, subtitles and hand-off","Quality, files, subtitles and hand-off"
@@ -933,6 +940,8 @@ Saved %1$s of %2$s photos before the story failed,Saved %1$s of %2$s photos befo
 "Saved %1$s of %2$s, the rest ran out of time","Saved %1$s of %2$s, the rest ran out of time"
 Saved %1$s original photos,Saved %1$s original photos
 Saved one original photo,Saved one original photo
+Saved videos forgotten. The files are still there.,Saved videos forgotten. The files are still there.
+Saved videos put back,Saved videos put back
 "Saved, override off","Saved, override off"
 Saved. Restart TikTok to apply this.,Saved. Restart TikTok to apply this.
 Saving,Saving
@@ -1172,6 +1181,7 @@ There is no Lab change to undo.,There is no Lab change to undo.
 There is no diagnostic data to clear,There is no diagnostic data to clear
 There is no diagnostic data to put back,There is no diagnostic data to put back
 There was nothing to put back,There was nothing to put back
+There were no saved videos to forget,There were no saved videos to forget
 These loaded values are for a different TikTok version.,These loaded values are for a different TikTok version.
 This catalog entry is no longer available. Refresh the Lab and try again.,This catalog entry is no longer available. Refresh the Lab and try again.
 This change couldn't be saved. Try again.,This change couldn't be saved. Try again.
@@ -1238,6 +1248,7 @@ Today: %1$d videos,Today: %1$d videos
 "Tokens: {creator}, {date}, {video_id}, {index}. {index} numbers the photos of a slideshow you save with Download original photos. Anything saved through TikTok's own button is numbered by the folder instead. The file extension is kept automatically.","Tokens: {creator}, {date}, {video_id}, {index}. {index} numbers the photos of a slideshow you save with Download original photos. Anything saved through TikTok's own button is numbered by the folder instead. The file extension is kept automatically."
 "Tokens: {creator}, {date}, {video_id}. Start with {creator}/ to give each creator a folder. The file extension is kept automatically.","Tokens: {creator}, {date}, {video_id}. Start with {creator}/ to give each creator a folder. The file extension is kept automatically."
 "Tokens: {date}, {media_id}. Works for image and video stickers.","Tokens: {date}, {media_id}. Works for image and video stickers."
+Too late to put the saved videos back,Too late to put the saved videos back
 Too many media saves are already running. Try again in a moment.,Too many media saves are already running. Try again in a moment.
 Tracking,Tracking
 "Tracking, device access and links","Tracking, device access and links"
@@ -1263,6 +1274,7 @@ Unblock this commenter,Unblock this commenter
 Unblocked %1$s,Unblocked %1$s
 Undo,Undo
 Undo clearing seen videos,Undo clearing seen videos
+Undo forgetting saved videos,Undo forgetting saved videos
 Undo last Lab change,Undo last Lab change
 Undo last restore or reset,Undo last restore or reset
 Undoing the last change,Undoing the last change

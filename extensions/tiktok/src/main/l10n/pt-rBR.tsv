@@ -1314,6 +1314,18 @@ Tokens: {creator}, {date}, {video_id}. Start with {creator}/ to give each creato
 Save details beside the video	Salvar detalhes junto ao vídeo
 Save the caption, creator, link and publication date in a TXT file. On Android 10 and later, the pair uses Download or Documents under the same folder name. Applies to saves handled here.	Salva a legenda, o criador, o link e a data de publicação em um TXT. No Android 10 ou posterior, os dois arquivos usam Download ou Documents com o mesmo nome de pasta. Vale para vídeos salvos aqui.
 Check for already-saved videos	Verificar vídeos já salvos
+Forget saved videos	Esquecer os vídeos salvos
+Undo forgetting saved videos	Desfazer o esquecimento dos vídeos salvos
+Forget which videos Hushfeed saved here, so the already-saved check starts over. The saved files and your settings stay. Turning the check off doesn't erase this record.	Esquece quais vídeos o Hushfeed salvou aqui, para que a verificação de vídeos já salvos comece de novo. Os arquivos salvos e suas configurações continuam. Desligar a verificação não apaga este registro.
+Forgetting saved videos	Esquecendo os vídeos salvos
+Putting the saved videos back	Trazendo os vídeos salvos de volta
+Forgotten. Tap to put them back.	Esquecidos. Toque para trazê-los de volta.
+Saved videos forgotten. The files are still there.	Vídeos salvos esquecidos. Os arquivos continuam lá.
+There were no saved videos to forget	Não havia vídeos salvos para esquecer
+Couldn't forget the saved videos. Try again.	Não foi possível esquecer os vídeos salvos. Tente novamente.
+Saved videos put back	Vídeos salvos trazidos de volta
+Couldn't put the saved videos back. Try again.	Não foi possível trazer os vídeos salvos de volta. Tente novamente.
+Too late to put the saved videos back	Tarde demais para trazer os vídeos salvos de volta
 Remember up to %1$s video saves made here while this is on. If the file still exists, offer Open or Save again before downloading another copy.	Lembra até %1$s vídeos salvos aqui enquanto a opção estiver ligada. Se o arquivo ainda existir, oferece Abrir ou Salvar novamente antes de baixar outra cópia.
 This video is already saved. Open TikTok to save another copy.	Este vídeo já está salvo. Abra o TikTok para salvar outra cópia.
 This video is already saved	Este vídeo já está salvo
