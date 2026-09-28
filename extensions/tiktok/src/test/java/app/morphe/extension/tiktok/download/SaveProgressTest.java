@@ -162,6 +162,40 @@ public class SaveProgressTest {
         }
     }
 
+    /**
+     * A sheet with no background of its own has its content at the window's root, which needn't
+     * be a FrameLayout. Rows on it take that layout's params, and stacking them or taking one
+     * down cast them back to a FrameLayout's and threw.
+     */
+    @Test public void rowsOnAWindowWhoseRootIsNotAFrameLayoutStackAndGo() {
+        try (var owner = Robolectric.buildActivity(SaveNoticeTest.HostActivity.class).setup().visible()) {
+            Activity activity = owner.get();
+            Utils.setActivity(activity);
+            android.widget.LinearLayout sheet = new android.widget.LinearLayout(activity);
+            sheet.setOrientation(android.widget.LinearLayout.VERTICAL);
+            activity.getWindowManager().addView(sheet, new android.view.WindowManager.LayoutParams());
+            idle();
+            SaveNotice.windowRootsForTests = List.of(activity.getWindow().getDecorView(), sheet);
+            try {
+                SaveProgress first = SaveProgress.begin(3);
+                SaveProgress second = SaveProgress.begin(4);
+                settle();
+                View lower = (View) find(sheet, "Saving 1 of 3").getParent();
+                View upper = (View) find(sheet, "Saving 1 of 4").getParent();
+                assertTrue("the second row stands above the first",
+                        ((ViewGroup.MarginLayoutParams) upper.getLayoutParams()).bottomMargin
+                                > ((ViewGroup.MarginLayoutParams) lower.getLayoutParams()).bottomMargin);
+                first.run(index -> { });
+                idle();
+                second.run(index -> { });
+                idle();
+                assertNull("the rows came down with their saves", find(sheet, "Cancel"));
+            } finally {
+                activity.getWindowManager().removeView(sheet);
+            }
+        }
+    }
+
     @Test public void aSaveOverInsideTheSheetWaitNeverShowsARow() {
         try (var owner = Robolectric.buildActivity(SaveNoticeTest.HostActivity.class).setup().visible()) {
             Activity activity = owner.get();

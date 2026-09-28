@@ -432,11 +432,7 @@ final class SaveProgress {
                     bottom += previous.getHeight() + gap;
                 }
             }
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-            if (params.bottomMargin != bottom) {
-                params.bottomMargin = bottom;
-                view.setLayoutParams(params);
-            }
+            setBottomMargin(view, bottom);
             highest = view;
             aboveHighest = bottom + view.getHeight() + gap;
         }
@@ -471,13 +467,23 @@ final class SaveProgress {
         }
         String text = L10n.quantity(activity, hidden, "One more save waiting", "%1$s more saves waiting");
         line.setText(text);
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) line.getLayoutParams();
-        if (params.bottomMargin != bottom) {
-            params.bottomMargin = bottom;
-            line.setLayoutParams(params);
-        }
+        setBottomMargin(line, bottom);
         if (hidden > overflowCount) announce(line, text);
         overflowCount = hidden;
+    }
+
+    /**
+     * Lifts a row to {@code bottom}. The top window can have any ViewGroup at its root, and one
+     * that isn't a FrameLayout swaps the banner's params for its own kind as the row goes in, so
+     * a cast back to FrameLayout's threw on the next pass here, which a row's end runs outside
+     * any catch. A row whose params carry no margin stays where that layout puts it.
+     */
+    private static void setBottomMargin(View view, int bottom) {
+        if (!(view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams)) return;
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        if (params.bottomMargin == bottom) return;
+        params.bottomMargin = bottom;
+        view.setLayoutParams(params);
     }
 
     /** What a row says: its label, which sits first in it or first in its body. */

@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** A save's progress row sitting on one of TikTok's pop-up sheets could close TikTok when the save ended or a second row came up. It stays where the sheet puts it now.
 * **TikTok:** With `{creator}/` at the start of the file name, the sound saved beside a video or a story now goes into that creator's folder with it. It went to the download folder one level up, so the two split apart. On Android 10 and newer it goes to the matching creator folder under Music.
 * **TikTok:** Every save says it's been taken the moment you ask, sounds, profile pictures, stickers and a live photo's clip included. Hushfeed runs three saves at once and lines up the rest, and a save in line used to show nothing until it started. Now a save with a progress row shows it straight away as waiting, with Cancel to take it out of line, and one without a row says how many saves are ahead of it. Past three rows, a single line counts the rest. Asking again for something already in line says whether it's still waiting or already saving, where it used to do nothing.
 * **TikTok:** On Android 10 and older, tapping the block button over a video, Unblock on its banner or Save media on a sticker no longer closes TikTok. Each of them marked itself busy in a way those Android versions refuse.
