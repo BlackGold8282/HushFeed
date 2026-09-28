@@ -415,9 +415,7 @@ public class CommentDislikeGestureTest {
         View sibling = commentCell("uid-same");
         View unrelated = commentCell("uid-other");
 
-        java.util.Set<String> blocked =
-                ReflectionHelpers.getStaticField(CommentTools.class, "BLOCKED_UIDS");
-        blocked.add("uid-same");
+        CommentTools.markBlockedForTests("uid-same");
         try {
             java.lang.reflect.Method refresh =
                     CommentTools.class.getDeclaredMethod("applyBlockedEverywhere");
@@ -431,7 +429,7 @@ public class CommentDislikeGestureTest {
             assertEquals("a row by a different account was faded too", 1f,
                     unrelated.getAlpha(), 0.001f);
         } finally {
-            blocked.remove("uid-same");
+            ReflectionHelpers.<java.util.Set<String>>getStaticField(CommentTools.class, "BLOCKED_UIDS").clear();
         }
     }
 

@@ -278,7 +278,11 @@ public final class CommentTools {
         }
     }
 
-    /** Accounts blocked this session, by uid, so a recycled cell shows the right state. */
+    /**
+     * Accounts blocked this session, so a recycled cell shows the right state. Kept per signed-in
+     * account: a commenter one account blocked showed as blocked to the next account signed in,
+     * and the first tap there sent that account an unblock.
+     */
     private static final Set<String> BLOCKED_UIDS = Collections.synchronizedSet(new HashSet<>());
 
     private static final ResourceIdCache RESOURCE_IDS = new ResourceIdCache();
@@ -849,7 +853,18 @@ public final class CommentTools {
 
     private static boolean isBlocked(Object comment) {
         String uid = uidOf(comment);
-        return uid != null && BLOCKED_UIDS.contains(uid);
+        return uid != null && BLOCKED_UIDS.contains(blockKey(uid));
+    }
+
+    /** The commenter as blocked by the account signed in now. */
+    private static String blockKey(String uid) {
+        String account = signedInUserId();
+        return (account == null ? "" : account) + '/' + uid;
+    }
+
+    /** Records {@code uid} as blocked by the account signed in now. Tests only. */
+    static void markBlockedForTests(String uid) {
+        BLOCKED_UIDS.add(blockKey(uid));
     }
 
     private static String uidOf(Object comment) {
@@ -887,7 +902,7 @@ public final class CommentTools {
         }
 
         cell.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
-        if (author.uid != null && BLOCKED_UIDS.contains(author.uid)) {
+        if (author.uid != null && BLOCKED_UIDS.contains(blockKey(author.uid))) {
             unblock(cell, author);
         } else {
             block(cell, author);
@@ -895,6 +910,8 @@ public final class CommentTools {
     }
 
     private static void block(View cell, VideoAuthor author) {
+        // The account that blocks is the one signed in at the tap, whatever happens meanwhile.
+        String key = author.uid == null ? null : blockKey(author.uid);
         blockInFlight = true;
         BlockAuthorService.block(author, result -> {
             blockInFlight = false;
@@ -904,8 +921,8 @@ public final class CommentTools {
                 return;
             }
 
-            if (author.uid != null) {
-                BLOCKED_UIDS.add(author.uid);
+            if (key != null) {
+                BLOCKED_UIDS.add(key);
             }
             // The cell reads its current comment, so a recycled row is never mis-styled.
             applyBlockedEverywhere();
@@ -913,10 +930,15 @@ public final class CommentTools {
             View root = cell.getRootView();
             BlockAuthorOverlay.showUndoBanner(root instanceof ViewGroup ? (ViewGroup) root : null,
                     L10n.f("Blocked %1$s", author.label()), () -> {
+                        // Like a tap on the row: one request at a time, or a tap during this
+                        // one sent a second unblock.
+                        if (blockInFlight) return;
+                        blockInFlight = true;
                         BlockAuthorService.unblock(author, undoResult -> {
+                            blockInFlight = false;
                             if (undoResult == BlockAuthorService.Result.CONFIRMED) {
-                                if (author.uid != null) {
-                                    BLOCKED_UIDS.remove(author.uid);
+                                if (key != null) {
+                                    BLOCKED_UIDS.remove(key);
                                 }
                                 applyBlockedEverywhere();
                             }
@@ -928,6 +950,7 @@ public final class CommentTools {
     }
 
     private static void unblock(View cell, VideoAuthor author) {
+        String key = author.uid == null ? null : blockKey(author.uid);
         blockInFlight = true;
         BlockAuthorService.unblock(author, result -> {
             blockInFlight = false;
@@ -936,8 +959,8 @@ public final class CommentTools {
                         Utils.getContext(), result, author.label()));
                 return;
             }
-            if (author.uid != null) {
-                BLOCKED_UIDS.remove(author.uid);
+            if (key != null) {
+                BLOCKED_UIDS.remove(key);
             }
             applyBlockedEverywhere();
             Utils.showToastShort(BlockAuthorMessages.unblockResult(
