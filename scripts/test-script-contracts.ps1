@@ -462,6 +462,33 @@ foreach ($name in $consumerScripts) {
 
 . (Join-Path $PSScriptRoot 'release-receipt.ps1')
 
+# Under Windows PowerShell 5.1, which runs the hook when pwsh isn't on git's PATH, a native
+# command's stderr line throws under Stop even when it is redirected, so a failing aapt2 or CLI
+# surfaced as its own first stderr line and the script's report was lost. Run the manifest reader
+# there with a stand-in aapt2 that complains on stderr and fails.
+$windowsPowerShell = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+if (Test-Path -LiteralPath $windowsPowerShell -PathType Leaf) {
+    $nativeRoot = Join-Path ([IO.Path]::GetTempPath()) ('hushfeed-ps51-' + [Guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Path $nativeRoot | Out-Null
+    try {
+        $standInAapt2 = Join-Path $nativeRoot 'aapt2.cmd'
+        [IO.File]::WriteAllText($standInAapt2, "@echo W: not an APK 1>&2`r`n@exit /b 1`r`n")
+        $standInApk = Join-Path $nativeRoot 'input.apk'
+        [IO.File]::WriteAllText($standInApk, 'x')
+        $receiptScript = Join-Path $PSScriptRoot 'release-receipt.ps1'
+        $command = "`$ErrorActionPreference = 'Stop'; . '$receiptScript'; " +
+            "try { Get-ApkManifestFacts -Apk '$standInApk' -Aapt2 '$standInAapt2' | Out-Null; 'no error' } " +
+            "catch { `$_.Exception.Message }"
+        $message = (& $windowsPowerShell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command $command 2>&1 |
+            Out-String).Trim()
+        $global:LASTEXITCODE = 0
+        Assert-True ($message -like 'aapt2 could not read the manifest of*not an APK*') `
+            "Under Windows PowerShell 5.1 a failing aapt2 surfaced as: $message"
+    } finally {
+        Remove-Item -LiteralPath $nativeRoot -Recurse -Force -ErrorAction SilentlyContinue
+    }
+}
+
 # A failed fixture run quotes the CLI: an early error wherever it fell, and the last lines.
 $cliRun = @('INFO: Loading patches...', 'SEVERE: early fingerprint failure') +
     @(1..30 | ForEach-Object { "INFO: Applied: patch $_" }) +
