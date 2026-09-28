@@ -196,9 +196,6 @@ public final class SettingsBackup {
             operation.abort();
             throw error;
         }
-        // The Calm feed card kept offering "Restore setup" from before the reset, which would
-        // have put back the values the reset had just cleared.
-        CalmFeedPreset.forgetSnapshot(context);
     }
 
     private static void restoreWithOperation(Context context, String text, boolean saveUndo,
@@ -238,6 +235,10 @@ public final class SettingsBackup {
                 operation.complete();
                 closed = true;
                 if (next.labIncluded) FeatureGateLabStore.discardLabUndo();
+                // The Calm feed card offered "Restore setup" from before a reset or an import,
+                // which would have put back values it had just replaced. The setup goes aside
+                // with the undo copy instead, so the Undo below brings both back.
+                if (saveUndo) CalmFeedPreset.setAsideForUndo(context);
             } catch (Exception error) {
                 try { Setting.saveAll(previous.values, true); } catch (Exception rollback) { error.addSuppressed(rollback); }
                 // Only put the Lab back when the apply above reached it. Writing the same
@@ -271,6 +272,7 @@ public final class SettingsBackup {
         BudgetChanges.applyDue(SessionBudget.now());
         String replaced = create(false);
         String text = restoreFrom(context, readableUndoFile(context).openRead(), false, false);
+        CalmFeedPreset.swapWithUndo(context);
         // What the undo replaced becomes the copy, once it has worked, so a second Undo brings
         // back whatever changed since the restore instead of losing it for good. Written after,
         // not before: a failed undo must leave the copy it was asked for in place.

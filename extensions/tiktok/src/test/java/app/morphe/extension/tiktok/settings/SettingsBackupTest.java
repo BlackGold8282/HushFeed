@@ -549,15 +549,33 @@ public class SettingsBackupTest {
     }
 
     /**
-     * A reset lets go of the setup Calm feed saved. Its card went on offering "Restore setup",
-     * which would have put back what the reset had just cleared.
+     * A reset sets the setup Calm feed saved aside, and Undo brings it back with the settings.
+     * The card went on offering "Restore setup" after a reset, which would have put back what
+     * the reset had just cleared; dropping the setup instead lost it for good on Undo.
      */
-    @Test public void aResetForgetsTheSetupCalmFeedSaved() throws Exception {
-        CalmFeedPreset.apply(Utils.getContext());
-        assertTrue(CalmFeedPreset.hasSnapshot(Utils.getContext()));
-        SettingsBackup.reset(Utils.getContext());
+    @Test public void aResetSetsTheCalmFeedSetupAsideAndUndoBringsItBack() throws Exception {
+        android.content.Context context = Utils.getContext();
+        Settings.HIDE_LIVE.save(false);
+        CalmFeedPreset.apply(context);
+        assertEquals(CalmFeedPreset.State.ACTIVE, CalmFeedPreset.state(context));
+
+        SettingsBackup.reset(context);
         assertFalse("the Calm feed card still offers the setup from before the reset",
-                CalmFeedPreset.hasSnapshot(Utils.getContext()));
+                CalmFeedPreset.hasSnapshot(context));
+
+        SettingsBackup.undo(context);
+        assertEquals("Undo brought the settings back without the setup they came with",
+                CalmFeedPreset.State.ACTIVE, CalmFeedPreset.state(context));
+        CalmFeedPreset.restore(context);
+        assertFalse("the setup put back is not the one saved before Calm feed", Settings.HIDE_LIVE.get());
+
+        // Undo swaps with what it replaced: once more puts the reset back, with no setup to
+        // offer, and once more after that brings Calm feed back with the setup saved for it.
+        CalmFeedPreset.apply(context);
+        SettingsBackup.undo(context);
+        assertFalse("the reset came back with a setup from before it", CalmFeedPreset.hasSnapshot(context));
+        SettingsBackup.undo(context);
+        assertEquals(CalmFeedPreset.State.ACTIVE, CalmFeedPreset.state(context));
     }
 
     @Test public void resetAndUndoRestoreBothStoresAndSurviveAnUnrelatedSettingChange() throws Exception {

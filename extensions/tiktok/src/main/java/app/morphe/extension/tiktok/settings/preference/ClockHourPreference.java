@@ -20,8 +20,11 @@ import java.util.regex.Pattern;
  */
 @SuppressWarnings("deprecation")
 public class ClockHourPreference extends NumberInputPreference {
-    /** An hour with or without its ":00": 6, 06, 6:00, 06:00 and 0600 are all six o'clock. */
-    private static final Pattern HOUR = Pattern.compile("(\\d{1,2})(?::?00)?");
+    /**
+     * An hour with or without its ":00": 6, 06, 6:00, 06:00 and 0600 are all six o'clock. Any
+     * script's digits, as the plain number parse took before: a time keyboard can type them.
+     */
+    private static final Pattern HOUR = Pattern.compile("(\\d{1,2})(?::?(\\d\\d))?", Pattern.UNICODE_CHARACTER_CLASS);
 
     public ClockHourPreference(Context context, String title, String summary, IntegerSetting setting) {
         super(context, title, summary, setting, "", "");
@@ -40,7 +43,10 @@ public class ClockHourPreference extends NumberInputPreference {
     protected Integer parseTyped(String typed) {
         if (typed == null) return null;
         Matcher hour = HOUR.matcher(typed.trim());
-        return hour.matches() ? Integer.valueOf(hour.group(1)) : null;
+        if (!hour.matches()) return null;
+        // An hour, not a time: the minutes, when there are any, have to be none.
+        if (hour.group(2) != null && Integer.parseInt(hour.group(2)) != 0) return null;
+        return Integer.valueOf(hour.group(1));
     }
 
     @Override

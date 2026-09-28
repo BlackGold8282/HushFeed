@@ -71,6 +71,34 @@ public class UndoRowTest {
                         message.invoke(null, UNDO, new IllegalStateException("broken"))));
     }
 
+    /** A Reset or an Undo that stopped halfway names itself, not a restore nobody asked for. */
+    @Test public void aResetOrUndoThatStoppedHalfwayNamesItself() throws Exception {
+        java.lang.reflect.Method message = SettingsBackupPreference.class
+                .getDeclaredMethod("failureMessage", int.class, Exception.class);
+        message.setAccessible(true);
+        java.lang.reflect.Constructor<SettingsBackup.RestoreException> make =
+                SettingsBackup.RestoreException.class.getDeclaredConstructor(Throwable.class,
+                        SettingsBackup.Failure.class, boolean.class, boolean.class);
+        make.setAccessible(true);
+        Exception halfway = make.newInstance(new IllegalStateException("interrupted"),
+                SettingsBackup.Failure.RECOVERY_REQUIRED, false, true);
+        Exception stuck = make.newInstance(new IllegalStateException("interrupted"),
+                SettingsBackup.Failure.RECOVERY_REQUIRED, false, false);
+
+        org.junit.Assert.assertEquals(
+                "Reset didn't finish. Some settings may still be changed. Use Undo to put them back.",
+                message.invoke(null, RESET, halfway));
+        org.junit.Assert.assertEquals("Reset didn't finish. Some settings may still be changed.",
+                message.invoke(null, RESET, stuck));
+        org.junit.Assert.assertEquals(
+                "Undo didn't finish. Some settings may still be changed. Try Undo again.",
+                message.invoke(null, UNDO, halfway));
+        org.junit.Assert.assertEquals("Undo didn't finish. Some settings may still be changed.",
+                message.invoke(null, UNDO, stuck));
+        // A restore from a file keeps its own words.
+        assertTrue(((String) message.invoke(null, 7312, halfway)).startsWith("Restore failed."));
+    }
+
     /** The real Undo row, built the way the Backup and restore page builds it. */
     private Preference undoRow() {
         TikTokPreferenceFragment fragment = new TikTokPreferenceFragment();

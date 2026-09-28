@@ -31,7 +31,9 @@ public class ClockHourPreferenceTest {
 
     @Test public void everyWayOfWritingAnHourReadsAsThatHour() {
         String[][] cases = {{"6", "6"}, {"06", "6"}, {"6:00", "6"}, {"06:00", "6"}, {"0600", "6"},
-                {"600", "6"}, {"18:00", "18"}, {"1800", "18"}, {"0", "0"}, {" 23 ", "23"}, {"100", "1"}};
+                {"600", "6"}, {"18:00", "18"}, {"1800", "18"}, {"0", "0"}, {" 23 ", "23"}, {"100", "1"},
+                // Arabic-Indic digits, which a time keyboard in that locale types.
+                {"٠٦:٠٠", "6"}, {"١٨", "18"}};
         for (String[] typed : cases) {
             assertEquals("typed " + typed[0], Integer.valueOf(typed[1]), row.parseTyped(typed[0]));
         }
