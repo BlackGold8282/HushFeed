@@ -288,7 +288,12 @@ public final class CommentTools {
     private static final ResourceIdCache RESOURCE_IDS = new ResourceIdCache();
     private static final DislikeTouchListener DISLIKE_TOUCH = new DislikeTouchListener();
 
-    private static volatile boolean blockInFlight;
+    /**
+     * Block and unblock requests on their way, by commenter and signed-in account. One flag for
+     * every commenter dropped the banner's Undo while another commenter's request was pending,
+     * after the banner had already gone.
+     */
+    private static final Set<String> IN_FLIGHT = Collections.synchronizedSet(new HashSet<>());
 
     private CommentTools() {
     }
@@ -875,10 +880,6 @@ public final class CommentTools {
     // ---- blocking ----------------------------------------------------------------------
 
     private static void toggleBlock(View cell) {
-        if (blockInFlight) {
-            return;
-        }
-
         Object comment;
         synchronized (CELL_COMMENTS) {
             comment = CELL_COMMENTS.get(cell);
@@ -901,20 +902,30 @@ public final class CommentTools {
             return;
         }
 
+        // One request per commenter at a time: a second tap on the same row sent a second block
+        // or unblock. Another commenter's request doesn't wait on this one.
+        String flight = flightKey(author);
+        if (!IN_FLIGHT.add(flight)) {
+            return;
+        }
         cell.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
         if (author.uid != null && BLOCKED_UIDS.contains(blockKey(author.uid))) {
-            unblock(cell, author);
+            unblock(cell, author, flight);
         } else {
-            block(cell, author);
+            block(cell, author, flight);
         }
     }
 
-    private static void block(View cell, VideoAuthor author) {
+    /** The commenter as the account signed in now sees them, for the in-flight set. */
+    private static String flightKey(VideoAuthor author) {
+        return blockKey(author.uid != null ? author.uid : "sec:" + author.secUid);
+    }
+
+    private static void block(View cell, VideoAuthor author, String flight) {
         // The account that blocks is the one signed in at the tap, whatever happens meanwhile.
         String key = author.uid == null ? null : blockKey(author.uid);
-        blockInFlight = true;
         BlockAuthorService.block(author, result -> {
-            blockInFlight = false;
+            IN_FLIGHT.remove(flight);
             if (result != BlockAuthorService.Result.CONFIRMED) {
                 Utils.showToastLong(BlockAuthorMessages.blockFailure(
                         Utils.getContext(), result, author.label()));
@@ -930,12 +941,11 @@ public final class CommentTools {
             View root = cell.getRootView();
             BlockAuthorOverlay.showUndoBanner(root instanceof ViewGroup ? (ViewGroup) root : null,
                     L10n.f("Blocked %1$s", author.label()), () -> {
-                        // Like a tap on the row: one request at a time, or a tap during this
-                        // one sent a second unblock.
-                        if (blockInFlight) return;
-                        blockInFlight = true;
+                        // Like a tap on the row: one request for this commenter at a time. A
+                        // tap on their row already on its way is that same unblock.
+                        if (!IN_FLIGHT.add(flight)) return;
                         BlockAuthorService.unblock(author, undoResult -> {
-                            blockInFlight = false;
+                            IN_FLIGHT.remove(flight);
                             if (undoResult == BlockAuthorService.Result.CONFIRMED) {
                                 if (key != null) {
                                     BLOCKED_UIDS.remove(key);
@@ -949,11 +959,10 @@ public final class CommentTools {
         });
     }
 
-    private static void unblock(View cell, VideoAuthor author) {
+    private static void unblock(View cell, VideoAuthor author, String flight) {
         String key = author.uid == null ? null : blockKey(author.uid);
-        blockInFlight = true;
         BlockAuthorService.unblock(author, result -> {
-            blockInFlight = false;
+            IN_FLIGHT.remove(flight);
             if (result != BlockAuthorService.Result.CONFIRMED) {
                 Utils.showToastLong(BlockAuthorMessages.unblockResult(
                         Utils.getContext(), result, author.label()));

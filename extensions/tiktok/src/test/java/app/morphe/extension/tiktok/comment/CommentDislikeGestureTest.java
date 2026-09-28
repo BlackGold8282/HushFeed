@@ -54,7 +54,7 @@ public class CommentDislikeGestureTest {
         ReflectionHelpers.<Map<View, ?>>getStaticField(CommentTools.class, "CELL_COMMENTS").clear();
         // A block that never reports back leaves the busy guard set, and every later tap would
         // return on it instead of acting.
-        ReflectionHelpers.setStaticField(CommentTools.class, "blockInFlight", false);
+        ReflectionHelpers.<Set<String>>getStaticField(CommentTools.class, "IN_FLIGHT").clear();
         ReflectionHelpers.<Set<String>>getStaticField(CommentTools.class, "BLOCKED_UIDS").clear();
         ShadowToast.reset();
     }

@@ -39,6 +39,7 @@ public class CommentBlockAccountsTest {
 
     @After public void tearDown() throws Exception {
         blocked().clear();
+        inFlight().clear();
         CommentTools.signedInUserIdForTests = null;
     }
 
@@ -52,6 +53,58 @@ public class CommentBlockAccountsTest {
 
         CommentTools.signedInUserIdForTests = "account_a";
         assertTrue("switching back lost the block", isBlocked(new Comment("commenter")));
+    }
+
+    /**
+     * One request per commenter at a time, and no more than that: a single flag for everyone
+     * dropped the banner's Undo for one commenter while another commenter's request was pending.
+     */
+    @Test public void aRequestForOneCommenterHoldsOnlyThatCommenter() throws Exception {
+        app.morphe.extension.shared.Utils.setContext(org.robolectric.RuntimeEnvironment.getApplication());
+        CommentTools.signedInUserIdForTests = "account_a";
+        android.view.View first = cellFor("commenter_x");
+        android.view.View second = cellFor("commenter_y");
+
+        toggle(first);
+        toggle(first);
+        assertTrue("the first tap sent nothing", inFlight().contains(blockKey("commenter_x")));
+        assertTrue("a second tap on the same row sent a second request", inFlight().size() == 1);
+        toggle(second);
+        assertTrue("another commenter waited on the first one", inFlight().contains(blockKey("commenter_y")));
+
+        // Without TikTok the requests fail fast and report back on the main thread.
+        long deadline = System.currentTimeMillis() + 10_000;
+        while (!inFlight().isEmpty() && System.currentTimeMillis() < deadline) {
+            org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+            Thread.sleep(20);
+        }
+        assertTrue("a finished request stayed in flight: " + inFlight(), inFlight().isEmpty());
+        assertFalse("a failed block was recorded", isBlocked(new Comment("commenter_x")));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static android.view.View cellFor(String uid) throws Exception {
+        android.view.View cell = new android.view.View(org.robolectric.RuntimeEnvironment.getApplication());
+        Field field = CommentTools.class.getDeclaredField("CELL_COMMENTS");
+        field.setAccessible(true);
+        java.util.Map<android.view.View, Object> cells = (java.util.Map<android.view.View, Object>) field.get(null);
+        synchronized (cells) {
+            cells.put(cell, new Comment(uid));
+        }
+        return cell;
+    }
+
+    private static void toggle(android.view.View cell) throws Exception {
+        Method method = CommentTools.class.getDeclaredMethod("toggleBlock", android.view.View.class);
+        method.setAccessible(true);
+        method.invoke(null, cell);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Set<String> inFlight() throws Exception {
+        Field field = CommentTools.class.getDeclaredField("IN_FLIGHT");
+        field.setAccessible(true);
+        return (Set<String>) field.get(null);
     }
 
     @SuppressWarnings("unchecked")
