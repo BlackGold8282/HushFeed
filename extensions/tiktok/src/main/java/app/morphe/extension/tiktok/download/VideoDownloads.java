@@ -206,7 +206,7 @@ final class VideoDownloads {
                         // isn't taken down.
                         // The writer says a failure by toast and answers false; the count has
                         // to know, or a lost sound would read as a save with everything in it.
-                        if (!AudioDownloads.write(app, audioNameSnapshot, sound[0] == null ? picture[0] : sound[0], false)) {
+                        if (!AudioDownloads.write(app, audioNameSnapshot, sound[0] == null ? picture[0] : sound[0], path, false)) {
                             soundSkipped[0] = true;
                             throw new IOException("The sound beside the video was not saved");
                         }
