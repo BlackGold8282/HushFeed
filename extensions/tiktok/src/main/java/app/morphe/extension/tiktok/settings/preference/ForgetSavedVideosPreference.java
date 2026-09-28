@@ -69,7 +69,11 @@ public final class ForgetSavedVideosPreference extends Preference
                     offered = forgotten;
                     SettingsActionBanner.showUndo(context, L10n.t(context,
                             "Saved videos forgotten. The files are still there."),
-                            () -> undo(context, forgotten));
+                            () -> {
+                                // The row's Undo may have run already, or be running: a second
+                                // one ended on "Too late" after a restore that worked.
+                                if (working == null && offered == forgotten) undo(context, forgotten);
+                            });
                     // The Undo lives as long as the banner that offers it, a longer
                     // accessibility timeout included, and its rows go with it.
                     Utils.runOnMainThreadDelayed(() -> expire(forgotten), SettingsUi.feedbackTimeout(

@@ -43,8 +43,11 @@ public final class SavedVideoArchive {
     private static final Object LOCK = new Object();
     /** Moved on by every forget. A save records only into the generation it started in. */
     private static final AtomicLong GENERATION = new AtomicLong();
-    /** What the latest forget took, for its Undo. Held under {@link #LOCK}, never written out. */
-    private static Snapshot undo;
+    /**
+     * What the latest forget took, for its Undo. Written under {@link #LOCK} and never written out;
+     * volatile so the settings row can ask about it without waiting on a save's database write.
+     */
+    private static volatile Snapshot undo;
 
     public enum ForgetResult { FORGOTTEN, NOTHING_SAVED, FAILED }
 
@@ -194,9 +197,8 @@ public final class SavedVideoArchive {
 
     /** Whether the forget of {@code generation} can still be undone. */
     public static boolean canUndo(long generation) {
-        synchronized (LOCK) {
-            return undo != null && undo.generation == generation;
-        }
+        Snapshot held = undo;
+        return held != null && held.generation == generation;
     }
 
     /** Lets go of the rows the forget of {@code generation} took, once its Undo is gone. */
