@@ -578,6 +578,41 @@ public class SettingsBackupTest {
         assertEquals(CalmFeedPreset.State.ACTIVE, CalmFeedPreset.state(context));
     }
 
+    /**
+     * A restore that fails after writing the undo copy leaves Undo on offer, and the banner asks
+     * for it when putting things back needs it. The Calm feed setup went aside only once a
+     * restore had worked, so that Undo swapped in whatever an earlier reset had left there, or
+     * nothing, and took the current setup away; a reset and Undo after that lost it for good.
+     */
+    @Test public void anUndoAfterAFailedImportKeepsTheCalmFeedSetup() throws Exception {
+        android.content.Context context = Utils.getContext();
+        Settings.HIDE_LIVE.save(false);
+        CalmFeedPreset.apply(context);
+        JSONObject next = new JSONObject(SettingsBackup.create(false));
+        next.getJSONObject("settings").put(Settings.REGION_SPOOF.key, true);
+        var original = Setting.preferences.preferences;
+        var field = app.morphe.extension.shared.settings.preference.SharedPrefCategory.class
+                .getDeclaredField("preferences");
+        field.setAccessible(true);
+        field.set(Setting.preferences, failingCommits(original, () -> true, () -> {}));
+        try {
+            assertThrows(Exception.class, () -> SettingsBackup.restore(context, next.toString(), true));
+        } finally {
+            field.set(Setting.preferences, original);
+        }
+        assertEquals(CalmFeedPreset.State.ACTIVE, CalmFeedPreset.state(context));
+
+        SettingsBackup.undo(context);
+        assertEquals("the Undo after a failed import took the Calm feed setup away",
+                CalmFeedPreset.State.ACTIVE, CalmFeedPreset.state(context));
+        SettingsBackup.reset(context);
+        SettingsBackup.undo(context);
+        assertEquals("a reset and its Undo lost the setup",
+                CalmFeedPreset.State.ACTIVE, CalmFeedPreset.state(context));
+        CalmFeedPreset.restore(context);
+        assertFalse("the setup put back is not the one saved before Calm feed", Settings.HIDE_LIVE.get());
+    }
+
     @Test public void resetAndUndoRestoreBothStoresAndSurviveAnUnrelatedSettingChange() throws Exception {
         Settings.BLOCKED_CREATORS.save("creator");
         Settings.AUTO_ADVANCE.save(true);

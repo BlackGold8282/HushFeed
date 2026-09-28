@@ -212,7 +212,10 @@ public final class SettingsBackup {
             Snapshot previous = parseForJournal(previousJournal);
             Map<String, ?> previousPreferences = new LinkedHashMap<>(
                     Setting.preferences.preferences.getAll());
-            if (saveUndo) writeUndo(context, previousText);
+            if (saveUndo) {
+                writeUndo(context, previousText);
+                CalmFeedPreset.holdForUndo(context);
+            }
             BudgetChanges.Split budget = BudgetChanges.forRestore(next.values, SessionBudget.now());
             Map<Setting<?>, Object> updates = budget.withWaiting();
             operation.recordSettings(previousJournal, withPendingBudget(text,
@@ -236,9 +239,9 @@ public final class SettingsBackup {
                 closed = true;
                 if (next.labIncluded) FeatureGateLabStore.discardLabUndo();
                 // The Calm feed card offered "Restore setup" from before a reset or an import,
-                // which would have put back values it had just replaced. The setup goes aside
-                // with the undo copy instead, so the Undo below brings both back.
-                if (saveUndo) CalmFeedPreset.setAsideForUndo(context);
+                // which would have put back values it had just replaced. Its copy went aside
+                // with the undo copy above, so the Undo below brings both back.
+                if (saveUndo) CalmFeedPreset.clearAfterRestore(context);
             } catch (Exception error) {
                 try { Setting.saveAll(previous.values, true); } catch (Exception rollback) { error.addSuppressed(rollback); }
                 // Only put the Lab back when the apply above reached it. Writing the same

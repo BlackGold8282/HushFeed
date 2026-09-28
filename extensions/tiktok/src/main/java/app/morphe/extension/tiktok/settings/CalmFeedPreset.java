@@ -178,14 +178,27 @@ public final class CalmFeedPreset {
     }
 
     /**
-     * Sets the saved setup aside with the settings' undo copy, once a reset or an import has
-     * replaced every setting. Offered as it was, "Restore setup" would have put back values the
-     * reset had just cleared; dropped outright, an Undo of the reset lost it for good.
+     * Keeps a copy of the saved setup beside the settings' undo copy, written with it, so the two
+     * always belong to the same moment. Held only once the restore had worked, a restore that
+     * failed left the undo copy new and this copy old, and the Undo its banner asked for brought
+     * back a setup from an earlier reset, or took the current one away.
      */
-    public static synchronized void setAsideForUndo(Context context) {
+    public static synchronized void holdForUndo(Context context) {
         SharedPreferences preferences = preferences(context);
         SharedPreferences.Editor edit = preferences.edit();
         move(preferences, edit, "", HELD);
+        if (!edit.commit()) {
+            app.morphe.extension.shared.Logger.printInfo(() -> "Could not keep the Calm feed setup for Undo");
+        }
+    }
+
+    /**
+     * Once a reset or an import has replaced every setting. Offered as it was, "Restore setup"
+     * would have put back values the reset had just cleared; the copy {@link #holdForUndo} kept
+     * is what the settings' Undo brings back.
+     */
+    public static synchronized void clearAfterRestore(Context context) {
+        SharedPreferences.Editor edit = preferences(context).edit();
         move(null, edit, HELD, "");
         if (!edit.commit()) {
             app.morphe.extension.shared.Logger.printInfo(() -> "Could not set the Calm feed setup aside");
