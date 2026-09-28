@@ -310,7 +310,10 @@ public final class VideoOverlayHider {
                 hide(activity, SEARCH_MODULE_PACKAGE, VISUAL_SEARCH_LAYER_IDS);
                 hide(activity, SEARCH_MODULE_PACKAGE, VISUAL_SEARCH_PILL_IDS);
             }
-            if (Settings.HIDE_LIVE_ENTRANCE.get()) {
+            boolean detailPager = isDetailPager(activity);
+            // The LIVE entrance is the main feed's; looked for in the detail pager it was reported
+            // missing on every pass, and the hook table called the overlay hooks broken.
+            if (Settings.HIDE_LIVE_ENTRANCE.get() && !detailPager) {
                 hide(activity, APP_PACKAGE, LIVE_ENTRANCE_IDS);
             }
 
@@ -329,7 +332,6 @@ public final class VideoOverlayHider {
             // the first swipe. Following the live state keeps it away until the tap that ends
             // the mode. The persisted setting cannot be used here: the automatic path never
             // writes it, so it would answer false for exactly the case this is meant to fix.
-            boolean detailPager = isDetailPager(activity);
             boolean tabStrip = !detailPager && RememberClearDisplayPatch.isClearDisplayNow();
             boolean counts = Settings.HIDE_RAIL_COUNTS.get();
             boolean[] rail = TRAVERSAL.rail;

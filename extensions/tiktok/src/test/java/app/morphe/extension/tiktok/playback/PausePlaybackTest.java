@@ -224,6 +224,34 @@ public class PausePlaybackTest {
         }
     }
 
+    /**
+     * The feed going behind another of TikTok's screens, a hashtag opened from the comments,
+     * still lets go of what it held for the sheet, without counting as leaving the app.
+     */
+    @Test public void theFeedGoingBehindAnotherScreenLetsGoOfTheCommentsHold() {
+        Settings.PAUSE_ON_COMMENTS.save(true);
+        try (var feedOwner = Robolectric.buildActivity(HostActivity.class).create();
+             var other = Robolectric.buildActivity(Activity.class)) {
+            PausePlayback.install(feedOwner.get());
+            feedOwner.start().resume().visible();
+            Activity feed = feedOwner.get();
+            Utils.setActivity(feed);
+            Dialog sheet = openSheet(feed);
+            PausePlayback.onCommentCellBound(cellIn(sheet));
+            Shadows.shadowOf(Looper.getMainLooper()).idle();
+            assertTrue(PausePlayback.quietenedForTests());
+
+            feedOwner.pause();
+            other.create().start().resume();
+            feedOwner.stop();
+            Shadows.shadowOf(Looper.getMainLooper()).idle();
+            assertFalse("the comments' hold followed the reader to another screen",
+                    PausePlayback.quietenedForTests());
+            assertFalse("another screen counted as leaving the app", PausePlayback.wasAwayForTests());
+            sheet.dismiss();
+        }
+    }
+
     @Test public void comingBackHoldsTheFeedUntilATap() {
         Settings.NO_RESUME_ON_FOREGROUND.save(true);
         try (var owner = Robolectric.buildActivity(HostActivity.class).setup().visible()) {

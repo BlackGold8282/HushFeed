@@ -289,6 +289,10 @@ public final class PausePlayback {
                         // countdown and gated the feed behind a tap nobody had left for.
                         @Override public void onActivityStopped(Activity stopped) {
                             if (STARTED.remove(stopped) && STARTED.isEmpty()) onBackground();
+                            // The feed going behind another of TikTok's screens still lets go of
+                            // what it held for the comments: kept, it paused whatever played on
+                            // the screen in front, a video opened from a hashtag in the sheet.
+                            else if (stopped.getClass() == feed) letGo();
                         }
 
                         @Override public void onActivityCreated(Activity created, Bundle state) {
