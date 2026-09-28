@@ -12,7 +12,7 @@ public final class ReleaseNotesData {
     public static final String TEXT =
             "## 0.63.0 (2026-09-27)\n" +
             "\n" +
-            "Source update. The downloadable release is still v0.61.0.\n" +
+            "Includes the changes developed in 0.62.0, which wasn't published as a separate bundle.\n" +
             "\n" +
             "* **TikTok:** Diagnostic messages remove quoted credentials, headers and account identifiers before reaching system logs, the in-memory buffer or crash files. Long inputs and exception chains are bounded, and a long dotted hostname no longer overflows the redactor's stack.\n" +
             "* **TikTok:** Opening links in an external browser preserves ordinary sites' `target` parameters. Only TikTok's known link-safety routes unwrap that parameter. Lookalike characters in a hostname no longer pass that check.\n" +
@@ -30,7 +30,7 @@ public final class ReleaseNotesData {
             "\n" +
             "## 0.62.0 (2026-09-27)\n" +
             "\n" +
-            "Source update. The downloadable release is still v0.61.0.\n" +
+            "Source changes included in the v0.63.0 release.\n" +
             "\n" +
             "* **TikTok:** Installation instructions name the current published bundle and distinguish it from the 98-patch source build. Removed the inherited donation button and corrected the Android verification advice.\n" +
             "\n" +
