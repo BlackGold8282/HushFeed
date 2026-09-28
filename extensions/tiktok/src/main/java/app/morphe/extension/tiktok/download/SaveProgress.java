@@ -142,7 +142,15 @@ final class SaveProgress {
      * {@code done} runs after that, exactly once. Null when the line is full, and no row shows.
      */
     MediaJobScheduler.Job submit(String label, String key, Runnable work, Runnable done) {
-        MediaJobScheduler.Job queued = MediaJobScheduler.submit(label, key, work, () -> {
+        return submit(label, key, total, work, done);
+    }
+
+    /**
+     * As above, for a save that writes {@code files} files while its row counts {@link #total}:
+     * a story's video counts one on the row, but its sound goes to the gallery beside it.
+     */
+    MediaJobScheduler.Job submit(String label, String key, int files, Runnable work, Runnable done) {
+        MediaJobScheduler.Job queued = MediaJobScheduler.submit(label, key, Math.max(files, total), work, () -> {
             dismiss();
             if (done != null) done.run();
         });

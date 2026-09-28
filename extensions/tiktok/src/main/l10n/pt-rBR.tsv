@@ -1298,6 +1298,20 @@ One more save waiting	Mais um salvamento aguardando
 %1$s more saves waiting	Mais %1$s salvamentos aguardando
 Starts after one other save	Começa depois de outro salvamento
 Starts after %1$s other saves	Começa depois de outros %1$s salvamentos
+# context: the banner the next start shows when TikTok closed before some saves ended. A heading, then one line per save: the kind of save, a colon, and how many of its files didn't finish. It must not promise the save will carry on by itself.
+TikTok closed during these saves	O TikTok fechou durante estes salvamentos
+%1$s: didn't finish	%1$s: não terminou
+%1$s: %2$s of %3$s files didn't finish	%1$s: %2$s de %3$s arquivos não terminaram
+%1$s: might not have finished	%1$s: pode não ter terminado
+%1$s: %2$s of %3$s files might not have finished	%1$s: %2$s de %3$s arquivos podem não ter terminado
+And one more save	E mais um salvamento
+And %1$s more saves	E mais %1$s salvamentos
+Original photos	Fotos originais
+Story	Story
+Original sound	Som original
+Profile picture	Foto de perfil
+Live photo clip	Clipe da foto ao vivo
+Media save	Salvamento de mídia
 Saved %1$s of %2$s, the rest cancelled	%1$s de %2$s salvos, o restante cancelado
 Saved %1$s of %2$s, %3$s skipped	%1$s de %2$s salvos, %3$s ignorados
 Saved %1$s of %2$s, %3$s skipped and the rest cancelled	%1$s de %2$s salvos, %3$s ignorados e o restante cancelado

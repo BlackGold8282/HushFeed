@@ -316,7 +316,9 @@ public final class StoryDownloads {
         String capturedAudioName = audioName;
         // The photos' row follows the job from the moment it is accepted; a video has none.
         SaveProgress progress = SaveProgress.queued(Math.max(1, photoSnapshot.size()), false);
-        MediaJobScheduler.Job job = progress.submit("story", key, () -> {
+        // A video story's sound is a second file in the gallery, though the row counts one.
+        int files = photoSnapshot.isEmpty() && capturedAudioName != null ? 2 : progress.total();
+        MediaJobScheduler.Job job = progress.submit("story", key, files, () -> {
             try {
                 if (photoSnapshot.isEmpty()) {
                     saveVideo(app, videoName, path, videoSnapshot, capturedAudioName);

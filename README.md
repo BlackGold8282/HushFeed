@@ -347,6 +347,8 @@ With `Advanced downloads`, **Save details beside the video** writes a TXT file c
 
 <img src="assets/settings/single-save-progress.png" alt="A single video save at 50 percent" width="328" />
 
+If TikTok closes while saves are still going, the next time you open it a banner names the ones that didn't finish, or that Hushfeed can't confirm, and how many of their files are missing. Files that already reached your gallery count as saved and are left alone. Nothing picks a save up again by itself, so save it again if you still want it. The note Hushfeed keeps on the phone for this holds no links and no video IDs, and each save's entry goes when the save ends or once the banner has named it.
+
 **Check for already-saved videos** remembers up to 10,000 successful video saves made while it's on. Saving one again offers Open or Save again if the file is still available, even if TikTok no longer supplies its download link. Deleted files can be downloaded again. The record stays on the phone. Both switches start off and apply to Hushfeed's saves, including video stories, rather than links handed to another app. **Forget saved videos** empties that record and leaves the files and your settings alone, with Undo for as long as its notice shows. Turning the check off stops new entries but keeps the record, so the row is there either way.
 
 <img src="assets/settings/already-saved.png" alt="Already-saved video choices in the dark theme" width="300" /> <img src="assets/settings/already-saved-light.png" alt="Already-saved video choices in the light theme" width="300" />

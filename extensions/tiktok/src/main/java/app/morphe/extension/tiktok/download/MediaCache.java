@@ -179,13 +179,23 @@ public final class MediaCache {
         }
     }
 
+    /**
+     * The start's sweep, then what the last TikTok left of its saves. Runs from the host
+     * application's attachBaseContext, where getApplicationContext() is still null (the
+     * application object is only handed to the package after attach), so the context it was
+     * given stands in; with null here every sweep returned at once and nothing was ever cleaned.
+     * TikTok's main process only: the other processes never save, and one of them rewriting the
+     * journal while the main one publishes could drop the entry a crash needs.
+     */
     public static void reconcileAsync(Context context) {
-        if (context == null || !RECONCILIATION_STARTED.compareAndSet(false, true)) return;
-        Context app = context.getApplicationContext();
+        if (context == null || !Utils.isMainProcess()
+                || !RECONCILIATION_STARTED.compareAndSet(false, true)) return;
+        Context app = applicationOr(context);
         try {
             Utils.submitOnBackgroundThread(() -> {
                 try {
                     reconcile(app);
+                    UnfinishedSaves.atStart(app);
                 } finally {
                     RECONCILIATION_STARTED.set(false);
                 }
@@ -197,10 +207,15 @@ public final class MediaCache {
         }
     }
 
+    private static Context applicationOr(Context context) {
+        Context application = context.getApplicationContext();
+        return application == null ? context : application;
+    }
+
     static void reconcile(Context context) {
         if (context == null) return;
         try {
-            Context app = context.getApplicationContext();
+            Context app = applicationOr(context);
             synchronized (LOCK) {
                 File directory = directory(app);
                 long cutoff = System.currentTimeMillis() - STALE_AFTER_MS;

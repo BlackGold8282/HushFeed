@@ -67,14 +67,18 @@ final class MediaJobScheduler {
         final int ahead;
         private final Runnable work;
         private final Runnable done;
+        /** What this save leaves on disk for the start after a closed TikTok; null when nothing does. */
+        final SaveRecords.Record record;
         private final AtomicInteger state = new AtomicInteger(WAITING);
 
-        private Job(String label, String key, Runnable work, Runnable done, int ahead) {
+        private Job(String label, String key, Runnable work, Runnable done, int ahead,
+                SaveRecords.Record record) {
             this.label = label;
             this.key = key;
             this.work = work;
             this.done = done;
             this.ahead = ahead;
+            this.record = record;
         }
 
         /** True until a worker takes it, and false for good once it is cancelled. */
@@ -96,6 +100,8 @@ final class MediaJobScheduler {
         @Override public void run() {
             // A cancel that won the race has already ended the job, done included.
             if (!state.compareAndSet(WAITING, RUNNING)) return;
+            // A file this save publishes is written down against its record as it lands.
+            SaveRecords.Record outer = SaveRecords.enter(record);
             try {
                 MediaBudget.runWithJobDeadline(work);
             } catch (RuntimeException failure) {
@@ -103,6 +109,7 @@ final class MediaJobScheduler {
                 // must not take TikTok down with the worker thread.
                 Logger.printException(() -> "Media job failed for " + label, failure);
             } finally {
+                SaveRecords.exit(outer);
                 state.set(OVER);
                 end();
             }
@@ -111,11 +118,13 @@ final class MediaJobScheduler {
         private void end() {
             ADMITTED.decrementAndGet();
             if (key != null) BY_KEY.remove(key, this);
-            if (done == null) return;
             try {
-                done.run();
+                if (done != null) done.run();
             } catch (RuntimeException failure) {
                 Logger.printException(() -> "Media job cleanup failed for " + label, failure);
+            } finally {
+                // Over, whichever way: the record closes whether the save worked or not.
+                SaveRecords.close(record);
             }
         }
     }
@@ -131,12 +140,22 @@ final class MediaJobScheduler {
      * @param key names what is being saved, so {@link #busyMessage} can find it; null for none
      */
     static Job submit(String label, String key, Runnable work, Runnable done) {
+        return submit(label, key, 1, work, done);
+    }
+
+    /**
+     * As above, for a save of {@code files} files, which is what the start after a closed TikTok
+     * counts it against when some of them never landed.
+     */
+    static Job submit(String label, String key, int files, Runnable work, Runnable done) {
         if (work == null) throw new NullPointerException("work");
         int before = ADMITTED.getAndIncrement();
-        Job job = new Job(label, key, work, done, Math.max(0, before - MAX_RUNNING_JOBS + 1));
+        Job job = new Job(label, key, work, done, Math.max(0, before - MAX_RUNNING_JOBS + 1),
+                SaveRecords.open(label, files));
         if (key != null) BY_KEY.put(key, job);
         try {
             EXECUTOR.execute(job);
+            SaveRecords.accepted(job.record);
             return job;
         } catch (RejectedExecutionException error) {
             job.state.set(Job.OVER);

@@ -1298,6 +1298,20 @@ One more save waiting	Un guardado más en espera
 %1$s more saves waiting	%1$s guardados más en espera
 Starts after one other save	Empieza después de otro guardado
 Starts after %1$s other saves	Empieza después de otros %1$s guardados
+# context: the banner the next start shows when TikTok closed before some saves ended. A heading, then one line per save: the kind of save, a colon, and how many of its files didn't finish. It must not promise the save will carry on by itself.
+TikTok closed during these saves	TikTok se cerró durante estos guardados
+%1$s: didn't finish	%1$s: no terminó
+%1$s: %2$s of %3$s files didn't finish	%1$s: %2$s de %3$s archivos no terminaron
+%1$s: might not have finished	%1$s: puede que no haya terminado
+%1$s: %2$s of %3$s files might not have finished	%1$s: puede que %2$s de %3$s archivos no hayan terminado
+And one more save	Y otro guardado
+And %1$s more saves	Y otros %1$s guardados
+Original photos	Fotos originales
+Story	Historia
+Original sound	Sonido original
+Profile picture	Foto de perfil
+Live photo clip	Clip de la foto en vivo
+Media save	Guardado de contenido
 Saved %1$s of %2$s, the rest cancelled	Se guardaron %1$s de %2$s, el resto se canceló
 Saved %1$s of %2$s, %3$s skipped	Se guardaron %1$s de %2$s, %3$s omitidos
 Saved %1$s of %2$s, %3$s skipped and the rest cancelled	Se guardaron %1$s de %2$s, %3$s omitidos y el resto cancelado

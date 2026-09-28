@@ -516,6 +516,7 @@ public final class StickerGallerySaver {
 
         Uri uri = MediaCache.insertPending(
                 context, resolver, DownloadDestination.collectionUri(relativePath, video), values);
+        SaveRecords.Slot slot = SaveRecords.located(uri);
         try {
             writer.write(resolver, uri, directory);
             MediaBudget.checkDiskSpace(directory, 0);
@@ -525,9 +526,11 @@ public final class StickerGallerySaver {
             complete.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);
             complete.put(MediaStore.MediaColumns.IS_PENDING, 0);
             completePending(context, resolver, uri, complete);
+            SaveRecords.published(slot);
             return uri;
         } catch (Throwable ex) {
             discardPending(context, resolver, uri, ex);
+            SaveRecords.abandoned(slot);
             throw ex;
         }
     }
@@ -549,6 +552,8 @@ public final class StickerGallerySaver {
         }
 
         File outputFile = MediaFileWriter.claim(directory, displayName);
+        // A converted sticker's size isn't known until it's written, so none is recorded.
+        SaveRecords.Slot slot = SaveRecords.located(outputFile, -1L);
         try {
             writer.write(outputFile);
             MediaBudget.checkDiskSpace(directory, 0);
@@ -556,10 +561,12 @@ public final class StickerGallerySaver {
             if (outputFile.exists() && !outputFile.delete()) {
                 debugLog("[Morphe Stickers] could not remove partial file=" + outputFile.getAbsolutePath());
             }
+            SaveRecords.abandoned(slot);
             throw ex;
         }
         MediaScannerConnection.scanFile(context, new String[]{outputFile.getAbsolutePath()},
                 new String[]{mimeType}, null);
+        SaveRecords.published(slot);
         return outputFile;
     }
 

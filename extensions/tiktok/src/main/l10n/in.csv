@@ -1296,6 +1296,19 @@ One more save waiting,Satu penyimpanan lagi menunggu
 %1$s more saves waiting,%1$s penyimpanan lagi menunggu
 Starts after one other save,Dimulai setelah satu penyimpanan lain
 Starts after %1$s other saves,Dimulai setelah %1$s penyimpanan lain
+TikTok closed during these saves,TikTok tertutup saat penyimpanan ini berjalan
+%1$s: didn't finish,%1$s: tidak selesai
+%1$s: %2$s of %3$s files didn't finish,%1$s: %2$s dari %3$s berkas tidak selesai
+%1$s: might not have finished,%1$s: mungkin tidak selesai
+%1$s: %2$s of %3$s files might not have finished,%1$s: %2$s dari %3$s berkas mungkin tidak selesai
+And one more save,Dan satu penyimpanan lain
+And %1$s more saves,Dan %1$s penyimpanan lain
+Original photos,Foto asli
+Story,Story
+Original sound,Suara asli
+Profile picture,Foto profil
+Live photo clip,Klip foto langsung
+Media save,Penyimpanan media
 "Saved %1$s of %2$s, the rest cancelled","%1$s dari %2$s tersimpan, sisanya dibatalkan"
 "Saved %1$s of %2$s, %3$s skipped","%1$s dari %2$s tersimpan, %3$s dilewati"
 "Saved %1$s of %2$s, %3$s skipped and the rest cancelled","%1$s dari %2$s tersimpan, %3$s dilewati, dan sisanya dibatalkan"
