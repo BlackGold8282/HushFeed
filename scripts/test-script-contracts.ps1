@@ -484,6 +484,20 @@ if (Test-Path -LiteralPath $windowsPowerShell -PathType Leaf) {
         $global:LASTEXITCODE = 0
         Assert-True ($message -like 'aapt2 could not read the manifest of*not an APK*') `
             "Under Windows PowerShell 5.1 a failing aapt2 surfaced as: $message"
+
+        # And a harmless stderr line from a call that succeeds: adb starting its server says so on
+        # stderr, which ended a -Replace run before it had checked anything.
+        $standInAdb = Join-Path $nativeRoot 'adb.cmd'
+        [IO.File]::WriteAllText($standInAdb, "@echo * daemon not running; starting now at tcp:5037 1>&2`r`n@exit /b 0`r`n")
+        $installScript = Join-Path $PSScriptRoot 'device-install.ps1'
+        $command = "`$ErrorActionPreference = 'Stop'; . '$installScript'; " +
+            "try { 'removed=' + (Remove-AndroidPackageIfInstalled -Adb '$standInAdb' -Serial 'serial' -PackageName 'com.example' 6> `$null) } " +
+            "catch { 'threw: ' + `$_.Exception.Message }"
+        $answer = (& $windowsPowerShell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command $command 2>&1 |
+            Out-String).Trim()
+        $global:LASTEXITCODE = 0
+        Assert-True ($answer -eq 'removed=False') `
+            "Under Windows PowerShell 5.1 adb's startup line stopped the install helper: $answer"
     } finally {
         Remove-Item -LiteralPath $nativeRoot -Recurse -Force -ErrorAction SilentlyContinue
     }
