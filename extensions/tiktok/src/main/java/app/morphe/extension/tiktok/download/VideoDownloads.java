@@ -22,7 +22,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 import org.json.JSONObject;
 
 final class VideoDownloads {
@@ -30,6 +29,15 @@ final class VideoDownloads {
     /** The videos whose already-saved choice is on screen, a subset of {@link #ACTIVE}. */
     private static final Set<String> ASKING = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
     private VideoDownloads() {}
+
+    /**
+     * One save of a video, into the row that follows it. Not Consumer: java.util.function arrived
+     * at API 24 and D8 can't backport a type, so on Android 6 every save through here threw
+     * NoClassDefFoundError with the video's id still held. Lint doesn't flag it.
+     */
+    private interface Save {
+        void accept(SaveProgress progress);
+    }
 
     /**
      * The rendition a download takes: the chosen quality, or on Automatic the highest when
@@ -134,7 +142,7 @@ final class VideoDownloads {
         // The video, the sound beside it when wanted, then each subtitle track. From three files
         // up, or with progress asked for, a row follows the save from the moment it is accepted.
         int files = 1 + (details != null ? 1 : 0) + (audioNameSnapshot != null ? 1 : 0) + captionSnapshot.size();
-        Consumer<SaveProgress> save = progress -> {
+        Save save = progress -> {
             // A source is needed for a new copy, but a remembered file can still be opened
             // after TikTok stops supplying a download address for this post.
             if (unavailable) {

@@ -357,6 +357,23 @@ public class AndroidTargetChangesGuardTest {
         }
         assertTrue("Android's regex refuses these flags:\n" + String.join("\n", offenders), offenders.isEmpty());
     }
+
+    /**
+     * java.util.function arrived at API 24 and the payload runs on API 23 without core library
+     * desugaring. D8 backports static methods such as List.copyOf but never a type, and lint's
+     * NewApi check let a Consumer local through into the shipped dex, where every video save on
+     * Android 6 would have thrown NoClassDefFoundError. Declare a small interface instead.
+     */
+    @Test
+    public void noPayloadTypeComesFromJavaUtilFunction() throws IOException {
+        java.util.regex.Pattern use = java.util.regex.Pattern.compile("java\\.util\\.function\\.[A-Z*]");
+        List<String> offenders = new ArrayList<>();
+        for (Path source : payloadSources()) {
+            if (use.matcher(read(source)).find()) offenders.add(relativeName(source));
+        }
+        assertTrue("java.util.function is API 24, the payload's floor is 23:\n" + String.join("\n", offenders),
+                offenders.isEmpty());
+    }
     /** Both trees whose Java ends up in the payload TikTok runs. */
     private static List<Path> payloadSources() throws IOException {
         List<Path> roots = new ArrayList<>();
