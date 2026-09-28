@@ -92,6 +92,12 @@ final class SaveRecords {
     private static List<Record> earlier;
     /** Set while a write is queued, so a burst of accepts and closes costs one write. LOCK. */
     private static boolean writeQueued;
+    /** Held across the file write and its fsync, and never while {@link #LOCK} is. */
+    private static final Object WRITE_LOCK = new Object();
+    /** The number of the last snapshot taken. LOCK. */
+    private static long snapshots;
+    /** The number of the snapshot on disk. WRITE_LOCK. */
+    private static long written;
     /** The record of the job this thread is running, for the publish that happens inside it. */
     private static final ThreadLocal<Record> CURRENT = new ThreadLocal<>();
     private static final Random IDS = new Random();
@@ -458,10 +464,18 @@ final class SaveRecords {
     /**
      * Writes every record this process knows of: the earlier ones not yet consumed, then its own.
      * A failure marks this process's records unsure, which the next write that succeeds carries.
+     *
+     * <p>Two steps under two locks. The snapshot is taken under {@link #LOCK}, which a Save or
+     * Cancel tap takes on the main thread, and it's quick. The write and its fsync happen under
+     * {@link #WRITE_LOCK} only, so a slow disk holds up the next write and never a tap. Each
+     * snapshot is numbered as it's taken, and one older than what is already on disk is dropped:
+     * two writers can reach the disk in either order, and the older state must not land last.
      */
     private static void persistNow(Context given) {
         Context context = given != null ? given : Utils.getContext();
         if (context == null) return;
+        byte[] bytes;
+        long snapshot;
         synchronized (LOCK) {
             try {
                 List<Record> previous = earlier(context);
@@ -469,21 +483,43 @@ final class SaveRecords {
                 JSONArray records = new JSONArray();
                 for (Record record : previous) records.put(json(record));
                 for (Record record : OPEN.values()) records.put(json(record));
-                AtomicFile file = file(context);
                 if (records.length() == 0) {
-                    if (exists(file)) file.delete();
-                    return;
+                    bytes = null;
+                } else {
+                    JSONObject root = new JSONObject();
+                    root.put("v", VERSION);
+                    root.put("records", records);
+                    bytes = root.toString().getBytes(StandardCharsets.UTF_8);
                 }
-                JSONObject root = new JSONObject();
-                root.put("v", VERSION);
-                root.put("records", records);
-                write(file, root.toString().getBytes(StandardCharsets.UTF_8));
-            } catch (IOException | JSONException | RuntimeException failure) {
-                for (Record record : OPEN.values()) record.unsure = true;
-                // The class alone: a parse or write message can carry the file's own text.
-                Logger.printInfo(() -> "Could not write the save records (" + failure.getClass().getSimpleName() + ")");
+            } catch (JSONException | RuntimeException failure) {
+                markUnsure(failure);
+                return;
+            }
+            snapshot = ++snapshots;
+        }
+        try {
+            AtomicFile file = file(context);
+            synchronized (WRITE_LOCK) {
+                if (snapshot <= written) return;
+                if (bytes == null) {
+                    if (exists(file)) file.delete();
+                } else {
+                    write(file, bytes);
+                }
+                written = snapshot;
+            }
+        } catch (IOException | RuntimeException failure) {
+            synchronized (LOCK) {
+                markUnsure(failure);
             }
         }
+    }
+
+    /** LOCK held. */
+    private static void markUnsure(Exception failure) {
+        for (Record record : OPEN.values()) record.unsure = true;
+        // The class alone: a parse or write message can carry the file's own text.
+        Logger.printInfo(() -> "Could not write the save records (" + failure.getClass().getSimpleName() + ")");
     }
 
     /** Drops earlier records past the age cap, then the oldest past the count cap. LOCK held. */

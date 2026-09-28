@@ -362,6 +362,65 @@ public class SaveRecordsTest {
     }
 
     // -----------------------------------------------------------------------------------------
+    // The write itself.
+    // -----------------------------------------------------------------------------------------
+
+    /**
+     * A write stuck on a slow disk holds up no Save or Cancel tap, which open and close records on
+     * the main thread: the file is written outside the lock they take. And a snapshot taken before
+     * another can't land after it, so the stuck write, once let go, doesn't put back a state the
+     * newer one already replaced.
+     */
+    @Test public void aSlowWriteHoldsUpNoTapAndAnOlderSnapshotNeverLandsLast() throws Exception {
+        SaveRecords.accepted(SaveRecords.open("video", 1));
+        startAgain(context, atDeath(context));
+        SaveRecords.Report report = SaveRecords.reconcile(context);
+        assertEquals(1, report.saves.size());
+
+        CountDownLatch reachedDisk = new CountDownLatch(1);
+        CountDownLatch disk = hold();
+        Context slow = new android.content.ContextWrapper(context) {
+            @Override public File getFilesDir() {
+                reachedDisk.countDown();
+                await(disk);
+                return super.getFilesDir();
+            }
+        };
+        // The older snapshot: the notice's record consumed, written by a disk that won't answer.
+        SaveRecords.consume(slow, report.ids());
+        assertTrue("the write never reached the disk", reachedDisk.await(5, TimeUnit.SECONDS));
+
+        SaveRecords.Record[] tapped = {null};
+        Thread tap = new Thread(() -> tapped[0] = SaveRecords.open("sound", 1));
+        tap.start();
+        tap.join(2000);
+        assertFalse("a Save tap waited on a write stuck on the disk", tap.isAlive());
+
+        // The newer snapshot: a file of a running save found its row, written straight through.
+        SaveRecords.Record story = SaveRecords.open("story", 1);
+        Thread publisher = new Thread(() -> {
+            SaveRecords.Record outer = SaveRecords.enter(story);
+            try {
+                SaveRecords.located(row(42L));
+            } finally {
+                SaveRecords.exit(outer);
+            }
+        });
+        publisher.start();
+        publisher.join(5000);
+        assertFalse("a publish waited on a write stuck on the disk", publisher.isAlive());
+
+        disk.countDown();
+        JSONArray kept = records(context);
+        assertEquals("the older snapshot landed over the newer one: " + kept, 2, kept.length());
+        JSONObject last = kept.getJSONObject(1);
+        assertEquals("story", last.getString("k"));
+        assertEquals(row(42L).toString(), last.getJSONArray("s").getJSONObject(0).getString("u"));
+        SaveRecords.close(tapped[0]);
+        SaveRecords.close(story);
+    }
+
+    // -----------------------------------------------------------------------------------------
     // What is kept, and what is said in the log.
     // -----------------------------------------------------------------------------------------
 
