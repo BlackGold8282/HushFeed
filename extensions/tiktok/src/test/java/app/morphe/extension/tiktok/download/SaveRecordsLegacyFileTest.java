@@ -24,12 +24,15 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowLog;
 import org.robolectric.shadows.ShadowMediaScannerConnection;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -169,6 +172,80 @@ public class SaveRecordsLegacyFileTest {
         assertEquals(1, report.saves.get(0).uncertain);
         assertEquals(0, report.saves.get(0).unfinished);
         assertEquals(1, report.saves.get(1).unfinished);
+    }
+
+    /**
+     * What the record may hold here, and for how long: a file being written is noted by its own
+     * path, which the default template fills with the creator and the video id, and nothing of it
+     * is left once the file is confirmed. No log line carries it, and nothing but SaveRecords
+     * names the records file, so no export, backup or report can pick it up.
+     */
+    @Test public void aFileBeingWrittenIsKeptByItsOwnPathOnlyUntilConfirmed() throws Exception {
+        String videoId = "7312345678901234567";
+        String name = "creatorname_" + videoId + ".jpg";
+        File file = target(name);
+        Files.write(file.toPath(), PICTURE);
+        ShadowLog.clear();
+        SaveRecords.Record record = SaveRecords.open("original photos", 2);
+        SaveRecords.accepted(record);
+        SaveRecords.Record outer = SaveRecords.enter(record);
+        try {
+            SaveRecords.Slot slot = SaveRecords.located(file, PICTURE.length);
+            String inFlight = SaveRecordsFixtures.text(atDeath(context));
+            assertTrue("a file being written wasn't noted by its path: " + inFlight, inFlight.contains(name));
+
+            SaveRecords.published(slot);
+            String confirmed = SaveRecordsFixtures.text(atDeath(context));
+            assertFalse("a confirmed file kept its path: " + confirmed, confirmed.contains(videoId));
+            assertFalse(confirmed.contains("creatorname"));
+
+            SaveRecords.located(target("creatorname_" + videoId + "_2.jpg"), PICTURE.length);
+        } finally {
+            SaveRecords.exit(outer);
+        }
+        startAgain(context, atDeath(context));
+        SaveRecords.Report report = SaveRecords.reconcile(context);
+        UnfinishedSaves.message(context, report);
+        assertEquals(1, report.saves.size());
+        assertEquals(1, report.saves.get(0).done);
+        assertEquals(1, report.saves.get(0).unfinished);
+
+        for (ShadowLog.LogItem item : ShadowLog.getLogs()) {
+            String line = item.msg + (item.throwable == null ? "" : " " + item.throwable);
+            for (String secret : new String[]{videoId, "creatorname", "Pictures", SaveRecords.FILE_NAME}) {
+                assertFalse("the log carried " + secret + ": " + line, line.contains(secret));
+            }
+        }
+
+        File root = new File("src/main/java");
+        if (!root.isDirectory()) root = new File("extensions/tiktok/src/main/java");
+        assertTrue(root.isDirectory());
+        List<String> readers = new ArrayList<>();
+        try (java.util.stream.Stream<java.nio.file.Path> sources = Files.walk(root.toPath())) {
+            for (java.nio.file.Path source : (Iterable<java.nio.file.Path>) sources::iterator) {
+                if (!source.toString().endsWith(".java")
+                        || source.getFileName().toString().equals("SaveRecords.java")) continue;
+                String text = new String(Files.readAllBytes(source), StandardCharsets.UTF_8);
+                if (text.contains(SaveRecords.FILE_NAME) || text.contains("SaveRecords.FILE_NAME")
+                        || text.contains("SaveRecords.file(")) readers.add(source.getFileName().toString());
+            }
+        }
+        assertEquals("something else can reach the records file", List.of(), readers);
+    }
+
+    /** The README says what the record keeps, the Android 9 path included, and claims nothing more. */
+    @Test public void theReadmeSaysWhatTheRecordKeeps() throws Exception {
+        File readme = new File("../../README.md");
+        if (!readme.isFile()) readme = new File("README.md");
+        assertTrue(readme.isFile());
+        String text = new String(Files.readAllBytes(readme.toPath()), StandardCharsets.UTF_8);
+        int at = text.indexOf("If TikTok closes while saves are still going");
+        assertTrue("the README lost its paragraph on unfinished saves", at >= 0);
+        String paragraph = text.substring(at, text.indexOf('\n', at));
+        assertFalse("the README says no video IDs are kept: " + paragraph, paragraph.contains("no video IDs"));
+        assertTrue("the README doesn't say a file being written is noted by its path: " + paragraph,
+                paragraph.contains("Android 9 and older") && paragraph.contains("path"));
+        assertTrue(paragraph.contains("no links or tokens"));
     }
 
     /** A file confirmed and deleted since is a file that was saved. */

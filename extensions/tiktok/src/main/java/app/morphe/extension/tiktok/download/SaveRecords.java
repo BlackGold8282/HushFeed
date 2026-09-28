@@ -54,9 +54,12 @@ import java.util.concurrent.TimeUnit;
  *
  * <p>It holds what that takes and nothing more: the kind of save, a random id, how many files it
  * expected, two timestamps, and for a file still in flight its MediaStore row, or on Android 9 and
- * older its path and expected size. A confirmed file keeps none of those. There is no address, no
- * token and no video id in it, and the log lines name kinds and counts only, since they go into
- * exported reports.
+ * older its path and expected size. A confirmed file keeps none of those. There is no address and
+ * no token in it. The Android 9 path is the name of the reader's own file, which already sits in
+ * shared storage under it, and a filename template can put the creator and the video id there;
+ * it is kept only while that file is written and goes the moment it is confirmed. The records
+ * file is private to TikTok and nothing exports, backs up or logs it: the log lines name kinds
+ * and counts only, since they go into exported reports.
  *
  * <p>Bounded twice: records from earlier processes go after {@link #MAX_AGE_MS}, and past
  * {@link #MAX_RECORDS} the oldest of them go first. This process's own records are never dropped.
@@ -128,7 +131,7 @@ final class SaveRecords {
         final Record record;
         /** The MediaStore row, Android 10 and newer. Null once published. */
         String uri;
-        /** The file itself, Android 9 and older. Null once published. */
+        /** The file itself, Android 9 and older: its own name, creator and video id included. Null once published. */
         String file;
         /** What a complete file measures, or -1 when that isn't known in advance. */
         long size;
