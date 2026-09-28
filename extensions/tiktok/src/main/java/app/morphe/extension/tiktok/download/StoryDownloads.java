@@ -263,8 +263,9 @@ public final class StoryDownloads {
             Utils.showToastShort(L10n.t("This story isn't available to save"));
             return true;
         }
+        String key = "story " + id;
         if (ACTIVE.contains(id)) {
-            Utils.showToastShort(L10n.t("Still saving the last one"));
+            Utils.showToastShort(MediaJobScheduler.busyMessage(key));
             return true;
         }
 
@@ -295,42 +296,41 @@ public final class StoryDownloads {
         }
 
         Context app = context.getApplicationContext();
-        if (!ACTIVE.add(id)) {
-            Utils.showToastShort(L10n.t("Still saving the last one"));
-            return true;
-        }
-        Utils.showToastShort(L10n.t("Saving the story"));
+        String path, videoName;
+        List<String> photoNames = new ArrayList<>();
         try {
-            String capturedAudioName = audioName;
-            String path = DownloadFilenameFormatter.destinationPath(aweme, !photoSnapshot.isEmpty());
-            String videoName = photoSnapshot.isEmpty() ? DownloadFilenameFormatter.formatSelectedVideoName(aweme) : null;
-            List<String> photoNames = new ArrayList<>();
+            path = DownloadFilenameFormatter.destinationPath(aweme, !photoSnapshot.isEmpty());
+            videoName = photoSnapshot.isEmpty() ? DownloadFilenameFormatter.formatSelectedVideoName(aweme) : null;
             for (int i = 0; i < photoSnapshot.size(); i++) {
                 photoNames.add(DownloadFilenameFormatter.formatOriginalPhotoName(aweme, i + 1, "tmp"));
             }
-            boolean submitted = MediaJobScheduler.submit("story", () -> {
-                try {
-                    if (photoSnapshot.isEmpty()) {
-                        saveVideo(app, videoName, path, videoSnapshot, capturedAudioName);
-                    } else {
-                        savePhotos(app, photoNames, path, photoSnapshot);
-                    }
-                } catch (IOException | RuntimeException exception) {
-                    Logger.printException(() -> "Story download failed", exception);
-                    Utils.showToastLong(L10n.t("The story couldn't be saved. Try again."));
-                } finally {
-                    ACTIVE.remove(id);
-                }
-            });
-            if (!submitted) {
-                ACTIVE.remove(id);
-                return false;
-            }
         } catch (RuntimeException exception) {
-            ACTIVE.remove(id);
             Logger.printException(() -> "Could not start the story download", exception);
             Utils.showToastLong(L10n.t("The story couldn't be saved. Try again."));
+            return true;
         }
+        if (!ACTIVE.add(id)) {
+            Utils.showToastShort(MediaJobScheduler.busyMessage(key));
+            return true;
+        }
+        String capturedAudioName = audioName;
+        // The photos' row follows the job from the moment it is accepted; a video has none.
+        SaveProgress progress = SaveProgress.queued(Math.max(1, photoSnapshot.size()), false);
+        MediaJobScheduler.Job job = progress.submit("story", key, () -> {
+            try {
+                if (photoSnapshot.isEmpty()) {
+                    saveVideo(app, videoName, path, videoSnapshot, capturedAudioName);
+                } else {
+                    savePhotos(app, photoNames, path, photoSnapshot, progress);
+                }
+            } catch (IOException | RuntimeException exception) {
+                Logger.printException(() -> "Story download failed", exception);
+                Utils.showToastLong(L10n.t("The story couldn't be saved. Try again."));
+            }
+        }, () -> ACTIVE.remove(id));
+        if (job == null) return false;
+        String saying = L10n.t("Saving the story");
+        progress.acknowledge(saying, saying);
         return true;
     }
 
@@ -364,7 +364,8 @@ public final class StoryDownloads {
         }
     }
 
-    private static void savePhotos(Context app, List<String> names, String path, List<List<String>> photos) {
+    private static void savePhotos(Context app, List<String> names, String path, List<List<String>> photos,
+            SaveProgress progress) {
         List<File> temporary = new ArrayList<>();
         // The banner's Open lands on the newest photo, which is where the gallery puts the rest.
         MediaFileWriter.Saved[] last = {null};
@@ -373,7 +374,7 @@ public final class StoryDownloads {
             // skipped and the rest still land. Say what did: a story that stopped part way has
             // files in the gallery already, and "nothing was saved" would send the reader back
             // for duplicates.
-            SaveProgress.Outcome outcome = SaveProgress.begin(photos.size()).run(index -> {
+            SaveProgress.Outcome outcome = progress.run(index -> {
                 MediaBudget.checkDiskSpace(app.getCacheDir(), -1L);
                 File temp = MediaCache.createTempFile(app, "story-photo-", ".tmp");
                 temporary.add(temp);

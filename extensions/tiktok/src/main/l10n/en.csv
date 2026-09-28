@@ -42,6 +42,7 @@ source,target
 %1$s min left,%1$s min left
 %1$s minute,%1$s minute
 %1$s minutes,%1$s minutes
+%1$s more saves waiting,%1$s more saves waiting
 %1$s needs fixing. %2$s,%1$s needs fixing. %2$s
 %1$s point,%1$s point
 %1$s points,%1$s points
@@ -775,6 +776,7 @@ On. Restore puts back the feed setup you had before.,On. Restore puts back the f
 "Once today's budget runs out, the hold stays and can't be dismissed. The budget settings are locked until the day starts over. Turn this off any time before the budget runs out.","Once today's budget runs out, the hold stays and can't be dismissed. The budget settings are locked until the day starts over. Turn this off any time before the budget runs out."
 One area was checked and everything it needs is here.,One area was checked and everything it needs is here.
 One minute left,One minute left
+One more save waiting,One more save waiting
 "One of the quote marks in that list has nothing to close it, so the rest of the line reads as one phrase. Add the missing quote or take the stray one out.","One of the quote marks in that list has nothing to close it, so the rest of the line reads as one phrase. Add the missing quote or take the stray one out."
 One value per line,One value per line
 One video was recorded before each account kept its own list. It hides nothing until you add it here.,One video was recorded before each account kept its own list. It hides nothing until you add it here.
@@ -926,6 +928,7 @@ Save Hushfeed settings and Feature Gate Lab rules to a JSON file.,Save Hushfeed 
 Save a profile picture on a long press,Save a profile picture on a long press
 Save a story on a long press,Save a story on a long press
 Save again,Save again
+Save cancelled. Nothing was saved.,Save cancelled. Nothing was saved.
 Save details beside the video,Save details beside the video
 "Save every photo in the post as TikTok received it, not as the screen shows it.","Save every photo in the post as TikTok received it, not as the screen shows it."
 Save field values,Save field values
@@ -959,6 +962,9 @@ Saving %1$s of %2$s: %3$s,Saving %1$s of %2$s: %3$s
 Saving %1$s original photos,Saving %1$s original photos
 Saving one original photo,Saving one original photo
 Saving settings backup,Saving settings backup
+Saving the live photo's clip,Saving the live photo's clip
+Saving the profile picture,Saving the profile picture
+Saving the sound,Saving the sound
 Saving the sticker,Saving the sticker
 Saving the story,Saving the story
 Saving video,Saving video
@@ -1065,6 +1071,8 @@ Start the day at,Start the day at
 Start today over,Start today over
 Start typing,Start typing
 "Start with comments. Hide the comment count, sort and close buttons, plus the suggestion area above them. Use Back or swipe down to close comments.","Start with comments. Hide the comment count, sort and close buttons, plus the suggestion area above them. Use Back or swipe down to close comments."
+Starts after %1$s other saves,Starts after %1$s other saves
+Starts after one other save,Starts after one other save
 Stay on the video in full screen,Stay on the video in full screen
 Staying on a video,Staying on a video
 Sticker,Sticker
@@ -1165,6 +1173,7 @@ The feed is open again,The feed is open again
 "The feed waits for one tap before it starts playing again when you come back to the app. Messages, profiles and search are still one tap away.","The feed waits for one tap before it starts playing again when you come back to the app. Messages, profiles and search are still one tap away."
 The file hushfeed-safe-mode couldn't be removed. Delete it from TikTok's folder under Android/data to turn Hushfeed back on.,The file hushfeed-safe-mode couldn't be removed. Delete it from TikTok's folder under Android/data to turn Hushfeed back on.
 "The hour both budgets reset, on a 24 hour clock. Four in the morning by default, because someone still scrolling at one is having last night.","The hour both budgets reset, on a 24 hour clock. Four in the morning by default, because someone still scrolling at one is having last night."
+The last one is still waiting to start,The last one is still waiting to start
 The live photo's clip couldn't be saved. Try again.,The live photo's clip couldn't be saved. Try again.
 The loaded-values file you chose couldn't be read. Try again.,The loaded-values file you chose couldn't be read. Try again.
 "The original photos aren't available, so TikTok's own save runs instead","The original photos aren't available, so TikTok's own save runs instead"
@@ -1178,6 +1187,7 @@ The profile picture couldn't be saved. Try again.,The profile picture couldn't b
 The report couldn't be saved. Try again.,The report couldn't be saved. Try again.
 The row of story avatars across the top of the Inbox goes. Stories still play from the feed and from profiles.,The row of story avatars across the top of the Inbox goes. Stories still play from the feed and from profiles.
 The saved-video choice couldn't open. Try again.,The saved-video choice couldn't open. Try again.
+The saved-video choice is still open,The saved-video choice is still open
 The setting couldn't finish updating. Its saved value is shown.,The setting couldn't finish updating. Its saved value is shown.
 The settings backup was rejected. Nothing was altered.,The settings backup was rejected. Nothing was altered.
 The smallest value is above the largest,The smallest value is above the largest
@@ -1330,6 +1340,8 @@ Wait a day to loosen the budget,Wait a day to loosen the budget
 "Wait a day to loosen the budget is on, so Hushfeed stays on","Wait a day to loosen the budget is on, so Hushfeed stays on"
 Wait before hiding the controls.,Wait before hiding the controls.
 Waiting to record. Go to the screen you want recorded.,Waiting to record. Go to the screen you want recorded.
+Waiting to save %1$s files,Waiting to save %1$s files
+Waiting to save video,Waiting to save video
 Watching and sharing,Watching and sharing
 "WebP, exactly as TikTok sent it","WebP, exactly as TikTok sent it"
 What TikTok gets,What TikTok gets

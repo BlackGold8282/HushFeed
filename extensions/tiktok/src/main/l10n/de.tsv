@@ -863,6 +863,9 @@ Saving one original photo	Ein Originalfoto wird gespeichert
 Saving settings backup	Einstellungssicherung wird gespeichert
 Saving the sticker	Sticker wird gespeichert
 Saving the story	Story wird gespeichert
+Saving the sound	Sound wird gespeichert
+Saving the profile picture	Profilbild wird gespeichert
+Saving the live photo's clip	Clip des Live-Fotos wird gespeichert
 Screen	Bildschirm
 Screen time	Bildschirmzeit
 Search	Suche
@@ -962,6 +965,7 @@ Sticker saved to %1$s	Sticker gespeichert in %1$s
 Still here. Nothing is waiting.	Immer noch hier. Es wartet nichts.
 Still reading the record. Tap again in a moment.	Der Verlauf wird noch gelesen. Tippe gleich noch einmal.
 Still saving the last one	Das letzte wird noch gespeichert
+The last one is still waiting to start	Das letzte wartet noch auf den Start
 Stop ByteDance AppLog events, AppsFlyer attribution, explicit Firebase screen reports and crash reporting from being sent. TikTok's own diagnostics go quiet with them.	ByteDance-AppLog-Ereignisse, AppsFlyer-Attribution, explizite Firebase-Bildschirmberichte und Absturzmeldungen nicht mehr senden. TikToks eigene Diagnose verstummt damit ebenfalls.
 Stop TikTok asking the screen to run at the frame rate of the video it's playing. On a 90 or 120 Hz phone that ask slows the whole app down to the video's rate, scrolling included.	Verhindert, dass TikTok den Bildschirm auf die Bildrate des laufenden Videos herunterregelt. Auf einem 90 oder 120 Hz Telefon bremst diese Anfrage die ganze App auf die Rate des Videos aus, das Scrollen eingeschlossen.
 Stop TikTok listening to the accelerometer, gyroscope, magnetometer and the other motion sensors it uses to fingerprint the phone. Saves the battery they wake.	Verhindert, dass TikTok Beschleunigungssensor, Gyroskop, Magnetometer und die anderen Bewegungssensoren abhört, mit denen es das Telefon identifiziert. Spart den Akku, den sie wecken.
@@ -1291,6 +1295,12 @@ Swipe left	Nach links wischen
 TikTok default (open the creator's profile)	TikTok-Standard (Profil des Creators öffnen)
 Saving %1$s of %2$s	Datei %1$s von %2$s wird gespeichert
 Stopping after this file	Wird nach dieser Datei beendet
+Waiting to save %1$s files	%1$s Dateien warten auf das Speichern
+Save cancelled. Nothing was saved.	Speichern abgebrochen. Es wurde nichts gespeichert.
+One more save waiting	Eine weitere Speicherung wartet
+%1$s more saves waiting	%1$s weitere Speicherungen warten
+Starts after one other save	Startet nach einer anderen Speicherung
+Starts after %1$s other saves	Startet nach %1$s anderen Speicherungen
 Saved %1$s of %2$s, the rest cancelled	%1$s von %2$s gespeichert, der Rest abgebrochen
 Saved %1$s of %2$s, %3$s skipped	%1$s von %2$s gespeichert, %3$s übersprungen
 Saved %1$s of %2$s, %3$s skipped and the rest cancelled	%1$s von %2$s gespeichert, %3$s übersprungen und der Rest abgebrochen
@@ -1346,6 +1356,7 @@ This video is already saved. Open TikTok to save another copy.	Dieses Video ist 
 This video is already saved	Dieses Video ist bereits gespeichert
 Save again	Erneut speichern
 The saved-video choice couldn't open. Try again.	Die Auswahl zum gespeicherten Video konnte nicht geöffnet werden. Versuch es erneut.
+The saved-video choice is still open	Die Auswahl zum gespeicherten Video ist noch offen
 This video isn't available as a complete file. Try again later.	Dieses Video ist nicht als vollständige Datei verfügbar. Versuch es später erneut.
 Saving video to %1$s	Video wird in %1$s gespeichert
 Video and details saved to %1$s	Video und Details in %1$s gespeichert
@@ -1354,6 +1365,7 @@ The already-saved check failed. Try again.	Die Prüfung bereits gespeicherter Vi
 Show download progress	Downloadfortschritt anzeigen
 Show a progress bar while a video saves.	Beim Speichern eines Videos einen Fortschrittsbalken anzeigen.
 Saving video	Video wird gespeichert
+Waiting to save video	Video wartet auf das Speichern
 Saving video: %1$s	Video wird gespeichert: %1$s
 Saving %1$s of %2$s: %3$s	%1$s von %2$s wird gespeichert: %3$s
 Couldn't save the change. Try again.	Die Änderung konnte nicht gespeichert werden. Versuch es erneut.

@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Every save says it's been taken the moment you ask, sounds, profile pictures, stickers and a live photo's clip included. Hushfeed runs three saves at once and lines up the rest, and a save in line used to show nothing until it started. Now a save with a progress row shows it straight away as waiting, with Cancel to take it out of line, and one without a row says how many saves are ahead of it. Past three rows, a single line counts the rest. Asking again for something already in line says whether it's still waiting or already saving, where it used to do nothing.
 * **TikTok:** On Android 10 and older, tapping the block button over a video, Unblock on its banner or Save media on a sticker no longer closes TikTok. Each of them marked itself busy in a way those Android versions refuse.
 * **TikTok:** Diagnostics can record a screen's layout for a "please hide this" report. Tap Record a screen's layout, go to the screen, and twenty seconds later the next exported report carries how that screen and any sheet over it are built, without any of its text.
 * **TikTok:** The block control, the mute button and Hushfeed's other buttons over the video now show on a video opened from a creator's profile, a hashtag or a sound, and come back to the feed with you. They stayed on the feed behind that screen, where nobody could see them. Mute feed videos mutes those videos too, so the button means what it says there.

@@ -894,6 +894,9 @@ Saving one original photo	Bir orijinal fotoğraf kaydediliyor
 Saving settings backup	Ayar yedeği kaydediliyor
 Saving the sticker	Çıkartma kaydediliyor
 Saving the story	Hikaye kaydediliyor
+Saving the sound	Ses kaydediliyor
+Saving the profile picture	Profil fotoğrafı kaydediliyor
+Saving the live photo's clip	Canlı fotoğraf klibi kaydediliyor
 Screen	Ekran
 Screen time	Ekran süresi
 Search	Arama
@@ -996,6 +999,7 @@ Sticker saved to %1$s	Çıkartma şuraya kaydedildi: %1$s
 Still here. Nothing is waiting.	Hâlâ burada. Bekleyen bir şey yok.
 Still reading the record. Tap again in a moment.	Kayıt hâlâ okunuyor. Birazdan yeniden dokun.
 Still saving the last one	Bir önceki hâlâ kaydediliyor
+The last one is still waiting to start	Bir önceki hâlâ başlamayı bekliyor
 Stop ByteDance AppLog events, AppsFlyer attribution, explicit Firebase screen reports and crash reporting from being sent. TikTok's own diagnostics go quiet with them.	ByteDance AppLog olaylarının, AppsFlyer ilişkilendirmesinin, açık Firebase ekran raporlarının ve çökme raporlarının gönderilmesini durdur. TikTok'un kendi tanılaması da bunlarla birlikte susar.
 Stop TikTok asking the screen to run at the frame rate of the video it's playing. On a 90 or 120 Hz phone that ask slows the whole app down to the video's rate, scrolling included.	TikTok'un ekrandan, oynattığı videonun kare hızında çalışmasını istemesini durdur. 90 veya 120 Hz'lik bir telefonda bu istek, kaydırma dahil tüm uygulamayı videonun hızına düşürür.
 Stop TikTok listening to the accelerometer, gyroscope, magnetometer and the other motion sensors it uses to fingerprint the phone. Saves the battery they wake.	TikTok'un ivmeölçeri, jiroskopu, manyetometreyi ve telefonun parmak izini çıkarmak için kullandığı diğer hareket sensörlerini dinlemesini durdur. Bu sensörlerin uyandıkça harcadığı pili korur.
@@ -1288,6 +1292,12 @@ Swipe left	Sola kaydır
 TikTok default (open the creator's profile)	TikTok varsayılanı (içerik üreticisinin profilini aç)
 Saving %1$s of %2$s	%2$s dosyadan %1$s. kaydediliyor
 Stopping after this file	Bu dosyadan sonra durduruluyor
+Waiting to save %1$s files	%1$s dosya kaydedilmeyi bekliyor
+Save cancelled. Nothing was saved.	Kaydetme iptal edildi. Hiçbir şey kaydedilmedi.
+One more save waiting	Bir kayıt daha bekliyor
+%1$s more saves waiting	%1$s kayıt daha bekliyor
+Starts after one other save	Başka bir kayıttan sonra başlar
+Starts after %1$s other saves	Diğer %1$s kayıttan sonra başlar
 Saved %1$s of %2$s, the rest cancelled	%2$s dosyadan %1$s kaydedildi, kalanlar iptal edildi
 Saved %1$s of %2$s, %3$s skipped	%2$s dosyadan %1$s kaydedildi, %3$s atlandı
 Saved %1$s of %2$s, %3$s skipped and the rest cancelled	%2$s dosyadan %1$s kaydedildi, %3$s atlandı ve kalanlar iptal edildi
@@ -1343,6 +1353,7 @@ This video is already saved. Open TikTok to save another copy.	Bu video zaten ka
 This video is already saved	Bu video zaten kayıtlı
 Save again	Yeniden kaydet
 The saved-video choice couldn't open. Try again.	Kayıtlı video seçenekleri açılamadı. Yeniden deneyin.
+The saved-video choice is still open	Kayıtlı video seçenekleri hâlâ açık
 This video isn't available as a complete file. Try again later.	Bu video tam bir dosya olarak mevcut değil. Daha sonra yeniden deneyin.
 Saving video to %1$s	Video %1$s konumuna kaydediliyor
 Video and details saved to %1$s	Video ve ayrıntılar %1$s konumuna kaydedildi
@@ -1351,6 +1362,7 @@ The already-saved check failed. Try again.	Önceden kaydedilen videolar kontrol 
 Show download progress	İndirme ilerlemesini göster
 Show a progress bar while a video saves.	Video kaydedilirken ilerleme çubuğu gösterir.
 Saving video	Video kaydediliyor
+Waiting to save video	Video kaydedilmeyi bekliyor
 Saving video: %1$s	Video kaydediliyor: %1$s
 Saving %1$s of %2$s: %3$s	%1$s / %2$s kaydediliyor: %3$s
 Couldn't save the change. Try again.	Değişiklik kaydedilemedi. Tekrar dene.

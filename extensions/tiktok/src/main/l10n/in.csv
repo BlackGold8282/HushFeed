@@ -860,6 +860,9 @@ Saving one original photo,Menyimpan satu foto asli
 Saving settings backup,Menyimpan cadangan pengaturan
 Saving the sticker,Menyimpan stiker
 Saving the story,Menyimpan Story
+Saving the sound,Menyimpan suara
+Saving the profile picture,Menyimpan foto profil
+Saving the live photo's clip,Menyimpan klip foto langsung
 Screen,Layar
 Screen time,Waktu layar
 Search,Pencarian
@@ -959,6 +962,7 @@ Sticker saved to %1$s,Stiker disimpan ke %1$s
 Still here. Nothing is waiting.,Masih di sini. Tidak ada yang menunggu.
 Still reading the record. Tap again in a moment.,Catatannya masih dibaca. Ketuk lagi sebentar lagi.
 Still saving the last one,Yang sebelumnya masih disimpan
+The last one is still waiting to start,Yang sebelumnya masih menunggu untuk dimulai
 "Stop ByteDance AppLog events, AppsFlyer attribution, explicit Firebase screen reports and crash reporting from being sent. TikTok's own diagnostics go quiet with them.","Hentikan pengiriman peristiwa AppLog ByteDance, atribusi AppsFlyer, laporan layar Firebase, dan laporan mogok. Diagnostik milik TikTok ikut diam bersamanya."
 "Stop TikTok asking the screen to run at the frame rate of the video it's playing. On a 90 or 120 Hz phone that ask slows the whole app down to the video's rate, scrolling included.","Hentikan TikTok meminta layar berjalan pada laju bingkai video yang sedang diputar. Di ponsel 90 atau 120 Hz, permintaan itu memperlambat seluruh aplikasi sampai ke laju videonya, termasuk saat menggulir."
 "Stop TikTok listening to the accelerometer, gyroscope, magnetometer and the other motion sensors it uses to fingerprint the phone. Saves the battery they wake.","Mencegah TikTok mendengarkan akselerometer, giroskop, magnetometer, dan sensor gerak lain yang dipakainya untuk mengenali ponsel. Menghemat baterai yang mereka bangunkan."
@@ -1286,6 +1290,12 @@ Swipe left,Geser ke kiri
 TikTok default (open the creator's profile),Bawaan TikTok (buka profil kreator)
 Saving %1$s of %2$s,Menyimpan %1$s dari %2$s
 Stopping after this file,Berhenti setelah berkas ini
+Waiting to save %1$s files,Menunggu untuk menyimpan %1$s berkas
+Save cancelled. Nothing was saved.,Penyimpanan dibatalkan. Tidak ada yang disimpan.
+One more save waiting,Satu penyimpanan lagi menunggu
+%1$s more saves waiting,%1$s penyimpanan lagi menunggu
+Starts after one other save,Dimulai setelah satu penyimpanan lain
+Starts after %1$s other saves,Dimulai setelah %1$s penyimpanan lain
 "Saved %1$s of %2$s, the rest cancelled","%1$s dari %2$s tersimpan, sisanya dibatalkan"
 "Saved %1$s of %2$s, %3$s skipped","%1$s dari %2$s tersimpan, %3$s dilewati"
 "Saved %1$s of %2$s, %3$s skipped and the rest cancelled","%1$s dari %2$s tersimpan, %3$s dilewati, dan sisanya dibatalkan"
@@ -1341,6 +1351,7 @@ This video is already saved. Open TikTok to save another copy.,Video ini sudah d
 This video is already saved,Video ini sudah disimpan
 Save again,Simpan lagi
 The saved-video choice couldn't open. Try again.,Pilihan untuk video tersimpan tidak dapat dibuka. Coba lagi.
+The saved-video choice is still open,Pilihan untuk video tersimpan masih terbuka
 This video isn't available as a complete file. Try again later.,Video ini belum tersedia sebagai file lengkap. Coba lagi nanti.
 Saving video to %1$s,Menyimpan video ke %1$s
 Video and details saved to %1$s,Video dan detail disimpan ke %1$s
@@ -1349,6 +1360,7 @@ The already-saved check failed. Try again.,Pemeriksaan video tersimpan gagal. Co
 Show download progress,Tampilkan progres unduhan
 Show a progress bar while a video saves.,Tampilkan bilah progres saat video disimpan.
 Saving video,Menyimpan video
+Waiting to save video,Menunggu untuk menyimpan video
 Saving video: %1$s,Menyimpan video: %1$s
 Saving %1$s of %2$s: %3$s,Menyimpan %1$s dari %2$s: %3$s
 Couldn't save the change. Try again.,Perubahan tidak dapat disimpan. Coba lagi.

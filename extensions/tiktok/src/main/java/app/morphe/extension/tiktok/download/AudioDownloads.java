@@ -62,8 +62,12 @@ final class AudioDownloads {
             Logger.printException(() -> "Could not work out the sound download name", exception);
             return;
         }
-        if (!ACTIVE.add(id)) return;
-        boolean submitted = MediaJobScheduler.submit("sound", () -> {
+        String key = "sound " + id;
+        if (!ACTIVE.add(id)) {
+            Utils.showToastShort(MediaJobScheduler.busyMessage(key));
+            return;
+        }
+        MediaJobScheduler.Job job = MediaJobScheduler.submit("sound", key, () -> {
             File fetched = null;
             try {
                 fetched = MediaCache.createTempFile(app, "sound-source-", ".mp4");
@@ -76,10 +80,10 @@ final class AudioDownloads {
                 if (fetched != null && !MediaCache.delete(fetched)) {
                     Logger.printInfo(() -> "Could not remove sound temporary file");
                 }
-                ACTIVE.remove(id);
             }
-        });
-        if (!submitted) ACTIVE.remove(id);
+        }, () -> ACTIVE.remove(id));
+        String saying = L10n.t("Saving the sound");
+        MediaJobScheduler.acknowledge(job, saying, saying);
     }
 
     /**

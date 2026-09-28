@@ -860,6 +860,9 @@ Saving one original photo	Guardando una foto original
 Saving settings backup	Guardando la copia de seguridad de los ajustes
 Saving the sticker	Guardando el sticker
 Saving the story	Guardando la historia
+Saving the sound	Guardando el sonido
+Saving the profile picture	Guardando la foto de perfil
+Saving the live photo's clip	Guardando el clip de la foto en vivo
 Screen	Pantalla
 Screen time	Tiempo de pantalla
 Search	Búsqueda
@@ -959,6 +962,7 @@ Sticker saved to %1$s	Sticker guardado en %1$s
 Still here. Nothing is waiting.	Sigues aquí. No hay nada esperando.
 Still reading the record. Tap again in a moment.	Todavía se está leyendo el registro. Toca otra vez dentro de un momento.
 Still saving the last one	Todavía se está guardando el anterior
+The last one is still waiting to start	El anterior todavía está esperando para empezar
 Stop ByteDance AppLog events, AppsFlyer attribution, explicit Firebase screen reports and crash reporting from being sent. TikTok's own diagnostics go quiet with them.	Impedir que se envíen los eventos AppLog de ByteDance, la atribución de AppsFlyer, los informes explícitos de pantalla de Firebase y los informes de fallos. Los diagnósticos propios de TikTok se callan con ellos.
 Stop TikTok asking the screen to run at the frame rate of the video it's playing. On a 90 or 120 Hz phone that ask slows the whole app down to the video's rate, scrolling included.	Impedir que TikTok pida que la pantalla funcione a la tasa de fotogramas del vídeo que está reproduciendo. En un móvil de 90 o 120 Hz esa petición ralentiza toda la app hasta la tasa del vídeo, el desplazamiento incluido.
 Stop TikTok listening to the accelerometer, gyroscope, magnetometer and the other motion sensors it uses to fingerprint the phone. Saves the battery they wake.	Impide que TikTok escuche el acelerómetro, el giroscopio, el magnetómetro y los demás sensores de movimiento que usa para identificar el teléfono. Ahorra la batería que consumen.
@@ -1288,6 +1292,12 @@ Swipe left	Deslizar a la izquierda
 TikTok default (open the creator's profile)	Predeterminado de TikTok (abrir el perfil del creador)
 Saving %1$s of %2$s	Guardando %1$s de %2$s
 Stopping after this file	Se detendrá después de este archivo
+Waiting to save %1$s files	Esperando para guardar %1$s archivos
+Save cancelled. Nothing was saved.	Guardado cancelado. No se guardó nada.
+One more save waiting	Un guardado más en espera
+%1$s more saves waiting	%1$s guardados más en espera
+Starts after one other save	Empieza después de otro guardado
+Starts after %1$s other saves	Empieza después de otros %1$s guardados
 Saved %1$s of %2$s, the rest cancelled	Se guardaron %1$s de %2$s, el resto se canceló
 Saved %1$s of %2$s, %3$s skipped	Se guardaron %1$s de %2$s, %3$s omitidos
 Saved %1$s of %2$s, %3$s skipped and the rest cancelled	Se guardaron %1$s de %2$s, %3$s omitidos y el resto cancelado
@@ -1343,6 +1353,7 @@ This video is already saved. Open TikTok to save another copy.	Este video ya est
 This video is already saved	Este video ya está guardado
 Save again	Guardar de nuevo
 The saved-video choice couldn't open. Try again.	No se pudieron abrir las opciones del video guardado. Inténtalo de nuevo.
+The saved-video choice is still open	Las opciones del video guardado siguen abiertas
 This video isn't available as a complete file. Try again later.	Este video no está disponible como archivo completo. Inténtalo más tarde.
 Saving video to %1$s	Guardando video en %1$s
 Video and details saved to %1$s	Video y detalles guardados en %1$s
@@ -1351,6 +1362,7 @@ The already-saved check failed. Try again.	No se pudieron comprobar los videos y
 Show download progress	Mostrar progreso de descarga
 Show a progress bar while a video saves.	Muestra una barra de progreso mientras se guarda un vídeo.
 Saving video	Guardando vídeo
+Waiting to save video	Esperando para guardar el vídeo
 Saving video: %1$s	Guardando vídeo: %1$s
 Saving %1$s of %2$s: %3$s	Guardando %1$s de %2$s: %3$s
 Couldn't save the change. Try again.	No se pudo guardar el cambio. Inténtalo de nuevo.
