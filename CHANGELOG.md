@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** On Android 10 and older, tapping the block button over a video, Unblock on its banner or Save media on a sticker no longer closes TikTok. Each of them marked itself busy in a way those Android versions refuse.
 * **TikTok:** Diagnostics can record a screen's layout for a "please hide this" report. Tap Record a screen's layout, go to the screen, and twenty seconds later the next exported report carries how that screen and any sheet over it are built, without any of its text.
 * **TikTok:** The block control, the mute button and Hushfeed's other buttons over the video now show on a video opened from a creator's profile, a hashtag or a sound, and come back to the feed with you. They stayed on the feed behind that screen, where nobody could see them. Mute feed videos mutes those videos too, so the button means what it says there.
 * **TikTok:** The budget label and the fade before the hold go as soon as you switch to Profile, Inbox or another tab. Only the playing video moved them, so they could stay over those tabs, the fade nearly black. The fade also stops above the tab row now.
