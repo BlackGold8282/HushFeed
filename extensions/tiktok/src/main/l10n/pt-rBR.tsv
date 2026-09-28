@@ -217,7 +217,15 @@ Choose which rows and controls appear	Escolha quais linhas e controles aparecem
 Clear all	Limpar tudo
 Clear all Lab data (overrides, switch, recordings)	Limpar todos os dados do Lab (substituições, interruptor, gravações)
 Clear all suggested accounts	Limpar todas as contas sugeridas
-Clear the recent events, saved crash reports and the hook status above.	Limpa os eventos recentes, os relatórios de falha salvos e o estado dos ganchos acima.
+Clear the recent events, saved crash reports, a recorded screen layout and the hook status above.	Limpa os eventos recentes, os relatórios de falha salvos, um layout de tela gravado e o estado dos ganchos acima.
+Record a screen's layout	Gravar o layout de uma tela
+Tap, then go to the screen with what you want hidden. After %1$d seconds Hushfeed records how that screen is built, without any of its text, for the diagnostic report.	Toque aqui e vá até a tela com o que você quer ocultar. Depois de %1$d segundos, o Hushfeed grava como essa tela é montada, sem nenhum texto dela, para o relatório de diagnóstico.
+Waiting to record. Go to the screen you want recorded.	Aguardando para gravar. Vá até a tela que você quer gravar.
+A screen's layout is recorded. Export the diagnostic report to send it, or tap to record another.	Há um layout de tela gravado. Exporte o relatório de diagnóstico para enviá-lo, ou toque para gravar outro.
+Go to the screen now. Hushfeed records its layout in %1$d seconds.	Vá até a tela agora. O Hushfeed grava o layout dela em %1$d segundos.
+Screen layout recorded. Export the diagnostic report to send it.	Layout da tela gravado. Exporte o relatório de diagnóstico para enviá-lo.
+Nothing was recorded because Hushfeed settings were still open. Start again, then leave settings.	Nada foi gravado porque as configurações do Hushfeed ainda estavam abertas. Comece de novo e depois saia das configurações.
+Couldn't record the screen's layout. Start again from Diagnostics.	Não foi possível gravar o layout da tela. Comece de novo em Diagnóstico.
 Clear diagnostic data	Limpar os dados de diagnóstico
 Clear display	Tela limpa
 Clear display delay	Espera para limpar a tela

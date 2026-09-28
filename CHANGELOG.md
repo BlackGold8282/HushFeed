@@ -2,6 +2,10 @@
 
 Every Hushfeed release, newest first.
 
+## Unreleased
+
+* **TikTok:** Diagnostics can record a screen's layout for a "please hide this" report. Tap Record a screen's layout, go to the screen, and twenty seconds later the next exported report carries how that screen and any sheet over it are built, without any of its text.
+
 ## 0.64.0 (2026-09-28)
 
 * **TikTok:** Hiding buttons in the right column now works on videos opened from a creator's profile, a hashtag or a sound too (#47). Those play in a screen of their own, which the hides never reached, so only the feed lost its Like, Save or Share button.

@@ -220,7 +220,15 @@ Choose which rows and controls appear	Wähle sichtbare Zeilen und Bedienelemente
 Clear all	Alle löschen
 Clear all Lab data (overrides, switch, recordings)	Alle Labordaten löschen (Überschreibungen, Schalter, Aufzeichnungen)
 Clear all suggested accounts	Alle vorgeschlagenen Konten löschen
-Clear the recent events, saved crash reports and the hook status above.	Die letzten Ereignisse, gespeicherte Absturzberichte und den Hook-Status oben löschen.
+Clear the recent events, saved crash reports, a recorded screen layout and the hook status above.	Die letzten Ereignisse, gespeicherte Absturzberichte, ein aufgezeichnetes Bildschirmlayout und den Hook-Status oben löschen.
+Record a screen's layout	Layout eines Bildschirms aufzeichnen
+Tap, then go to the screen with what you want hidden. After %1$d seconds Hushfeed records how that screen is built, without any of its text, for the diagnostic report.	Tippe hier und geh dann zu dem Bildschirm mit dem, was ausgeblendet werden soll. Nach %1$d Sekunden zeichnet Hushfeed auf, wie dieser Bildschirm aufgebaut ist, ohne seinen Text, für den Diagnosebericht.
+Waiting to record. Go to the screen you want recorded.	Warte auf die Aufzeichnung. Geh zu dem Bildschirm, der aufgezeichnet werden soll.
+A screen's layout is recorded. Export the diagnostic report to send it, or tap to record another.	Ein Bildschirmlayout ist aufgezeichnet. Exportiere den Diagnosebericht, um es zu senden, oder tippe, um ein anderes aufzuzeichnen.
+Go to the screen now. Hushfeed records its layout in %1$d seconds.	Geh jetzt zu dem Bildschirm. Hushfeed zeichnet sein Layout in %1$d Sekunden auf.
+Screen layout recorded. Export the diagnostic report to send it.	Bildschirmlayout aufgezeichnet. Exportiere den Diagnosebericht, um es zu senden.
+Nothing was recorded because Hushfeed settings were still open. Start again, then leave settings.	Es wurde nichts aufgezeichnet, weil die Hushfeed-Einstellungen noch offen waren. Starte erneut und verlasse dann die Einstellungen.
+Couldn't record the screen's layout. Start again from Diagnostics.	Das Layout des Bildschirms konnte nicht aufgezeichnet werden. Starte erneut unter Diagnose.
 Clear diagnostic data	Diagnosedaten löschen
 Clear display	Freie Ansicht
 Clear display delay	Verzögerung der freien Ansicht

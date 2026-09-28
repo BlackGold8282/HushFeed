@@ -216,7 +216,15 @@ Choose which rows and controls appear,Pilih baris dan kontrol yang muncul
 Clear all,Hapus semua
 "Clear all Lab data (overrides, switch, recordings)","Hapus semua data Lab (penggantian, sakelar, rekaman)"
 Clear all suggested accounts,Hapus semua akun yang disarankan
-"Clear the recent events, saved crash reports and the hook status above.","Hapus peristiwa terbaru, laporan crash yang tersimpan, dan status hook di atas."
+"Clear the recent events, saved crash reports, a recorded screen layout and the hook status above.","Hapus peristiwa terbaru, laporan crash yang tersimpan, tata letak layar yang direkam, dan status hook di atas."
+Record a screen's layout,Rekam tata letak layar
+"Tap, then go to the screen with what you want hidden. After %1$d seconds Hushfeed records how that screen is built, without any of its text, for the diagnostic report.","Ketuk, lalu buka layar yang berisi hal yang ingin kamu sembunyikan. Setelah %1$d detik Hushfeed merekam susunan layar itu, tanpa teksnya sama sekali, untuk laporan diagnostik."
+Waiting to record. Go to the screen you want recorded.,Menunggu untuk merekam. Buka layar yang ingin kamu rekam.
+"A screen's layout is recorded. Export the diagnostic report to send it, or tap to record another.","Tata letak sebuah layar sudah direkam. Ekspor laporan diagnostik untuk mengirimnya, atau ketuk untuk merekam yang lain."
+Go to the screen now. Hushfeed records its layout in %1$d seconds.,Buka layarnya sekarang. Hushfeed merekam tata letaknya dalam %1$d detik.
+Screen layout recorded. Export the diagnostic report to send it.,Tata letak layar direkam. Ekspor laporan diagnostik untuk mengirimnya.
+"Nothing was recorded because Hushfeed settings were still open. Start again, then leave settings.","Tidak ada yang direkam karena pengaturan Hushfeed masih terbuka. Mulai lagi, lalu keluar dari pengaturan."
+Couldn't record the screen's layout. Start again from Diagnostics.,Tata letak layar tidak dapat direkam. Mulai lagi dari Diagnostik.
 Clear diagnostic data,Hapus data diagnostik
 Clear display,Tampilan bersih
 Clear display delay,Jeda tampilan bersih

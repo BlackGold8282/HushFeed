@@ -222,7 +222,15 @@ Choose which rows and controls appear	Hangi satırların ve kontrollerin görün
 Clear all	Tümünü temizle
 Clear all Lab data (overrides, switch, recordings)	Tüm Lab verilerini temizle (geçersiz kılmalar, anahtar, kayıtlar)
 Clear all suggested accounts	Önerilen tüm hesapları temizle
-Clear the recent events, saved crash reports and the hook status above.	Son olayları, kaydedilen çökme raporlarını ve yukarıdaki kanca durumunu temizle.
+Clear the recent events, saved crash reports, a recorded screen layout and the hook status above.	Son olayları, kaydedilen çökme raporlarını, kaydedilmiş bir ekran düzenini ve yukarıdaki kanca durumunu temizle.
+Record a screen's layout	Bir ekranın düzenini kaydet
+Tap, then go to the screen with what you want hidden. After %1$d seconds Hushfeed records how that screen is built, without any of its text, for the diagnostic report.	Dokun, sonra gizlemek istediğin şeyin olduğu ekrana git. %1$d saniye sonra Hushfeed o ekranın nasıl kurulduğunu, metnini almadan, tanılama raporu için kaydeder.
+Waiting to record. Go to the screen you want recorded.	Kayıt bekleniyor. Kaydedilmesini istediğin ekrana git.
+A screen's layout is recorded. Export the diagnostic report to send it, or tap to record another.	Bir ekran düzeni kaydedildi. Göndermek için tanılama raporunu dışa aktar ya da başka birini kaydetmek için dokun.
+Go to the screen now. Hushfeed records its layout in %1$d seconds.	Şimdi ekrana git. Hushfeed %1$d saniye içinde düzenini kaydeder.
+Screen layout recorded. Export the diagnostic report to send it.	Ekran düzeni kaydedildi. Göndermek için tanılama raporunu dışa aktar.
+Nothing was recorded because Hushfeed settings were still open. Start again, then leave settings.	Hushfeed ayarları hâlâ açık olduğu için hiçbir şey kaydedilmedi. Yeniden başlat, sonra ayarlardan çık.
+Couldn't record the screen's layout. Start again from Diagnostics.	Ekranın düzeni kaydedilemedi. Tanılama bölümünden yeniden başlat.
 Clear diagnostic data	Tanılama verilerini temizle
 Clear display	Temiz ekran
 Clear display delay	Temiz ekran gecikmesi
