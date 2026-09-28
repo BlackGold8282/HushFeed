@@ -5,6 +5,7 @@ Every Hushfeed release, newest first.
 ## Unreleased
 
 * **TikTok:** Diagnostics can record a screen's layout for a "please hide this" report. Tap Record a screen's layout, go to the screen, and twenty seconds later the next exported report carries how that screen and any sheet over it are built, without any of its text.
+* **TikTok:** The block control, the mute button and Hushfeed's other buttons over the video now show on a video opened from a creator's profile, a hashtag or a sound, and come back to the feed with you. They stayed on the feed behind that screen, where nobody could see them. Mute feed videos mutes those videos too, so the button means what it says there.
 
 ## 0.64.0 (2026-09-28)
 

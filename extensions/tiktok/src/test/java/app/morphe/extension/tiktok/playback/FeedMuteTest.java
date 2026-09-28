@@ -146,6 +146,29 @@ public class FeedMuteTest {
         assertEquals("an unmuted feed engine is left alone", List.of(), calls);
     }
 
+    /**
+     * A video opened from a profile, a hashtag or a sound plays in the detail pager, which draws
+     * the mute button too. What the button says has to hold there.
+     */
+    @Test public void aDetailPagerVideoFollowsTheMuteButton() {
+        Settings.FEED_MUTED.save(true);
+        ActivityController<com.ss.android.ugc.aweme.detail.ui.DetailActivity> pager =
+                Robolectric.buildActivity(com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).setup();
+        try {
+            Object engine = engine("pager", "301");
+            FeedMute.onControllerPlay(new Controller(pager.get()), video("301"));
+            FeedMute.onEnginePlay(engine);
+            assertEquals(List.of("pager mute"), calls);
+            assertTrue(FeedMute.isHoldingFocus());
+
+            calls.clear();
+            FeedMute.setMuted(false);
+            assertEquals(List.of("pager sound"), calls);
+        } finally {
+            pager.pause().stop().destroy();
+        }
+    }
+
     @Test public void videosTheFeedDidNotAskForKeepTheirSound() {
         Settings.FEED_MUTED.save(true);
         // A DM chat's video: no feed controller asked for it.

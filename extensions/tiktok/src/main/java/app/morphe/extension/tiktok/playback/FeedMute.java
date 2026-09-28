@@ -11,6 +11,7 @@ import android.os.Bundle;
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.shared.diagnostics.HookStatus;
+import app.morphe.extension.tiktok.blockauthor.FeedVisibility;
 import app.morphe.extension.tiktok.blockauthor.Reflect;
 import app.morphe.extension.tiktok.feedfilter.LiveFilter;
 import app.morphe.extension.tiktok.settings.L10n;
@@ -87,11 +88,11 @@ public final class FeedMute {
         followed = new WeakReference<>(application);
         application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override public void onActivityResumed(Activity resumed) {
-                if (resumed.getClass() == feedActivity) feedInFront = true;
+                if (isFeedHost(resumed)) feedInFront = true;
             }
 
             @Override public void onActivityPaused(Activity paused) {
-                if (paused.getClass() == feedActivity) feedInFront = false;
+                if (isFeedHost(paused)) feedInFront = false;
             }
 
             @Override public void onActivityCreated(Activity created, Bundle state) { }
@@ -162,12 +163,20 @@ public final class FeedMute {
         }
     }
 
-    /** A video on the feed's own activity, not a story and not LIVE. */
+    /**
+     * The feed's own activity, or the detail pager a video from a profile, a hashtag or a sound
+     * plays in. The mute button is drawn there too, so what it says has to hold there.
+     */
+    static boolean isFeedHost(Object host) {
+        Class<?> feed = feedActivity;
+        return host != null && feed != null
+                && (host.getClass() == feed || FeedVisibility.isDetailPager(host));
+    }
+
+    /** A video on the feed or a detail pager, not a story and not LIVE. */
     static boolean isFeedPlay(Object controller, Object aweme) {
         if (!(aweme instanceof Aweme)) return false;
-        Object host = Reflect.readField(controller, "activity");
-        Class<?> feed = feedActivity;
-        if (host == null || feed == null || host.getClass() != feed) return false;
+        if (!isFeedHost(Reflect.readField(controller, "activity"))) return false;
         Aweme item = (Aweme) aweme;
         if (item.getIsTikTokStory()) return false;
         int type = item.getAwemeType();
