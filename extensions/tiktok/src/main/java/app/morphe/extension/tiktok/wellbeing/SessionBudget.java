@@ -202,28 +202,21 @@ public final class SessionBudget {
      *
      * <p>Nothing is added while a hold is running: the feed is behind the overlay, and charging
      * someone for a video they cannot see would empty tomorrow's budget as well as today's.
-     *
-     * @return true on the report that took the time budget from under its limit to over it. A
-     *         long or looping video can run out the budget halfway through, and the hold is due
-     *         then rather than at the next video, which may be minutes away.
      */
-    public static boolean noteWatching() {
-        if (!counting()) return false;
+    public static void noteWatching() {
+        if (!counting()) return;
         synchronized (LOCK) {
             load();
             long now = clock.now();
             rollOver(now);
             long since = lastTickMs == 0 ? 0 : now - lastTickMs;
             lastTickMs = now;
-            if (since <= 0 || since > MAX_TICK_MS) return false;
-            if (lockUntilMs > now) return false;
-            long limit = Settings.SESSION_BUDGET_MINUTES.get() * 60_000L;
-            boolean under = limit > 0 && watchedMs < limit;
+            if (since <= 0 || since > MAX_TICK_MS) return;
+            if (lockUntilMs > now) return;
             watchedMs += since;
             // Committed in steps: a record on every callback is a blocking write several times
             // a second, and losing at most half a minute to a kill is a fair trade for that.
             if (watchedMs - writtenWatchedMs >= WRITE_EVERY_MS) save();
-            return under && watchedMs >= limit;
         }
     }
 
