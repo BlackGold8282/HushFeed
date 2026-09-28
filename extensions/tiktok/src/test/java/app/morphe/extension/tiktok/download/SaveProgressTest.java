@@ -196,6 +196,37 @@ public class SaveProgressTest {
         }
     }
 
+    /**
+     * Three saves started on a creator's video keep running after it closes, their rows left on
+     * its dead views. Those rows took the three places, so a save started back on the feed got
+     * no row, and the line counting it went onto the closed screen.
+     */
+    @Test public void rowsLeftOnAClosedScreenDontHideTheNextSavesRow() {
+        var closed = Robolectric.buildActivity(SaveNoticeTest.HostActivity.class).setup().visible();
+        Utils.setActivity(closed.get());
+        List<SaveProgress> left = new ArrayList<>();
+        for (int index = 0; index < SaveProgress.MAX_ROWS; index++) left.add(SaveProgress.begin(3));
+        settle();
+        closed.get().finish();
+        closed.pause().stop().destroy();
+        idle();
+        try (var owner = Robolectric.buildActivity(SaveNoticeTest.HostActivity.class).setup().visible()) {
+            Activity feed = owner.get();
+            Utils.setActivity(feed);
+            ViewGroup root = feed.findViewById(android.R.id.content);
+            SaveProgress next = SaveProgress.begin(4);
+            settle();
+            View row = root.findViewWithTag("hushfeed_save_progress");
+            assertNotNull("the feed's save has a row", row);
+            assertEquals("and it can be seen", View.VISIBLE, row.getVisibility());
+            assertNull("no line counts rows nobody can see", root.findViewWithTag("hushfeed_save_waiting"));
+            next.run(index -> { });
+            for (SaveProgress progress : left) progress.run(index -> { });
+            idle();
+            assertNull(root.findViewWithTag("hushfeed_save_progress"));
+        }
+    }
+
     @Test public void aSaveOverInsideTheSheetWaitNeverShowsARow() {
         try (var owner = Robolectric.buildActivity(SaveNoticeTest.HostActivity.class).setup().visible()) {
             Activity activity = owner.get();

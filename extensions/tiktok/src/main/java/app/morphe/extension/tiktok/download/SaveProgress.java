@@ -409,7 +409,10 @@ final class SaveProgress {
         View highest = null;
         int aboveHighest = 0;
         for (View view : LIVE_ROWS) {
-            if (!(view.getParent() instanceof ViewGroup)) continue;
+            // A row left on a screen that has closed (rehome gives up on a finishing activity)
+            // can't be seen, so it takes no place: counted, it kept a new save's row out of sight
+            // behind rows nobody could see until their saves ended.
+            if (!(view.getParent() instanceof ViewGroup) || !view.isAttachedToWindow()) continue;
             if (shown == MAX_ROWS) {
                 view.setVisibility(View.GONE);
                 hidden++;
