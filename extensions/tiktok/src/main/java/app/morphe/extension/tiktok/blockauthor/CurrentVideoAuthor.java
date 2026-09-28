@@ -124,10 +124,14 @@ public final class CurrentVideoAuthor {
         // lowers it, and the notice and the hold are due then: left to the next video change, a
         // long or looping one played on past the budget. claimNotice answers once per spent
         // budget and re-arms itself when a raised budget puts the reader under it again.
-        long now = SessionBudget.now();
-        if (now - lastClaimAskedAt >= CLAIM_EVERY_MS || now < lastClaimAskedAt) {
-            lastClaimAskedAt = now;
-            if (SessionBudget.claimNotice()) SessionBudgetNotice.show();
+        // Only while a budget counts: with none set there is nothing to run out, and the video
+        // change still asks, which is what lets a removed budget's hold go.
+        if (SessionBudget.isCounting()) {
+            long now = SessionBudget.now();
+            if (now - lastClaimAskedAt >= CLAIM_EVERY_MS || now < lastClaimAskedAt) {
+                lastClaimAskedAt = now;
+                if (SessionBudget.claimNotice()) SessionBudgetNotice.show();
+            }
         }
         SessionLockOverlay.ensureRunning();
         // Follows the budget rather than a clock of its own, so it is redrawn from the same
