@@ -216,7 +216,11 @@ public final class BlockAuthorOverlay {
         followed = new WeakReference<>(application);
         application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override public void onActivityResumed(Activity resumed) {
-                if (!FeedVisibility.isFeedWindow(resumed) || buttonReference.get() == null) return;
+                // Whether the controls are wanted, not whether a view is held: the pager's views
+                // can be collected by the time the reader is back, and a weak handle that came
+                // back empty left the feed without controls until the next swipe.
+                if (!FeedVisibility.isFeedWindow(resumed)) return;
+                if (!Settings.BLOCK_AUTHOR_BUTTON.get() && !notInterestedEnabled() && !muteButtonEnabled()) return;
                 VideoAuthor author = CurrentVideoAuthor.get();
                 if (author != null) attach(author, resumed);
             }

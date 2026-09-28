@@ -113,7 +113,10 @@ public final class FeedMute {
             }
 
             @Override public void onActivityCreated(Activity created, Bundle state) { }
-            @Override public void onActivityStarted(Activity started) { }
+            // A pager's first video can start its engine before the pager resumes.
+            @Override public void onActivityStarted(Activity started) {
+                if (isFeedHost(started)) feedInFront = true;
+            }
             @Override public void onActivityStopped(Activity stopped) { }
             @Override public void onActivitySaveInstanceState(Activity activity, Bundle state) { }
             @Override public void onActivityDestroyed(Activity destroyed) { }
