@@ -174,7 +174,10 @@ public final class BlockAuthorOverlay {
         if (feedback != null) feedback.setVisibility(visible && notInterestedEnabled() ? View.VISIBLE : View.GONE);
         View mute = muteReference.get();
         if (mute != null) {
-            mute.setVisibility(visible && muteButtonEnabled() ? View.VISIBLE : View.GONE);
+            // Not over a story or a LIVE replay, which play with their sound whatever it says.
+            VideoAuthor playing = CurrentVideoAuthor.get();
+            boolean governed = FeedMute.appliesTo(playing == null ? null : playing.awemeId);
+            mute.setVisibility(visible && muteButtonEnabled() && governed ? View.VISIBLE : View.GONE);
             showMuteState(mute);
         }
     }

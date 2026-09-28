@@ -9,6 +9,7 @@ Every Hushfeed release, newest first.
 * **TikTok:** The budget label and the fade before the hold go as soon as you switch to Profile, Inbox or another tab. Only the playing video moved them, so they could stay over those tabs, the fade nearly black. The fade also stops above the tab row now.
 * **TikTok:** When the time budget runs out partway through a long video, the notice and the hold come right then. They waited for the next video, so a long or looping one could play well past the budget.
 * **TikTok:** New row under Downloads, Forget saved videos. It empties the record behind the already-saved check, keeps the files and your settings, and offers Undo while its notice is up. A save that was already running when you forgot doesn't add itself back.
+* **TikTok:** Mute feed videos leaves another app's music playing in two more cases. Turning mute on from the settings page now gives the sound back when you return to the feed, and turning the sound back on while a video is paused makes the feed ask for it when it plays again, rather than playing over the other app. The mute button also stays off stories and LIVE replays, which keep their sound.
 
 ## 0.64.0 (2026-09-28)
 
