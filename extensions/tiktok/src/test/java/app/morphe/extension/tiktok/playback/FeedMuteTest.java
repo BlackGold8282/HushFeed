@@ -296,6 +296,37 @@ public class FeedMuteTest {
         other.pause().stop().destroy();
     }
 
+    /**
+     * Most feed videos start by routes the PlayerController play doesn't hear (S25, 47.1.3,
+     * 2026-09-29: three swipes in four left no note). The feed's current video, as the block
+     * button tracks it, notes each one instead, in either order with the engine.
+     */
+    @Test public void aFeedVideoStartedWithoutTheControllersPlayIsMutedAsTheCurrentVideo() {
+        Settings.FEED_MUTED.save(true);
+        FeedMute.onEnginePlay(engine("A", "801"));
+        FeedMute.onCurrentVideo(video("801"));
+        assertEquals(List.of("A mute"), calls);
+
+        FeedMute.onCurrentVideo(aweme("802", 150, false, 0));
+        FeedMute.onEnginePlay(engine("photo", "802"));
+        assertEquals(List.of("A mute", "photo mute"), calls);
+
+        // A story or a LIVE in the feed keeps its sound, and the focus goes to it.
+        calls.clear();
+        FeedMute.onEnginePlay(engine("story", "803"));
+        FeedMute.onCurrentVideo(story("803"));
+        FeedMute.onCurrentVideo(live("804"));
+        FeedMute.onEnginePlay(engine("live", "804"));
+        assertEquals(List.of(), calls);
+        assertFalse("a LIVE in front had its focus turned down", FeedMute.holdPageFocus("P"));
+
+        // With another screen over the feed, the current video is nothing to mute.
+        feed.pause();
+        FeedMute.onEnginePlay(engine("other", "805"));
+        FeedMute.onCurrentVideo(video("805"));
+        assertEquals(List.of(), calls);
+    }
+
     @Test public void anEnginePreparedAheadWhileUnmutedIsMutedByTheButtonLater() {
         FeedMute.onEnginePlay(engine("A", "721"));
         FeedMute.onControllerPlay(new Controller(feed.get()), video("721"));

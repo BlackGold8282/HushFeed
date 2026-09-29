@@ -197,6 +197,9 @@ public final class CurrentVideoAuthor {
 
             if (item != null && item.aweme != null) {
                 CurrentVideoSound.update(item.aweme);
+                // Mute feed videos hears only one of the routes TikTok starts a feed video by;
+                // this change is the one every route passes.
+                app.morphe.extension.tiktok.playback.FeedMute.onCurrentVideo(item.aweme);
             } else {
                 CurrentVideoSound.clear();
             }

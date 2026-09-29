@@ -234,11 +234,38 @@ public final class FeedMute {
                 && (host.getClass() == feed || FeedVisibility.isDetailPager(host));
     }
 
+    /**
+     * The feed's current video, as the block button's tracking names it on each change. TikTok
+     * starts most feed videos through routes other than the PlayerController play heard above
+     * (S25, 47.1.3, 2026-09-29: three swipes in four left no note, so their engines kept their
+     * sound), and this tracking follows every one of them. Main or player thread.
+     */
+    public static void onCurrentVideo(Object aweme) {
+        if (!SettingsStatus.feedMuteEnabled || !(aweme instanceof Aweme)) return;
+        try {
+            String id = ((Aweme) aweme).getAid();
+            if (id == null || id.isEmpty()) return;
+            boolean feed = feedInFront && isFeedItem((Aweme) aweme);
+            lastPlayFeed = feed;
+            synchronized (PLAYS) {
+                PLAYS.put(id, feed);
+            }
+            settle(id, feed);
+            HookStatus.bound(HOOK_FAMILY, "current video");
+        } catch (Throwable failure) {
+            HookStatus.threw(HOOK_FAMILY, "current video", failure);
+        }
+    }
+
     /** A video on the feed or a detail pager, not a story and not LIVE. */
     static boolean isFeedPlay(Object controller, Object aweme) {
         if (!(aweme instanceof Aweme)) return false;
         if (!isFeedHost(Reflect.readField(controller, "activity"))) return false;
-        Aweme item = (Aweme) aweme;
+        return isFeedItem((Aweme) aweme);
+    }
+
+    /** Not a story and not LIVE: what the button governs, wherever the item came from. */
+    private static boolean isFeedItem(Aweme item) {
         if (item.getIsTikTokStory()) return false;
         int type = item.getAwemeType();
         if (type == STORY_TYPE || type == STORY_TYPE_SHARED) return false;
