@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Resource and battery governor's description no longer claims a battery saving that was never measured. It says which sensors it stops TikTok listening to.
 * **TikTok:** The README and the patch descriptions in Morphe Manager now give measured numbers for the optional trimming patches instead of adjectives: the storage each one saves, and what they did to memory use on a Galaxy S22 (alone or all together, nothing beyond the run-to-run spread, apart from about 13 MB less loaded code with all of them on).
 * **TikTok:** AMOLED dark theme's description and the README no longer say it needs a 768 MB memory limit to patch. Measured on two phones, it still finishes at 640 MB, just slower, so 768 MB or more is now advice rather than a requirement.
 * **TikTok:** The keyboard no longer rewrites an app's package name in Send links to another app, or a host in Share links through another host. A keyboard like SwiftKey used to capitalize it and add a space after every dot, so com.dv.adm came out as "Com. Dv. Adm" and the field refused it. The fields for handles, country and language codes, sound ids, filename templates and speeds get the same plain keyboard.

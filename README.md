@@ -228,7 +228,7 @@ The eleven optional patches in the Performance group were measured on a Galaxy S
 | `Remove LIVE extras` | Empties TikTok's link-mic and LIVE match or minigame assets, then skips its gift-effect widget setup. Co-hosting, games and animated gifts may stop. The APK gets about 3 MB smaller. |
 | `Remove unused language packs` | Empties unselected TikTok language bundles while always keeping English. Selected language codes are checked before any file changes. With the default choices it saves about 26 MB of storage. |
 | `Repost diagnostics` | With diagnostic logging on, records a repost request, TikTok's answer, and the next repost-list read without recording the video's ID or note. |
-| `Resource and battery governor` | Stops TikTok listening to the motion sensors it polls for device fingerprinting: the accelerometer, gyroscope, magnetometer, rotation, gravity and linear acceleration sensors. Saves the battery they wake. Switch: Hushfeed settings > Privacy. |
+| `Resource and battery governor` | Stops TikTok listening to the motion sensors it polls for device fingerprinting: the accelerometer, gyroscope, magnetometer, rotation, gravity and linear acceleration sensors. Switch: Hushfeed settings > Privacy. |
 | `Resume videos after scrolling` | Continues supported videos from where playback stopped when returning after a scroll. Switch: Hushfeed settings > App. |
 | `Sanitize sharing links` | Removes tracking parameters from TikTok links before they are shared, and can put a host of your choosing in place of tiktok.com. Switch: Hushfeed settings > Privacy. |
 | `Settings` | Adds the Hushfeed settings screen to TikTok and keeps its entry first in Settings and privacy. |
