@@ -60,6 +60,15 @@ public final class FeedMute {
     };
     /** Engines that played a feed video, so a mute switched on mid-video reaches them. */
     private static final WeakHashMap<Object, Boolean> FEED_ENGINES = new WeakHashMap<>();
+    /**
+     * Every engine seen playing. TikTok prepares the next videos ahead, and an engine's play()
+     * runs while it prepares, before the controller has asked for that video; when the video
+     * comes on, the engine often starts without play() again. Deciding at play() alone missed
+     * every such engine (S22 and S25, 2026-09-29: no feed engine was ever muted, so a feed
+     * video on 47.1.3 and a photo post on 47.0.3 kept their sound). The controller's ask settles
+     * the engines already prepared for its video.
+     */
+    private static final WeakHashMap<Object, Boolean> ENGINES = new WeakHashMap<>();
     /** Engines this muted, with the mute TikTok had on them before. */
     private static final WeakHashMap<Object, Boolean> MUTED = new WeakHashMap<>();
     /** Focus helpers seen asking for focus for a feed video. */
@@ -207,6 +216,7 @@ public final class FeedMute {
                 synchronized (PLAYS) {
                     PLAYS.put(id, feed);
                 }
+                settle(id, feed && feedInFront);
             }
             HookStatus.bound(HOOK_FAMILY, "controller play");
         } catch (Throwable failure) {
@@ -239,10 +249,28 @@ public final class FeedMute {
     private static final int STORY_TYPE = 40;
     private static final int STORY_TYPE_SHARED = 45;
 
+    /**
+     * Engines already prepared for the video a controller just asked for, whose play() came
+     * before the ask, take the answer that play() would have got.
+     */
+    private static void settle(String id, boolean feed) {
+        for (Object engine : keys(ENGINES)) {
+            if (!id.equals(engineSourceId(engine))) continue;
+            synchronized (FEED_ENGINES) {
+                if (feed) FEED_ENGINES.put(engine, Boolean.TRUE);
+                else FEED_ENGINES.remove(engine);
+            }
+            apply(engine);
+        }
+    }
+
     /** The top of the feed engine's play(), on its player thread. */
     public static void onEnginePlay(Object engine) {
         if (engine == null || !SettingsStatus.feedMuteEnabled) return;
         try {
+            synchronized (ENGINES) {
+                ENGINES.put(engine, Boolean.TRUE);
+            }
             String id = engineSourceId(engine);
             Boolean feed = null;
             if (id != null) {
@@ -386,7 +414,7 @@ public final class FeedMute {
         synchronized (PLAYS) {
             PLAYS.clear();
         }
-        for (WeakHashMap<Object, Boolean> map : Arrays.asList(FEED_ENGINES, MUTED, SESSION_HELPERS, PAGE_HELPERS)) {
+        for (WeakHashMap<Object, Boolean> map : Arrays.asList(ENGINES, FEED_ENGINES, MUTED, SESSION_HELPERS, PAGE_HELPERS)) {
             synchronized (map) {
                 map.clear();
             }

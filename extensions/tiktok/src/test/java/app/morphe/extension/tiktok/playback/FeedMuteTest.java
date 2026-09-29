@@ -258,6 +258,52 @@ public class FeedMuteTest {
         assertEquals(List.of("A mute", "A sound"), calls);
     }
 
+    /**
+     * TikTok prepares the next videos ahead, and an engine's play() runs while it prepares,
+     * before the controller asks for that video; when the video comes on, the engine often
+     * starts without play() again. Every test above had the ask first, and on both phones no
+     * feed engine was ever muted (2026-09-29: a feed video on 47.1.3 and a photo post on 47.0.3
+     * kept their sound with the mute on).
+     */
+    @Test public void anEnginePreparedBeforeTheFeedAskedForItIsStillMuted() {
+        Settings.FEED_MUTED.save(true);
+        FeedMute.onEnginePlay(engine("A", "701"));
+        assertEquals("nothing is known about the video yet", List.of(), calls);
+        FeedMute.onControllerPlay(new Controller(feed.get()), video("701"));
+        assertEquals(List.of("A mute"), calls);
+
+        // A one-photo post with a sound plays its music on the same engines.
+        FeedMute.onEnginePlay(engine("photo", "702"));
+        FeedMute.onControllerPlay(new Controller(feed.get()), aweme("702", 150, false, 0));
+        assertEquals(List.of("A mute", "photo mute"), calls);
+
+        calls.clear();
+        FeedMute.setMuted(false);
+        assertTrue(calls.toString(), calls.contains("A sound"));
+        assertTrue(calls.toString(), calls.contains("photo sound"));
+    }
+
+    @Test public void anEnginePreparedAheadForAStoryALiveOrAnotherScreenKeepsItsSound() {
+        Settings.FEED_MUTED.save(true);
+        FeedMute.onEnginePlay(engine("story", "711"));
+        FeedMute.onControllerPlay(new Controller(feed.get()), story("711"));
+        FeedMute.onEnginePlay(engine("live", "712"));
+        FeedMute.onControllerPlay(new Controller(feed.get()), live("712"));
+        ActivityController<OtherScreen> other = Robolectric.buildActivity(OtherScreen.class).setup();
+        FeedMute.onEnginePlay(engine("detail", "713"));
+        FeedMute.onControllerPlay(new Controller(other.get()), video("713"));
+        assertEquals(List.of(), calls);
+        other.pause().stop().destroy();
+    }
+
+    @Test public void anEnginePreparedAheadWhileUnmutedIsMutedByTheButtonLater() {
+        FeedMute.onEnginePlay(engine("A", "721"));
+        FeedMute.onControllerPlay(new Controller(feed.get()), video("721"));
+        assertEquals(List.of(), calls);
+        FeedMute.setMuted(true);
+        assertTrue(calls.toString(), calls.contains("A mute"));
+    }
+
     @Test public void aVideoSeenInTheFeedKeepsSoundWhenOpenedFromAnotherScreen() {
         Settings.FEED_MUTED.save(true);
         FeedMute.onControllerPlay(new Controller(feed.get()), video("305"));
