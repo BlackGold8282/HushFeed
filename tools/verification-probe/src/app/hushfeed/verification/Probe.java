@@ -2279,10 +2279,10 @@ public final class Probe extends Instrumentation {
                         return "could not write " + file.getName() + ": " + error;
                     }
                 }
-                if (!dayOld.setLastModified(now - 48L * 3_600_000L)
-                        || !hourOld.setLastModified(now - 3_600_000L)) {
-                    return "could not age the files";
-                }
+                // Both, whatever the first answers, so a failure leaves neither at "now".
+                boolean agedDay = dayOld.setLastModified(now - 48L * 3_600_000L);
+                boolean agedHour = hourOld.setLastModified(now - 3_600_000L);
+                if (!agedDay || !agedHour) return "could not age the files";
             } else if ("clear".equals(op)) {
                 dayOld.delete();
                 hourOld.delete();
