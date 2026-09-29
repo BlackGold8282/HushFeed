@@ -8,6 +8,7 @@ package app.morphe.extension.tiktok.settings.preference.categories;
 
 import android.content.Context;
 import android.preference.PreferenceScreen;
+import android.text.InputType;
 
 import app.morphe.extension.tiktok.offline.CustomOfflineVideosLimitPatch;
 import app.morphe.extension.tiktok.settings.L10n;
@@ -158,13 +159,19 @@ public class DownloadsPreferenceCategory extends ConditionalPreferenceCategory {
         }
         if (SettingsStatus.advancedDownloadsEnabled) {
             addPreference(new SectionHeadingPreference(context, "Hand-off"));
-            addPreference(new InputTextPreference(
+            InputTextPreference downloader = new InputTextPreference(
                     context,
                     "Send links to another app",
                     "An app's package name, like com.dv.adm. The save button sends the video's "
                             + "link there instead of saving it here. Leave it empty to save here.",
                     Settings.EXTERNAL_DOWNLOADER_PACKAGE)
-                    .withCheck(value -> ExternalDownloader.packageNameProblem(value.trim())));
+                    .withCheck(value -> ExternalDownloader.packageNameProblem(value.trim()));
+            // A package name has to match exactly, and a keyboard left to treat it as prose
+            // capitalized it, spaced it after each dot and autocorrected it: com.dv.adm came out
+            // as "Com. Dv. Adm", which the check then refuses (S25, SwiftKey).
+            downloader.getEditText().setInputType(InputType.TYPE_CLASS_TEXT
+                    | InputType.TYPE_TEXT_VARIATION_URI | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+            addPreference(downloader);
             ChoicePreference ytdlnisType = new ChoicePreference(context, "YTDLnis download type",
                     Settings.YTDLNIS_DOWNLOAD_TYPE, new String[]{"Video", "Audio"},
                     new String[]{"video", "audio"});

@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The keyboard no longer rewrites an app's package name in Send links to another app, or a host in Share links through another host. A keyboard like SwiftKey used to capitalize it and add a space after every dot, so com.dv.adm came out as "Com. Dv. Adm" and the field refused it.
 * **TikTok:** A list or text setting saved right as you left the settings screen could keep its old value until TikTok restarted, even though the row and the saved file both already showed the new one. Closing a dialog is its own step after the tap on OK, and leaving the screen a beat too soon used to skip past it.
 * **TikTok:** When TikTok closes in the middle of a save, the next time you open it a banner says which saves didn't finish, or might not have, and how many of their files are missing. Files that already reached your gallery count as saved, and nothing restarts on its own, so save it again if you still want it. If another message covers the banner before its time is up, it comes back the next time you open TikTok. The start-up cleanup of half-written files from a day or more ago also runs now. It was meant to run every time TikTok started but never did.
 * **TikTok:** A save's progress row sitting on one of TikTok's pop-up sheets could close TikTok when the save ended or a second row came up. It stays where the sheet puts it now.

@@ -6,6 +6,7 @@ package app.morphe.extension.tiktok.settings.preference.categories;
 
 import android.content.Context;
 import android.preference.PreferenceScreen;
+import android.text.InputType;
 
 import app.morphe.extension.shared.settings.BaseSettings;
 import app.morphe.extension.tiktok.settings.Settings;
@@ -149,14 +150,19 @@ public final class PrivacyPreferenceCategory extends ConditionalPreferenceCatego
                     "Remove tracking parameters from shared links.",
                     BaseSettings.SANITIZE_SHARING_LINKS
             ));
-            addPreference(new InputTextPreference(
+            InputTextPreference host = new InputTextPreference(
                     context,
                     "Share links through another host",
                     "A host to put in place of tiktok.com when you share or copy a link, like "
                             + "vxtiktok.com. Leave it empty to share TikTok's own links. Only TikTok "
                             + "links are changed, and only the host: nothing is sent anywhere new.",
                     Settings.CUSTOM_SHARE_DOMAIN
-            ));
+            );
+            // A host name, not a sentence: a keyboard that capitalizes and spaces after each
+            // dot turns vxtiktok.com into "Vxtiktok. Com".
+            host.getEditText().setInputType(InputType.TYPE_CLASS_TEXT
+                    | InputType.TYPE_TEXT_VARIATION_URI | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+            addPreference(host);
         }
         if (SettingsStatus.externalBrowserEnabled) {
             addPreference(new TogglePreference(
