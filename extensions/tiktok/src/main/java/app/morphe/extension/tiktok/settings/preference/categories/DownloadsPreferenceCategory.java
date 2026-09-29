@@ -8,7 +8,6 @@ package app.morphe.extension.tiktok.settings.preference.categories;
 
 import android.content.Context;
 import android.preference.PreferenceScreen;
-import android.text.InputType;
 
 import app.morphe.extension.tiktok.offline.CustomOfflineVideosLimitPatch;
 import app.morphe.extension.tiktok.settings.L10n;
@@ -81,7 +80,7 @@ public class DownloadsPreferenceCategory extends ConditionalPreferenceCategory {
                     "Video filename",
                     "Tokens: {creator}, {date}, {video_id}. Start with {creator}/ to give each creator a folder. The file extension is kept automatically.",
                     Settings.DOWNLOAD_VIDEO_FILENAME_TEMPLATE
-            ));
+            ).withNameKeyboard());
             addPreference(new InputTextPreference(
                     context,
                     "Photo filename",
@@ -90,14 +89,14 @@ public class DownloadsPreferenceCategory extends ConditionalPreferenceCategory {
                             + "TikTok's own button is numbered by the folder instead. The file "
                             + "extension is kept automatically.",
                     Settings.DOWNLOAD_PHOTO_FILENAME_TEMPLATE
-            ));
+            ).withNameKeyboard());
             if (SettingsStatus.downloadEnabled) {
                 addPreference(new InputTextPreference(
                         context,
                         "Comment media filename",
                         "Tokens: {date}, {media_id}. Works for image and video stickers.",
                         Settings.DOWNLOAD_COMMENT_MEDIA_FILENAME_TEMPLATE
-                ));
+                ).withNameKeyboard());
                 addPreference(new TogglePreference(
                         context,
                         "Remove watermark",
@@ -159,19 +158,14 @@ public class DownloadsPreferenceCategory extends ConditionalPreferenceCategory {
         }
         if (SettingsStatus.advancedDownloadsEnabled) {
             addPreference(new SectionHeadingPreference(context, "Hand-off"));
-            InputTextPreference downloader = new InputTextPreference(
+            addPreference(new InputTextPreference(
                     context,
                     "Send links to another app",
                     "An app's package name, like com.dv.adm. The save button sends the video's "
                             + "link there instead of saving it here. Leave it empty to save here.",
                     Settings.EXTERNAL_DOWNLOADER_PACKAGE)
-                    .withCheck(value -> ExternalDownloader.packageNameProblem(value.trim()));
-            // A package name has to match exactly, and a keyboard left to treat it as prose
-            // capitalized it, spaced it after each dot and autocorrected it: com.dv.adm came out
-            // as "Com. Dv. Adm", which the check then refuses (S25, SwiftKey).
-            downloader.getEditText().setInputType(InputType.TYPE_CLASS_TEXT
-                    | InputType.TYPE_TEXT_VARIATION_URI | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-            addPreference(downloader);
+                    .withCheck(value -> ExternalDownloader.packageNameProblem(value.trim()))
+                    .withNameKeyboard());
             ChoicePreference ytdlnisType = new ChoicePreference(context, "YTDLnis download type",
                     Settings.YTDLNIS_DOWNLOAD_TYPE, new String[]{"Video", "Audio"},
                     new String[]{"video", "audio"});

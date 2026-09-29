@@ -421,14 +421,27 @@ public class InputCheckTest {
      * An app name and a host have to match exactly, so the keyboard is told they aren't prose.
      * Left to treat them as sentences, SwiftKey on the S25 turned com.deniscerri.ytdl into
      * "Com. Deniscerri. Ytdl", which the check above then refused, and the reader couldn't type
-     * the name at all.
+     * the name at all. Handles, codes, ids, filename templates and speeds are names in the same
+     * sense: a capital or a space after a dot changes what they mean.
      */
     @Test public void anAppNameAndAHostAreTypedAsNamesNotSentences() throws Exception {
         int name = android.text.InputType.TYPE_CLASS_TEXT
                 | android.text.InputType.TYPE_TEXT_VARIATION_URI
                 | android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
         String[][] fields = {{"DOWNLOADS", Settings.EXTERNAL_DOWNLOADER_PACKAGE.key},
-                {"PRIVACY", Settings.CUSTOM_SHARE_DOMAIN.key}};
+                {"PRIVACY", Settings.CUSTOM_SHARE_DOMAIN.key},
+                {"FEED_FILTER", Settings.BLOCKED_CREATORS.key},
+                {"FEED_FILTER", Settings.CREATOR_FILTER_EXCEPTIONS.key},
+                {"FEED_FILTER", Settings.BLOCKED_SOUND_IDS.key},
+                {"FEED_FILTER", Settings.REGION_ONLY_FROM.key},
+                {"FEED_FILTER", Settings.REGION_NEVER_FROM.key},
+                {"FEED_FILTER", Settings.CAPTION_LANGUAGES.key},
+                {"COMMENTS", Settings.COMMENT_BLOCKED_USERS.key},
+                {"REGION", Settings.SIM_SPOOF_ISO.key},
+                {"DOWNLOADS", Settings.DOWNLOAD_VIDEO_FILENAME_TEMPLATE.key},
+                {"DOWNLOADS", Settings.DOWNLOAD_PHOTO_FILENAME_TEMPLATE.key},
+                {"DOWNLOADS", Settings.DOWNLOAD_COMMENT_MEDIA_FILENAME_TEMPLATE.key},
+                {"PLAYBACK", Settings.CUSTOM_SPEEDS.key}};
         for (String[] where : fields) {
             onScreen(where[0], where[1], field -> {
                 openDialog(field);
@@ -444,6 +457,17 @@ public class InputCheckTest {
                                 | android.text.InputType.TYPE_TEXT_FLAG_AUTO_CORRECT));
                 field.getDialog().dismiss();
             });
+        }
+    }
+
+    /** Words and phrases are prose, and there the keyboard's suggestions help. */
+    @Test public void aFieldOfWordsKeepsTheKeyboardsSuggestions() throws Exception {
+        String[][] fields = {{"FEED_FILTER", Settings.BLOCKED_CAPTION_WORDS.key},
+                {"FEED_FILTER", Settings.BLOCKED_SOUND_NAMES.key}};
+        for (String[] where : fields) {
+            onScreen(where[0], where[1], field -> assertEquals(where[1] + " lost its suggestions", 0,
+                    field.getEditText().getInputType()
+                            & android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS));
         }
     }
 
