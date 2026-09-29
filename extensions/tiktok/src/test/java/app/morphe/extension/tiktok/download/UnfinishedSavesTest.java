@@ -327,6 +327,34 @@ public class UnfinishedSavesTest {
         assertEquals("said a third time", 2, shown.size());
     }
 
+    /**
+     * The reader backs out of TikTok a second after the notice goes up. Its timeout still comes,
+     * over a screen that's gone, and that isn't a notice read out in full: the next start says it
+     * again.
+     */
+    @Test public void aNoticeWhoseScreenWentAwayInsideItsTimeIsSaidAgain() throws Exception {
+        anEarlierProcessDiedSavingAVideo();
+        UnfinishedSaves.atStart(context);
+        screen(true);
+        idleFor(UnfinishedSaves.SETTLE_MS + 100);
+        String expected = "TikTok closed during these saves\nVideo: didn't finish";
+        assertEquals(List.of(expected), shown);
+
+        idleFor(1000);
+        screens.remove(screens.size() - 1).pause().stop().destroy();
+        idleFor(BANNER_TIME_MS);
+        assertEquals("a notice whose screen went away one second in was consumed", 1,
+                records(context).length());
+
+        startAgain(context, atDeath(context));
+        UnfinishedSaves.atStart(context);
+        screen(true);
+        idleFor(UnfinishedSaves.SETTLE_MS + 100);
+        assertEquals("the next start didn't say it again", List.of(expected, expected), shown);
+        idleFor(BANNER_TIME_MS);
+        assertEquals("the notice that ran its time wasn't consumed", 0, records(context).length());
+    }
+
     /** A start that never shows the main screen (a push, a background job) keeps it for one that does. */
     @Test public void aStartWithNoScreenKeepsTheRecordsForTheNext() throws Exception {
         anEarlierProcessDiedSavingAVideo();

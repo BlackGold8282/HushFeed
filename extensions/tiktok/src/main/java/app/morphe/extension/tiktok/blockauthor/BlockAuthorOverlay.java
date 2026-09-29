@@ -1044,9 +1044,10 @@ public final class BlockAuthorOverlay {
      * The notice banner, telling the caller when it was read out in full.
      *
      * <p>{@code ranItsTime} runs on the main thread once the banner has been up for its whole
-     * time, or at once when there was only a toast to show. Another banner replacing it, or the
-     * controls going away, takes it down early, and then it never runs: a caller that only
-     * forgets what it said once it was seen can say it again later.
+     * time and is still on the screen, or at once when there was only a toast to show. Another
+     * banner replacing it, the controls going away, or the reader leaving the screen cuts it
+     * short, and then it never runs: a caller that only forgets what it said once it was seen
+     * can say it again later.
      */
     public static void showNoticeBanner(ViewGroup root, String message, Runnable ranItsTime) {
         showBanner(root, message, null, null, ranItsTime);
@@ -1122,8 +1123,12 @@ public final class BlockAuthorOverlay {
                 final int token = ++undoGeneration;
                 Utils.runOnMainThreadDelayed(() -> {
                     if (token != undoGeneration) return;
+                    // Only a banner still on the screen at the end was read out in full. The
+                    // reader backing out or going Home stops nothing here, so the timeout comes
+                    // anyway, over a screen that is gone or stopped.
+                    boolean seen = banner.isAttachedToWindow() && banner.isShown();
                     dismissUndo();
-                    if (ranItsTime != null) ranItsTime.run();
+                    if (seen && ranItsTime != null) ranItsTime.run();
                 }, SettingsUi.feedbackTimeout(activity, (int) UNDO_VISIBLE_MS, action != null));
             } catch (Throwable ex) {
                 Logger.printException(() -> "Could not show the undo banner", ex);
