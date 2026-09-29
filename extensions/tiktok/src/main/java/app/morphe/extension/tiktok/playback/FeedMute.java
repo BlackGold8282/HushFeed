@@ -241,19 +241,33 @@ public final class FeedMute {
      * sound), and this tracking follows every one of them. Main or player thread.
      */
     public static void onCurrentVideo(Object aweme) {
+        note(aweme, true, "current video");
+    }
+
+    /**
+     * A feed item as the feed binds it, which is ahead of the reader reaching it, as the engine
+     * for it is prepared ahead. Noted only from the current video, a swipe let about half a
+     * second of the next video's sound through before its change came (S25, 2026-09-29). A
+     * bind says nothing about what plays now, so the focus is left to the current video.
+     */
+    public static void onFeedBind(Object aweme) {
+        note(aweme, false, "feed bind");
+    }
+
+    private static void note(Object aweme, boolean current, String what) {
         if (!SettingsStatus.feedMuteEnabled || !(aweme instanceof Aweme)) return;
         try {
             String id = ((Aweme) aweme).getAid();
             if (id == null || id.isEmpty()) return;
             boolean feed = feedInFront && isFeedItem((Aweme) aweme);
-            lastPlayFeed = feed;
+            if (current) lastPlayFeed = feed;
             synchronized (PLAYS) {
                 PLAYS.put(id, feed);
             }
             settle(id, feed);
-            HookStatus.bound(HOOK_FAMILY, "current video");
+            HookStatus.bound(HOOK_FAMILY, what);
         } catch (Throwable failure) {
-            HookStatus.threw(HOOK_FAMILY, "current video", failure);
+            HookStatus.threw(HOOK_FAMILY, what, failure);
         }
     }
 

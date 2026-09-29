@@ -327,6 +327,26 @@ public class FeedMuteTest {
         assertEquals(List.of(), calls);
     }
 
+    /**
+     * The feed binds an item ahead of the reader, as TikTok prepares its engine ahead. Noted only
+     * as the current video, each swipe let about half a second of the next video's sound through
+     * first (S25, 2026-09-29). A bind of the next item leaves the focus to what plays now.
+     */
+    @Test public void aBoundFeedItemIsMutedBeforeItBecomesCurrent() {
+        Settings.FEED_MUTED.save(true);
+        FeedMute.onFeedBind(video("811"));
+        FeedMute.onEnginePlay(engine("next", "811"));
+        FeedMute.onEnginePlay(engine("after", "812"));
+        FeedMute.onFeedBind(video("812"));
+        assertEquals(List.of("next mute", "after mute"), calls);
+
+        // A story is playing; binding the video after it doesn't take the story's focus away.
+        FeedMute.onCurrentVideo(story("813"));
+        FeedMute.onFeedBind(video("814"));
+        assertFalse("a bind of the next item turned the playing story's focus down",
+                FeedMute.holdPageFocus("P"));
+    }
+
     @Test public void anEnginePreparedAheadWhileUnmutedIsMutedByTheButtonLater() {
         FeedMute.onEnginePlay(engine("A", "721"));
         FeedMute.onControllerPlay(new Controller(feed.get()), video("721"));

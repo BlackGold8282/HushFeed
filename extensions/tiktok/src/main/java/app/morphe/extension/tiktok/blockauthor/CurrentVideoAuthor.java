@@ -104,6 +104,11 @@ public final class CurrentVideoAuthor {
      */
     static void update(Object videoItemParams) {
         Item item = parse(videoItemParams);
+        // Ahead of the reader, as TikTok prepares the item's engine ahead: muted then, a feed
+        // video starts silent instead of for the moment before it becomes current.
+        if (item != null && item.aweme != null) {
+            app.morphe.extension.tiktok.playback.FeedMute.onFeedBind(item.aweme);
+        }
         synchronized (SELECTING) {
             if (item != null && item.awemeId != null) {
                 RECENT.put(item.awemeId, item);
