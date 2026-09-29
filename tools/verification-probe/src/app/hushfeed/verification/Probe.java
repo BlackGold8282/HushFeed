@@ -657,6 +657,26 @@ public final class Probe extends Instrumentation {
                                 + " permStitch=" + optional(optional(aweme, "getInteractPermission"), "getStitch"));
                         break;
                     }
+                    case "labreport": {
+                        // The Feature Gate Lab's learn mode from the shell: op=begin starts a
+                        // recording, op=stop ends it and logs the report in numbered parts, since
+                        // one log line holds about 4 KB and a report runs longer.
+                        Class<?> learn = loader.loadClass(
+                                "app.morphe.extension.tiktok.featuregatelab.FeatureGateLearnMode");
+                        if ("begin".equals(intent.getStringExtra("op"))) {
+                            learn.getMethod("begin").invoke(null);
+                            Log.i(TAG, "ok labreport recording=" + learn.getMethod("isRecording").invoke(null));
+                            break;
+                        }
+                        String report = String.valueOf(learn.getMethod("stopAndBuildReport").invoke(null));
+                        int size = 3000;
+                        int parts = Math.max(1, (report.length() + size - 1) / size);
+                        for (int part = 0; part < parts; part++) {
+                            Log.i(TAG, "ok labreport part " + (part + 1) + "/" + parts + " "
+                                    + report.substring(part * size, Math.min(report.length(), (part + 1) * size)));
+                        }
+                        break;
+                    }
                     case "feedmute": {
                         // What Mute feed videos matches on: each engine it has seen with the
                         // source id TikTok's player reports for it, the videos the controller asked
