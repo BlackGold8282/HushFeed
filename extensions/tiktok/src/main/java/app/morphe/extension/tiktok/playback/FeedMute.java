@@ -81,6 +81,12 @@ public final class FeedMute {
     private static volatile boolean feedInFront;
     /** The last video a controller asked to play was a feed video. */
     private static volatile boolean lastPlayFeed;
+    /**
+     * The feed video playing now, kept apart from PLAYS. A profile grid or search results in the
+     * feed's own activity bind item after item, and past MAX_PLAYS of them the playing video's
+     * note was gone, so its next play() gave it its sound back (verifier, 2026-09-29).
+     */
+    private static volatile String currentFeedId;
     private static volatile Class<?> feedActivity;
     /**
      * A refresh that found the feed behind another screen, the settings page among them. What the
@@ -213,10 +219,10 @@ public final class FeedMute {
             lastPlayFeed = feed;
             String id = aweme instanceof Aweme ? ((Aweme) aweme).getAid() : null;
             if (id != null && !id.isEmpty()) {
-                synchronized (PLAYS) {
-                    PLAYS.put(id, feed);
+                if (feed) currentFeedId = id;
+                if (record(id, feed, isFeedHost(Reflect.readField(controller, "activity")))) {
+                    settle(id, feed && feedInFront);
                 }
-                settle(id, feed && feedInFront);
             }
             HookStatus.bound(HOOK_FAMILY, "controller play");
         } catch (Throwable failure) {
@@ -260,14 +266,28 @@ public final class FeedMute {
             String id = ((Aweme) aweme).getAid();
             if (id == null || id.isEmpty()) return;
             boolean feed = feedInFront && isFeedItem((Aweme) aweme);
-            if (current) lastPlayFeed = feed;
-            synchronized (PLAYS) {
-                PLAYS.put(id, feed);
+            if (current) {
+                lastPlayFeed = feed;
+                currentFeedId = feed ? id : null;
             }
-            settle(id, feed);
+            if (record(id, feed, feedInFront)) settle(id, feed);
             HookStatus.bound(HOOK_FAMILY, what);
         } catch (Throwable failure) {
             HookStatus.threw(HOOK_FAMILY, what, failure);
+        }
+    }
+
+    /**
+     * Notes whether a video is a feed video, and says whether the note was taken. A note from
+     * outside the feed never takes the feed's own note away: a feed video shared to a DM and
+     * opened there plays under the same id, and losing the note gave the feed's paused engine
+     * for it its sound back, heard when the reader came back to the feed (verifier, 2026-09-29).
+     */
+    private static boolean record(String id, boolean feed, boolean fromFeed) {
+        synchronized (PLAYS) {
+            if (!feed && !fromFeed && Boolean.TRUE.equals(PLAYS.get(id))) return false;
+            PLAYS.put(id, feed);
+            return true;
         }
     }
 
@@ -318,6 +338,7 @@ public final class FeedMute {
                 synchronized (PLAYS) {
                     feed = PLAYS.get(id);
                 }
+                if (feed == null && id.equals(currentFeedId)) feed = Boolean.TRUE;
             }
             boolean isFeed = feedInFront && Boolean.TRUE.equals(feed);
             if (isFeed) {
@@ -464,6 +485,7 @@ public final class FeedMute {
         lastPageHelper = new WeakReference<>(null);
         feedInFront = false;
         lastPlayFeed = false;
+        currentFeedId = null;
         refreshOwed = false;
         focusOwed = false;
         feedActivity = null;

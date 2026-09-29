@@ -438,6 +438,57 @@ public class FeedMuteTest {
         assertEquals(List.of(), calls);
     }
 
+    /** The last call made on the named engine. */
+    private String lastFor(String name) {
+        String last = null;
+        for (String call : calls) if (call.startsWith(name + " ")) last = call;
+        return last;
+    }
+
+    @Test public void aFeedVideoOpenedOnAnotherScreenStaysMutedInTheFeedAfterwards() {
+        Settings.FEED_MUTED.save(true);
+        Object a = engine("A", "901");
+        FeedMute.onFeedBind(video("901"));
+        FeedMute.onEnginePlay(a);
+        assertEquals(List.of("A mute"), calls);
+        feed.pause();
+        // The same video, shared to a DM and opened there, plays under the same id.
+        ActivityController<OtherScreen> other = Robolectric.buildActivity(OtherScreen.class).setup();
+        FeedMute.onControllerPlay(new Controller(other.get()), video("901"));
+        FeedMute.onEnginePlay(engine("dm", "901"));
+        other.pause().stop().destroy();
+        feed.resume();
+        // The feed's engine resumes without a play(), so what it was left with is what plays.
+        assertEquals("A mute", lastFor("A"));
+    }
+
+    @Test public void aFeedVideoOpenedOnAnotherScreenIsMutedWhenTheFeedPlaysItAgain() {
+        Settings.FEED_MUTED.save(true);
+        Object a = engine("A", "902");
+        FeedMute.onFeedBind(video("902"));
+        FeedMute.onEnginePlay(a);
+        feed.pause();
+        ActivityController<OtherScreen> other = Robolectric.buildActivity(OtherScreen.class).setup();
+        FeedMute.onControllerPlay(new Controller(other.get()), video("902"));
+        other.pause().stop().destroy();
+        feed.resume();
+        FeedMute.onEnginePlay(a);
+        assertEquals("A mute", lastFor("A"));
+    }
+
+    @Test public void theCurrentFeedVideoStaysMutedAfterAGridBindsMoreItemsThanAreRemembered() {
+        Settings.FEED_MUTED.save(true);
+        Object a = engine("A", "950");
+        FeedMute.onFeedBind(video("950"));
+        FeedMute.onCurrentVideo(video("950"));
+        FeedMute.onEnginePlay(a);
+        assertEquals(List.of("A mute"), calls);
+        // A profile grid or search results, in the feed's own activity, bind item after item.
+        for (int i = 0; i < 70; i++) FeedMute.onFeedBind(video("grid" + i));
+        FeedMute.onEnginePlay(a);
+        assertEquals("A mute", lastFor("A"));
+    }
+
     private Object engine(String name, String id) {
         Object engine = new Object() {
             @Override public String toString() {
