@@ -245,7 +245,62 @@ public final class ScreenTimePreferenceCategory extends ConditionalPreferenceCat
         Preference waitRow = findPreference(Settings.SESSION_BUDGET_WAIT_TO_LOOSEN.key);
         if (waitRow != null) showWhatWaits(waitRow);
 
-        addPreference(new StartTodayOverPreference(context));
+        addPreference(new StartTodayOverPreference(context, this::showTheBudgetAsItIs));
+        redrawWhenTheDayStarts();
+    }
+
+    /** Every row a budget change or a new day can move, in the order the page shows them. */
+    private static Setting<?>[] budgetRows() {
+        return new Setting<?>[]{Settings.SESSION_BUDGET_VIDEOS, Settings.SESSION_BUDGET_MINUTES,
+                Settings.SESSION_BUDGET_LOCK_MINUTES, Settings.SESSION_BUDGET_RESET_HOUR,
+                Settings.SESSION_BUDGET_LOCK, Settings.SESSION_BUDGET_PASSES_PER_DAY,
+                Settings.SESSION_BUDGET_WAIT_TO_LOOSEN};
+    }
+
+    /**
+     * Draws the budget rows again from what is stored now, without writing anything. The page
+     * drew them once, as it opened: Start today over left "Today: 2 minutes" on the row it had
+     * just cleared, and a page left open over the day's start kept Wait a day to loosen on and
+     * a waiting number waiting (S22), until the page was opened again.
+     */
+    private void showTheBudgetAsItIs() {
+        for (Setting<?> setting : budgetRows()) {
+            Preference row = findPreference(setting.key);
+            if (row == null) continue;
+            if (row instanceof NumberInputPreference) {
+                NumberInputPreference number = (NumberInputPreference) row;
+                String stored = String.valueOf(setting.get());
+                if (!stored.equals(number.getText())) number.setValueWithoutPersisting(stored);
+            } else if (row instanceof TogglePreference && setting.get() instanceof Boolean) {
+                TogglePreference toggle = (TogglePreference) row;
+                boolean persistent = toggle.isPersistent();
+                toggle.setPersistent(false);
+                toggle.setChecked((Boolean) setting.get());
+                toggle.setPersistent(persistent);
+            }
+            showWhatWaits(row);
+        }
+    }
+
+    /**
+     * At the day's start, or when a waiting change applies if that comes first, applies what is
+     * due and redraws the page. The budget applies waiting changes as it counts, and nothing
+     * counts while this page is up. Held weakly, so a page that has gone lets it lapse.
+     */
+    private void redrawWhenTheDayStarts() {
+        long now = SessionBudget.now();
+        long at = BudgetChanges.nextDayAt();
+        long waiting = BudgetChanges.appliesAt();
+        if (waiting > 0 && waiting < at) at = waiting;
+        java.lang.ref.WeakReference<ScreenTimePreferenceCategory> page = new java.lang.ref.WeakReference<>(this);
+        // A second past, so the clock reads the new day when it runs.
+        app.morphe.extension.shared.Utils.runOnMainThreadDelayed(() -> {
+            ScreenTimePreferenceCategory open = page.get();
+            if (open == null) return;
+            BudgetChanges.applyDue(SessionBudget.now());
+            open.showTheBudgetAsItIs();
+            open.redrawWhenTheDayStarts();
+        }, Math.max(0, at - now) + 1000);
     }
 
     private void showSaveFailure(Preference preference) {

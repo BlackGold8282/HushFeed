@@ -4,6 +4,7 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The Screen time page shows Start today over's result straight away, and a page left open while the day starts over shows what the new day changed. Both used to keep the old numbers and switches until you left the page and opened it again.
 * **TikTok:** Resource and battery governor's description no longer claims a battery saving that was never measured. It says which sensors it stops TikTok listening to.
 * **TikTok:** The README and the patch descriptions in Morphe Manager now give measured numbers for the optional trimming patches instead of adjectives: the storage each one saves, and what they did to memory use on a Galaxy S22 (alone or all together, nothing beyond the run-to-run spread, apart from about 13 MB less loaded code with all of them on).
 * **TikTok:** AMOLED dark theme's description and the README no longer say it needs a 768 MB memory limit to patch. Measured on two phones, it still finishes at 640 MB, just slower, so 768 MB or more is now advice rather than a requirement.
