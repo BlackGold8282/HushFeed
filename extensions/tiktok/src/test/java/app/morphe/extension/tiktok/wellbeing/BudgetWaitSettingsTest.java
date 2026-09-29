@@ -327,14 +327,15 @@ public class BudgetWaitSettingsTest {
     /**
      * Start today over redraws the page it was pressed on. On the S22 the row's "Today" line
      * kept the old count until the page was left and opened again, so the reset looked as if
-     * it hadn't worked. Taking it back redraws the page too.
+     * it hadn't worked. Taking it back redraws the page too. The real settings page, since it
+     * moves the category's rows onto itself.
      */
     @Test public void startTodayOverRedrawsTheCountsOnTheOpenPage() {
         Settings.SESSION_BUDGET_WAIT_TO_LOOSEN.save(false);
         Settings.SESSION_BUDGET_VIDEOS.save(5);
         SessionBudget.noteVideo("one");
         SessionBudget.noteVideo("two");
-        PreferenceScreen screen = screenTimeRows();
+        PreferenceScreen screen = savingPage();
         Preference videos = screen.findPreference(Settings.SESSION_BUDGET_VIDEOS.key);
         assertTrue(videos.getSummary().toString(), videos.getSummary().toString().contains("Today: 2 videos"));
         Preference startOver = screen.findPreference("action_start_today_over");
@@ -350,13 +351,14 @@ public class BudgetWaitSettingsTest {
     }
 
     /**
-     * A page left open while the day starts over shows what the start changed. On the S22 the
-     * Wait a day switch still read on after 4:00, and a waiting number still read as waiting,
-     * until the page was opened again.
+     * A page left open while the phone sleeps through the day's start shows what the start
+     * changed once the phone wakes. On the S22 the Wait a day switch still read on after 4:00,
+     * and a waiting number still read as waiting, until the page was opened again. Seven hours
+     * pass on the clock and only a minute of uptime, as they do on a phone asleep.
      */
     @Test public void anOpenPageShowsWhatTheDayStartChanged() {
         BudgetChanges.keep(Settings.SESSION_BUDGET_MINUTES, 60, now.get());
-        PreferenceScreen screen = screenTimeRows();
+        PreferenceScreen screen = savingPage();
         Preference minutes = screen.findPreference(Settings.SESSION_BUDGET_MINUTES.key);
         Preference wait = screen.findPreference(Settings.SESSION_BUDGET_WAIT_TO_LOOSEN.key);
         wait.getOnPreferenceChangeListener().onPreferenceChange(wait, false);
@@ -364,7 +366,7 @@ public class BudgetWaitSettingsTest {
         assertTrue(((android.preference.TwoStatePreference) wait).isChecked());
 
         now.set(at(2026, Calendar.SEPTEMBER, 8, 4, 1));
-        Shadows.shadowOf(Looper.getMainLooper()).idleFor(java.time.Duration.ofHours(8));
+        Shadows.shadowOf(Looper.getMainLooper()).idleFor(java.time.Duration.ofSeconds(61));
 
         String summary = minutes.getSummary().toString();
         assertTrue("the open page kept the evening's value: " + summary, summary.contains("Current: 60 minutes"));
@@ -374,6 +376,22 @@ public class BudgetWaitSettingsTest {
         assertFalse(wait.getSummary().toString().contains("Turns off at"));
     }
 
+    /** A clear can only be taken back the day it was made, so the row stops offering it after. */
+    @Test public void startTodayOverStopsOfferingYesterdaysCountsBack() {
+        Settings.SESSION_BUDGET_WAIT_TO_LOOSEN.save(false);
+        Settings.SESSION_BUDGET_VIDEOS.save(5);
+        SessionBudget.noteVideo("one");
+        PreferenceScreen screen = savingPage();
+        Preference startOver = screen.findPreference("action_start_today_over");
+        startOver.getOnPreferenceClickListener().onPreferenceClick(startOver);
+        assertTrue(startOver.getSummary().toString(), startOver.getSummary().toString().contains("Tap again"));
+
+        now.set(at(2026, Calendar.SEPTEMBER, 8, 4, 1));
+        Shadows.shadowOf(Looper.getMainLooper()).idleFor(java.time.Duration.ofSeconds(61));
+
+        assertFalse("the row still offers yesterday's counts back: " + startOver.getSummary(),
+                startOver.getSummary().toString().contains("Tap again"));
+    }
     @Test public void startTodayOverIsOffWhileLooseningWaits() {
         Settings.SESSION_BUDGET_VIDEOS.save(2);
         SessionBudget.noteVideo("one");

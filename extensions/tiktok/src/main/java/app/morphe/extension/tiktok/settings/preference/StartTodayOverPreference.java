@@ -47,7 +47,7 @@ public final class StartTodayOverPreference extends Preference implements Immedi
         setTitle(L10n.t(context, "Start today over"));
         // Whether a clear is waiting to be taken back outlives this row, so the row asks rather
         // than assuming it is the first one ever built.
-        setSummary(L10n.t(context, SessionBudget.canUndoClear() ? UNDO_SUMMARY : CLEAR_SUMMARY));
+        showWhatATapDoes();
 
         setOnPreferenceClickListener(preference -> {
             if (SessionBudget.canUndoClear()) {
@@ -75,6 +75,11 @@ public final class StartTodayOverPreference extends Preference implements Immedi
                     () -> undoClear(context));
             return true;
         });
+    }
+
+    /** Says what a tap does now: start today over, or put back a clear that can still be taken back. */
+    public void showWhatATapDoes() {
+        setSummary(L10n.t(getContext(), SessionBudget.canUndoClear() ? UNDO_SUMMARY : CLEAR_SUMMARY));
     }
 
     private void undoClear(Context context) {
