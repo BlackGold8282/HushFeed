@@ -725,6 +725,57 @@ public final class Probe extends Instrumentation {
                         Log.i(TAG, "ok feedmute " + out);
                         break;
                     }
+                    case "pitaya": {
+                        // Whether Pitaya came up: the Pitaya libraries loaded into TikTok, the
+                        // real core provider its plugin hands over (null while every core is
+                        // TikTok's "host not ready" stand-in), the cores asked for so far and
+                        // what answers each, and the boot loader's state. PitayaLite is left
+                        // out on purpose: reading its fields runs its class initializer, which
+                        // loads libAndroidPitayaProxy, so the library list answers for it.
+                        StringBuilder out = new StringBuilder("libs=");
+                        java.util.Set<String> libs = new java.util.TreeSet<>();
+                        try (java.io.BufferedReader maps = new java.io.BufferedReader(
+                                new java.io.FileReader("/proc/self/maps"))) {
+                            for (String line; (line = maps.readLine()) != null; ) {
+                                int slash = line.lastIndexOf('/');
+                                if (slash >= 0 && line.toLowerCase(java.util.Locale.ROOT).contains("pitaya")) {
+                                    libs.add(line.substring(slash + 1));
+                                }
+                            }
+                        }
+                        out.append(libs).append(' ');
+                        for (String name : new String[] {
+                                "com.bytedance.pitaya.api.mutilinstance.DelegateCoreProvider",
+                                "com.bytedance.pitaya.api.PitayaBootLoader"}) {
+                            Class<?> type = loader.loadClass(name);
+                            out.append(type.getSimpleName()).append('{');
+                            for (Field field : type.getDeclaredFields()) {
+                                if (!java.lang.reflect.Modifier.isStatic(field.getModifiers())) continue;
+                                field.setAccessible(true);
+                                Object value = field.get(null);
+                                String shown;
+                                if (value == null || value instanceof Boolean || value instanceof Number) {
+                                    shown = String.valueOf(value);
+                                } else if (value instanceof Map) {
+                                    StringBuilder entries = new StringBuilder("[");
+                                    synchronized (value) {
+                                        for (Map.Entry<?, ?> entry : ((Map<?, ?>) value).entrySet()) {
+                                            entries.append(entry.getKey()).append('=')
+                                                    .append(entry.getValue() == null ? "null" : entry.getValue().getClass().getSimpleName())
+                                                    .append(' ');
+                                        }
+                                    }
+                                    shown = entries.append(']').toString();
+                                } else {
+                                    shown = value.getClass().getName();
+                                }
+                                out.append(field.getName()).append('=').append(shown).append(' ');
+                            }
+                            out.append("} ");
+                        }
+                        Log.i(TAG, "ok pitaya " + out);
+                        break;
+                    }
                     case "addrs": {
                         // Which addresses the current post's video carries and where they point,
                         // to tell a photo post's server-side render from an empty shell. Host and
