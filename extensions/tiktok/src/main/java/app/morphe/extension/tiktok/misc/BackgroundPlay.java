@@ -1,0 +1,49 @@
+/*
+ * Copyright 2026 Hushfeed contributors
+ * https://github.com/SysAdminDoc/hushfeed
+ */
+package app.morphe.extension.tiktok.misc;
+
+import app.morphe.extension.tiktok.settings.Settings;
+import app.morphe.extension.tiktok.settings.SettingsStatus;
+
+/**
+ * Keeps TikTok's own background play on (#52).
+ *
+ * <p>TikTok reads the server value {@code background_play_enable} once a process: 0 is no
+ * background play, 1 lets the long-press menu turn it on for one video, and 2 lets the menu turn
+ * it on for good, which TikTok remembers as {@code long_term_bg_play_enable} in its
+ * {@code background_play_repo} store. The server moves accounts between those values, which is
+ * why the menu's switch comes and goes and why 2 set in the Feature Gate Lab can still fall back.
+ * With Keep playing in the background on, the value reads as 2 and the remembered switch reads
+ * as on, and TikTok does the rest: its player keeps going, its media notification pauses and
+ * resumes, and it gives way when another app takes audio focus. Hushfeed starts no service of
+ * its own. Which videos may play on stays TikTok's call too (it leaves some surfaces and kinds
+ * of video out), so the switch only takes away the server's say.
+ */
+public final class BackgroundPlay {
+    /** The Feature Gate Lab key the switch decides while it's on. */
+    public static final String GATE_KEY = "background_play_enable";
+    /** TikTok's value for background play the menu can leave on for good. */
+    static final int ALWAYS = 2;
+
+    private BackgroundPlay() {}
+
+    /**
+     * The {@code background_play_enable} value TikTok acts on. TikTok keeps the first answer for
+     * the life of the process, so the switch applies from the next start.
+     */
+    public static int mode(int served) {
+        return Settings.BACKGROUND_PLAY.get() ? ALWAYS : served;
+    }
+
+    /** Whether TikTok's remembered background play switch reads as on. */
+    public static boolean remembered(boolean stored) {
+        return stored || Settings.BACKGROUND_PLAY.get();
+    }
+
+    /** Whether the switch is deciding {@code key} right now, which the Lab shows on that key. */
+    public static boolean decidesGate(String key) {
+        return SettingsStatus.backgroundPlayEnabled && GATE_KEY.equals(key) && Settings.BACKGROUND_PLAY.get();
+    }
+}
