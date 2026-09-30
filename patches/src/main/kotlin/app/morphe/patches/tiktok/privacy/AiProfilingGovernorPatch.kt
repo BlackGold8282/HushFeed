@@ -11,7 +11,7 @@ import app.morphe.util.returnEarly
 @Suppress("unused")
 val aiProfilingGovernorPatch = bytecodePatch(
     name = "Stop on-device AI profiling",
-    description = "Keeps TikTok's Pitaya on-device AI plugin from starting, so its native engine doesn't load and it doesn't get a copy of every analytics event TikTok logs. TikTok carries on as if the Pitaya plugin weren't installed. Remove content credential and card scanner assets also takes the Pitaya libraries out of the app.",
+    description = "Keeps TikTok's Pitaya on-device AI plugin from starting, so its native engine doesn't load and it doesn't get a copy of every analytics event TikTok logs. TikTok carries on as if the Pitaya plugin weren't installed. Remove content credential and card scanner assets also empties some of Pitaya's libraries.",
     default = false,
 ) {
     category("Privacy")

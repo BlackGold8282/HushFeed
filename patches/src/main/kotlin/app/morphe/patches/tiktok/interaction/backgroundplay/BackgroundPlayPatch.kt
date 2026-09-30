@@ -112,11 +112,12 @@ val backgroundPlayPatch = bytecodePatch(
     name = "Keep playing in the background",
     description = "Keeps TikTok's own background play on, whatever its server says, so the video " +
         "you're watching keeps playing after you leave the app or turn the screen off, and TikTok's " +
-        "media notification pauses it. It also covers photo posts and the videos on your own " +
-        "profile, private ones included, which TikTok leaves out. It plays to the end of that video, because TikTok doesn't " +
-        "loop or move on in the background, and another app's sound still pauses it. The first " +
-        "video after TikTok opens only carries on once it has looped or you've moved to the next " +
-        "one. Off by default. Restart TikTok after changing it. Switch: Hushfeed settings > Playback.",
+        "media notification pauses and resumes it. It also covers photo posts and the videos on your " +
+        "own profile, private ones included, which TikTok leaves out. A feed video plays to its end, " +
+        "because TikTok doesn't loop or move on in the feed while it's in the background, and another " +
+        "app's sound still pauses it. The first video after TikTok opens only carries on once it has " +
+        "looped or you've moved to the next one. TikTok's own background play switch in the long-press " +
+        "menu stays on while this is on. Off by default. Restart TikTok after changing it. Switch: Hushfeed settings > Playback.",
     default = false,
 ) {
     category("Playback")
