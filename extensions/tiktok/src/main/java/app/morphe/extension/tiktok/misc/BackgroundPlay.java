@@ -4,6 +4,8 @@
  */
 package app.morphe.extension.tiktok.misc;
 
+import android.app.ActivityManager;
+
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
 
@@ -57,6 +59,33 @@ public final class BackgroundPlay {
     /** Whether a photo post counts as one for background play, which TikTok leaves out. */
     public static boolean photoMode(boolean photo) {
         return photo && !Settings.BACKGROUND_PLAY.get();
+    }
+
+    /**
+     * Whether a page's claim on the sound is skipped. TikTok takes transient audio focus when one
+     * of its pages resumes, and at a cold start it holds the feed's resume back until the feed's
+     * first page loads. Leaving before then had the claim land in the background, where TikTok's
+     * own background player took it for another app's sound and paused the first video. While
+     * the switch is on, a claim made with none of TikTok's screens showing is skipped.
+     */
+    public static boolean skipsPageFocus() {
+        if (!Settings.BACKGROUND_PLAY.get()) return false;
+        try {
+            ActivityManager.RunningAppProcessInfo state = new ActivityManager.RunningAppProcessInfo();
+            ActivityManager.getMyMemoryState(state);
+            return hidden(state.importance);
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Whether a process of this importance has none of its screens showing. A screen that shows,
+     * picture in picture included, keeps the process at the foreground importance, and TikTok
+     * playing in the background with its media notification sits just below it.
+     */
+    static boolean hidden(int importance) {
+        return importance > ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
     }
 
     /** Whether the switch is deciding {@code key} right now, which the Lab shows on that key. */

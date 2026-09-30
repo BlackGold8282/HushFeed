@@ -15,6 +15,7 @@ import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
+import com.android.tools.smali.dexlib2.iface.instruction.NarrowLiteralInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -159,6 +160,57 @@ class BackgroundPlayAnchorsTest {
             assertTrue("$version: no remembered-switch read calls the scene check", callers.any { method ->
                 val instructions = method.implementation!!.instructions.toList()
                 instructions.indices.any { instructions.readsKevaBoolean(it, REMEMBERED_KEY) }
+            })
+        }
+    }
+
+    @Test
+    fun `the page's claim on the sound resolves on each build`() {
+        Fixtures.forEachDeclared { apk ->
+            val classes = HashMap<String, ClassDef>()
+            val container = DexFileFactory.loadDexContainer(apk, Opcodes.getDefault())
+            for (entry in container.dexEntryNames) {
+                for (classDef in container.getEntry(entry)!!.dexFile.classes) classes.putIfAbsent(classDef.type, classDef)
+            }
+            val version = Fixtures.versionOf(apk)
+
+            val found = classes.values.flatMap { classDef -> classDef.methods.filter { PageAudioFocusFingerprint.takes(it, classDef) } }
+            assertEquals("$version: the page's claim takes ${found.map { it.definingClass }}", 1, found.size)
+            val claim = found.single()
+            assertFalse("$version: the page's claim is static", AccessFlags.STATIC.isSet(claim.accessFlags))
+            assertTrue("$version: the page's claim has no local for the guard",
+                claim.implementation!!.registerCount - claim.parameters.size - 1 >= 1)
+
+            // A transient claim on the music stream, with a listener that does nothing.
+            val body = claim.implementation!!.instructions.toList()
+            val request = body.indexOfFirst { instruction ->
+                instruction.getReference<MethodReference>()?.parameterTypes?.map(CharSequence::toString) ==
+                    listOf(AUDIO_MANAGER, FOCUS_LISTENER, "I", "I")
+            }
+            val call = body[request] as FiveRegisterInstruction
+            fun literal(register: Int) = body.subList(0, request).last {
+                it is OneRegisterInstruction && it.registerA == register
+            }.let { (it as? NarrowLiteralInstruction)?.narrowLiteral }
+            assertEquals("$version: the stream", 3, literal(call.registerE))
+            assertEquals("$version: the kind of claim", 2, literal(call.registerF))
+            val listener = body.subList(0, request).last {
+                it.opcode == Opcode.IGET_OBJECT && (it as OneRegisterInstruction).registerA == call.registerD
+            }.getReference<FieldReference>()!!.type
+            val onChange = classes.getValue(listener).methods.single { it.name == "onAudioFocusChange" }
+            assertEquals("$version: $listener does something with a focus change",
+                listOf(Opcode.RETURN_VOID), onChange.implementation!!.instructions.map { it.opcode })
+
+            // The feed's page resume is one of its callers.
+            assertTrue("$version: no page resume calls the claim", classes.values.flatMap { it.methods }.any { method ->
+                val instructions = method.implementation?.instructions?.toList() ?: return@any false
+                instructions.any { it.getReference<StringReference>()?.string?.let { text ->
+                    text.startsWith("PageAudioProcessor") && text.contains(".onPageResumed")
+                } == true } && instructions.any {
+                    it.getReference<MethodReference>()?.let { reference ->
+                        reference.definingClass == claim.definingClass && reference.name == claim.name &&
+                            reference.parameterTypes.map(CharSequence::toString) == listOf("Landroid/content/Context;")
+                    } == true
+                }
             })
         }
     }

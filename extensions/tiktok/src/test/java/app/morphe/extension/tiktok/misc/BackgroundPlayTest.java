@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import android.app.ActivityManager;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 
@@ -43,6 +44,14 @@ public class BackgroundPlayTest {
         assertTrue(BackgroundPlay.scene(true, "homepage_hot"));
         assertTrue(BackgroundPlay.photoMode(true));
         assertFalse(BackgroundPlay.photoMode(false));
+        assertFalse(BackgroundPlay.skipsPageFocus());
+    }
+
+    @Test public void onlyAScreenShowingCountsAsShowing() {
+        assertFalse(BackgroundPlay.hidden(ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND));
+        assertTrue(BackgroundPlay.hidden(ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND_SERVICE));
+        assertTrue(BackgroundPlay.hidden(ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE));
+        assertTrue(BackgroundPlay.hidden(ActivityManager.RunningAppProcessInfo.IMPORTANCE_CACHED));
     }
 
     @Test public void onLetsYourProfileAndPhotoPostsThrough() {

@@ -12,6 +12,7 @@ import app.morphe.patches.shared.compat.AppCompatibilities
 import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
 import app.morphe.patches.tiktok.misc.settings.settingsPatch
+import app.morphe.patches.tiktok.shared.guardAtEntry
 import app.morphe.util.addInstruction
 import app.morphe.util.addInstructions
 import app.morphe.util.getMutableMethod
@@ -68,6 +69,21 @@ internal object BackgroundPlaySceneCheckFingerprint : Fingerprint(
     filters = listOf(methodCall(definingClass = "Ljava/util/Set;", name = "contains")),
 )
 
+internal const val AUDIO_MANAGER = "Landroid/media/AudioManager;"
+internal const val FOCUS_LISTENER = "Landroid/media/AudioManager\$OnAudioFocusChangeListener;"
+
+/**
+ * TikTok's short claim on the sound for a page that resumes: transient audio focus, taken with
+ * a listener that does nothing. The feed's page resume calls it, and so do Explore and a few
+ * other pages.
+ */
+internal object PageAudioFocusFingerprint : Fingerprint(
+    returnType = "V",
+    parameters = listOf("Landroid/content/Context;"),
+    strings = listOf("audio"),
+    filters = listOf(methodCall(parameters = listOf(AUDIO_MANAGER, FOCUS_LISTENER, "I", "I"), returnType = "I")),
+)
+
 /** The string a const-string loads, or null. */
 private fun Instruction.string(): String? =
     if (opcode == Opcode.CONST_STRING || opcode == Opcode.CONST_STRING_JUMBO) getReference<StringReference>()?.string else null
@@ -115,9 +131,8 @@ val backgroundPlayPatch = bytecodePatch(
         "media notification pauses and resumes it. It also covers photo posts and the videos on your " +
         "own profile, private ones included, which TikTok leaves out. A feed video plays to its end, " +
         "because TikTok doesn't loop or move on in the feed while it's in the background, and another " +
-        "app's sound still pauses it. The first video after TikTok opens only carries on once it has " +
-        "looped or you've moved to the next one. TikTok's own background play switch in the long-press " +
-        "menu stays on while this is on. Off by default. Restart TikTok after changing it. Switch: Hushfeed settings > Playback.",
+        "app's sound still pauses it. TikTok's own background play switch in the long-press menu " +
+        "stays on while this is on. Off by default. Restart TikTok after changing it. Switch: Hushfeed settings > Playback.",
     default = false,
 ) {
     category("Playback")
@@ -203,6 +218,15 @@ val backgroundPlayPatch = bytecodePatch(
             )
         }
 
+        // At a cold start TikTok holds the feed's page resume back until the feed's first page
+        // loads. Leave before that and the page's claim on the sound lands in the background,
+        // where TikTok's own background player takes it for another app and pauses.
+        PageAudioFocusFingerprint.method.guardAtEntry(
+            "Keep playing in the background",
+            "invoke-static {}, $EXTENSION->skipsPageFocus()Z",
+            "return-void",
+        )
+
         var remembered = 0
         BackgroundPlayRememberedReadFingerprint.matchAll().forEach { match ->
             val method = match.method
@@ -229,6 +253,6 @@ val backgroundPlayPatch = bytecodePatch(
         if (remembered < 2) {
             throw PatchException("Keep playing in the background: found $remembered reads of TikTok's remembered background play switch, expected at least 2.")
         }
-        println("[Background play] Hooked the mode read, the scene and photo post checks and $remembered reads of the remembered switch.")
+        println("[Background play] Hooked the mode read, the scene and photo post checks, the page's claim on the sound and $remembered reads of the remembered switch.")
     }
 }
