@@ -489,6 +489,32 @@ public class FeedMuteTest {
         assertEquals("A mute", lastFor("A"));
     }
 
+    @Test public void anotherScreensEngineForAFeedVideoGetsItsSoundWhenThatScreenAsksForIt() {
+        Settings.FEED_MUTED.save(true);
+        FeedMute.onFeedBind(video("960"));
+        ActivityController<OtherScreen> other = Robolectric.buildActivity(OtherScreen.class).setup();
+        // Prepared while the feed was in front, so its play() muted it as a feed engine.
+        FeedMute.onEnginePlay(engine("detail", "960"));
+        FeedMute.onControllerPlay(new Controller(other.get()), video("960"));
+        String last = lastFor("detail");
+        other.pause().stop().destroy();
+        assertTrue("another screen's engine left muted: " + calls, last == null || last.equals("detail sound"));
+    }
+
+    @Test public void thePreparedNextFeedVideoStaysMutedAfterAGridBindsMoreItemsThanAreRemembered() {
+        Settings.FEED_MUTED.save(true);
+        FeedMute.onCurrentVideo(video("970"));
+        FeedMute.onEnginePlay(engine("A", "970"));
+        FeedMute.onFeedBind(video("971"));
+        Object b = engine("B", "971");
+        FeedMute.onEnginePlay(b);
+        assertEquals("B mute", lastFor("B"));
+        for (int i = 0; i < 70; i++) FeedMute.onFeedBind(video("grid" + i));
+        // Back on the feed, the next video comes on with a play() before its current-video change.
+        FeedMute.onEnginePlay(b);
+        assertEquals("B mute", lastFor("B"));
+    }
+
     private Object engine(String name, String id) {
         Object engine = new Object() {
             @Override public String toString() {
