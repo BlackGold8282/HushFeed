@@ -7,6 +7,7 @@ package app.morphe.patches.tiktok.interaction.backgroundplay
 import app.morphe.Fixtures
 import app.morphe.takes
 import app.morphe.util.getReference
+import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.DexFileFactory
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.Opcodes
@@ -15,6 +16,7 @@ import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
+import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction11n
@@ -24,6 +26,7 @@ import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodRefere
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableStringReference
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -92,6 +95,71 @@ class BackgroundPlayAnchorsTest {
                 }.map { "${method.definingClass}->${method.name}@$it" }
             }
             assertTrue("$version: the remembered switch is read where no hook is: $unhooked", unhooked.isEmpty())
+        }
+    }
+
+    @Test
+    fun `the scene check and its photo post check resolve on each build`() {
+        Fixtures.forEachDeclared { apk ->
+            val classes = HashMap<String, ClassDef>()
+            val container = DexFileFactory.loadDexContainer(apk, Opcodes.getDefault())
+            for (entry in container.dexEntryNames) {
+                for (classDef in container.getEntry(entry)!!.dexFile.classes) classes.putIfAbsent(classDef.type, classDef)
+            }
+            val version = Fixtures.versionOf(apk)
+
+            val found = classes.values.flatMap { classDef -> classDef.methods.filter { BackgroundPlaySceneCheckFingerprint.takes(it, classDef) } }
+            assertEquals("$version: the scene check takes ${found.map { it.definingClass }}", 1, found.size)
+            val check = found.single()
+            assertTrue("$version: the scene check is not static", AccessFlags.STATIC.isSet(check.accessFlags))
+            val body = check.implementation!!.instructions.toList()
+            val lookup = body.indexOfFirst { instruction ->
+                instruction.opcode == Opcode.INVOKE_INTERFACE && instruction.getReference<MethodReference>()?.let {
+                    it.definingClass == "Ljava/util/Set;" && it.name == "contains"
+                } == true
+            }
+            val call = body[lookup] as FiveRegisterInstruction
+
+            // The set it looks in is TikTok's scene list, filled with the feeds' event types.
+            val load = body.subList(0, lookup).last { it.opcode == Opcode.SGET_OBJECT && (it as OneRegisterInstruction).registerA == call.registerC }
+            val list = load.getReference<FieldReference>()!!
+            val listed = classes.getValue(list.definingClass).methods.single { it.name == "<clinit>" }.implementation!!.instructions
+                .mapNotNull { instruction -> instruction.getReference<StringReference>()?.string?.takeIf { instruction.loads(it) } }
+            assertTrue("$version: ${list.definingClass} lists $listed",
+                listed.containsAll(listOf("homepage_hot", "homepage_follow", "others_homepage")))
+
+            // What it looks up is the event type, the second parameter, and the answer lands elsewhere.
+            assertEquals("$version: the lookup is not of the event type",
+                check.implementation!!.registerCount - check.parameters.size + 1, call.registerD)
+            val result = body[lookup + 1]
+            assertEquals("$version: the lookup's answer is not kept", Opcode.MOVE_RESULT, result.opcode)
+            assertNotEquals(call.registerD, (result as OneRegisterInstruction).registerA)
+
+            // Photo posts are ruled out here (47.0.3) or in the one post check it calls (47.1.x).
+            val photoCheck = if (body.photoModeCall() >= 0) body else {
+                val helpers = body.filter { it.isStaticAwemeCheck() }.mapNotNull { instruction ->
+                    val reference = instruction.getReference<MethodReference>()!!
+                    classes[reference.definingClass]?.methods?.firstOrNull {
+                        it.name == reference.name && it.parameterTypes.map(CharSequence::toString) == listOf(AWEME) && it.returnType == "Z"
+                    }?.implementation?.instructions?.toList()
+                }.filter { it.photoModeCall() >= 0 }
+                assertEquals("$version: post checks ruling out photo posts", 1, helpers.size)
+                helpers.single()
+            }
+            assertEquals("$version: the photo post check is not kept", Opcode.MOVE_RESULT, photoCheck[photoCheck.photoModeCall() + 1].opcode)
+
+            // It's the check the per-video read of the remembered switch leads to.
+            val callers = classes.values.flatMap { it.methods }.filter { method ->
+                method.implementation?.instructions?.any {
+                    val reference = it.getReference<MethodReference>()
+                    reference?.definingClass == check.definingClass && reference.name == check.name &&
+                        reference.parameterTypes.map(CharSequence::toString) == check.parameterTypes.map(CharSequence::toString)
+                } == true
+            }
+            assertTrue("$version: no remembered-switch read calls the scene check", callers.any { method ->
+                val instructions = method.implementation!!.instructions.toList()
+                instructions.indices.any { instructions.readsKevaBoolean(it, REMEMBERED_KEY) }
+            })
         }
     }
 

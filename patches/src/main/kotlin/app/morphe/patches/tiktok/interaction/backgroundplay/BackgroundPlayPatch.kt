@@ -14,6 +14,7 @@ import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
 import app.morphe.patches.tiktok.misc.settings.settingsPatch
 import app.morphe.util.addInstruction
 import app.morphe.util.addInstructions
+import app.morphe.util.getMutableMethod
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
@@ -50,9 +51,40 @@ internal object BackgroundPlayRememberedReadFingerprint : Fingerprint(
     filters = listOf(methodCall(definingClass = KEVA, name = "getBoolean")),
 )
 
+internal const val AWEME = "Lcom/ss/android/ugc/aweme/feed/model/Aweme;"
+internal const val IS_PHOTO_MODE = "isPhotoMode"
+
+/**
+ * TikTok's check of whether a video may play on in the background. The page it was opened from
+ * (its event type, the second parameter) must be on TikTok's list, which has the For You and
+ * Following feeds, search and other people's profiles but not your own, and the post must not
+ * be an ad, a LIVE, paid content or a photo post. 47.0.3 makes the post checks here; 47.1.3 and
+ * 47.1.4 call a helper for them.
+ */
+internal object BackgroundPlaySceneCheckFingerprint : Fingerprint(
+    returnType = "Z",
+    parameters = listOf(AWEME, "Ljava/lang/String;", "Ljava/lang/String;"),
+    strings = listOf("search_result", "video"),
+    filters = listOf(methodCall(definingClass = "Ljava/util/Set;", name = "contains")),
+)
+
 /** The string a const-string loads, or null. */
 private fun Instruction.string(): String? =
     if (opcode == Opcode.CONST_STRING || opcode == Opcode.CONST_STRING_JUMBO) getReference<StringReference>()?.string else null
+
+/** Index of the first `AwemeExtKt.isPhotoMode(aweme)` call, or -1. */
+internal fun List<Instruction>.photoModeCall(): Int = indexOfFirst { instruction ->
+    instruction.opcode == Opcode.INVOKE_STATIC && instruction.getReference<MethodReference>()?.let {
+        it.name == IS_PHOTO_MODE && it.definingClass.endsWith("/AwemeExtKt;") && it.returnType == "Z" &&
+            it.parameterTypes.map(CharSequence::toString) == listOf(AWEME)
+    } == true
+}
+
+/** Whether this is a static call taking just a post and answering yes or no. */
+internal fun Instruction.isStaticAwemeCheck(): Boolean =
+    opcode == Opcode.INVOKE_STATIC && getReference<MethodReference>()?.let {
+        it.returnType == "Z" && it.parameterTypes.map(CharSequence::toString) == listOf(AWEME)
+    } == true
 
 /**
  * Whether [index] is `Keva.getBoolean(key, default)` with [key] loaded into its key register by a
@@ -80,7 +112,8 @@ val backgroundPlayPatch = bytecodePatch(
     name = "Keep playing in the background",
     description = "Keeps TikTok's own background play on, whatever its server says, so the video " +
         "you're watching keeps playing after you leave the app or turn the screen off, and TikTok's " +
-        "media notification pauses it. It plays to the end of that video, because TikTok doesn't " +
+        "media notification pauses it. It also covers photo posts and the videos on your own " +
+        "profile, private ones included, which TikTok leaves out. It plays to the end of that video, because TikTok doesn't " +
         "loop or move on in the background, and another app's sound still pauses it. The first " +
         "video after TikTok opens only carries on once it has looped or you've moved to the next " +
         "one. Off by default. Restart TikTok after changing it. Switch: Hushfeed settings > Playback.",
@@ -117,6 +150,58 @@ val backgroundPlayPatch = bytecodePatch(
             )
         }
 
+        // Photo posts first: on 47.0.3 their check comes after the list lookup in the same method.
+        val check = BackgroundPlaySceneCheckFingerprint.method
+        val checkInstructions = check.implementation!!.instructions.toList()
+        val photoCheck = if (checkInstructions.photoModeCall() >= 0) check else {
+            checkInstructions.filter { it.isStaticAwemeCheck() }
+                .map { it.getReference<MethodReference>()!!.getMutableMethod() }
+                .firstOrNull { it.implementation!!.instructions.toList().photoModeCall() >= 0 }
+                ?: throw PatchException("Keep playing in the background: the scene check no longer rules out photo posts where it's expected to.")
+        }
+        photoCheck.apply {
+            val instructions = implementation!!.instructions.toList()
+            val call = instructions.photoModeCall()
+            val result = instructions.getOrNull(call + 1)
+            if (result?.opcode != Opcode.MOVE_RESULT) {
+                throw PatchException("Keep playing in the background: the photo post check is not kept.")
+            }
+            val register = (result as OneRegisterInstruction).registerA
+            addInstructions(
+                call + 2,
+                """
+                    invoke-static { v$register }, $EXTENSION->photoMode(Z)Z
+                    move-result v$register
+                """,
+            )
+        }
+
+        // The page: the check's first Set.contains is its lookup of the event type in TikTok's list.
+        check.apply {
+            val instructions = implementation!!.instructions.toList()
+            val lookup = instructions.indexOfFirst {
+                it.opcode == Opcode.INVOKE_INTERFACE && it.getReference<MethodReference>()?.let { reference ->
+                    reference.definingClass == "Ljava/util/Set;" && reference.name == "contains"
+                } == true
+            }
+            val result = instructions.getOrNull(lookup + 1)
+            if (result?.opcode != Opcode.MOVE_RESULT) {
+                throw PatchException("Keep playing in the background: the scene check no longer keeps its list lookup.")
+            }
+            val scene = (instructions[lookup] as FiveRegisterInstruction).registerD
+            val register = (result as OneRegisterInstruction).registerA
+            if (scene == register) {
+                throw PatchException("Keep playing in the background: the scene check's lookup overwrites the page it looked up.")
+            }
+            addInstructions(
+                lookup + 2,
+                """
+                    invoke-static { v$register, v$scene }, $EXTENSION->scene(ZLjava/lang/String;)Z
+                    move-result v$register
+                """,
+            )
+        }
+
         var remembered = 0
         BackgroundPlayRememberedReadFingerprint.matchAll().forEach { match ->
             val method = match.method
@@ -143,6 +228,6 @@ val backgroundPlayPatch = bytecodePatch(
         if (remembered < 2) {
             throw PatchException("Keep playing in the background: found $remembered reads of TikTok's remembered background play switch, expected at least 2.")
         }
-        println("[Background play] Hooked the mode read and $remembered reads of the remembered switch.")
+        println("[Background play] Hooked the mode read, the scene and photo post checks and $remembered reads of the remembered switch.")
     }
 }

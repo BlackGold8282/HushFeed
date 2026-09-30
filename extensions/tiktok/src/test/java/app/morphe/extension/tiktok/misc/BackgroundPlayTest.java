@@ -39,6 +39,25 @@ public class BackgroundPlayTest {
         for (int served : new int[]{0, 1, 2, 7, -1}) assertEquals(served, BackgroundPlay.mode(served));
         assertFalse(BackgroundPlay.remembered(false));
         assertTrue(BackgroundPlay.remembered(true));
+        assertFalse(BackgroundPlay.scene(false, BackgroundPlay.OWN_PROFILE));
+        assertTrue(BackgroundPlay.scene(true, "homepage_hot"));
+        assertTrue(BackgroundPlay.photoMode(true));
+        assertFalse(BackgroundPlay.photoMode(false));
+    }
+
+    @Test public void onLetsYourProfileAndPhotoPostsThrough() {
+        try {
+            Settings.BACKGROUND_PLAY.save(true);
+            assertTrue(BackgroundPlay.scene(false, BackgroundPlay.OWN_PROFILE));
+            assertTrue(BackgroundPlay.scene(true, "others_homepage"));
+            // Only your own profile joins TikTok's list; any other page keeps TikTok's answer.
+            assertFalse(BackgroundPlay.scene(false, "chat"));
+            assertFalse(BackgroundPlay.scene(false, null));
+            assertFalse(BackgroundPlay.photoMode(true));
+            assertFalse(BackgroundPlay.photoMode(false));
+        } finally {
+            Settings.BACKGROUND_PLAY.save(false);
+        }
     }
 
     @Test public void onKeepsItOnForGood() {

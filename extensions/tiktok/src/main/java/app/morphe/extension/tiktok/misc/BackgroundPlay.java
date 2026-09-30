@@ -18,14 +18,17 @@ import app.morphe.extension.tiktok.settings.SettingsStatus;
  * With Keep playing in the background on, the value reads as 2 and the remembered switch reads
  * as on, and TikTok does the rest: its player keeps going, its media notification pauses and
  * resumes, and it gives way when another app takes audio focus. Hushfeed starts no service of
- * its own. Which videos may play on stays TikTok's call too (it leaves some surfaces and kinds
- * of video out), so the switch only takes away the server's say.
+ * its own. Which posts may play on stays TikTok's call too, with two exceptions: TikTok leaves
+ * out photo posts and the videos on your own profile (where your private videos play), and the
+ * switch lets both through. Ads, LIVE and paid posts still stop.
  */
 public final class BackgroundPlay {
     /** The Feature Gate Lab key the switch decides while it's on. */
     public static final String GATE_KEY = "background_play_enable";
     /** TikTok's value for background play the menu can leave on for good. */
     static final int ALWAYS = 2;
+    /** The event type TikTok gives the videos you open from your own profile. */
+    static final String OWN_PROFILE = "personal_homepage";
 
     private BackgroundPlay() {}
 
@@ -40,6 +43,20 @@ public final class BackgroundPlay {
     /** Whether TikTok's remembered background play switch reads as on. */
     public static boolean remembered(boolean stored) {
         return stored || Settings.BACKGROUND_PLAY.get();
+    }
+
+    /**
+     * Whether background play may start on the page {@code eventType} names. TikTok's list has
+     * the For You and Following feeds, search and other people's profiles, and leaves out your
+     * own profile, the only place your private videos play.
+     */
+    public static boolean scene(boolean listed, String eventType) {
+        return listed || (OWN_PROFILE.equals(eventType) && Settings.BACKGROUND_PLAY.get());
+    }
+
+    /** Whether a photo post counts as one for background play, which TikTok leaves out. */
+    public static boolean photoMode(boolean photo) {
+        return photo && !Settings.BACKGROUND_PLAY.get();
     }
 
     /** Whether the switch is deciding {@code key} right now, which the Lab shows on that key. */
