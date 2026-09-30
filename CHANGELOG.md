@@ -2,6 +2,10 @@
 
 Every Hushfeed release, newest first.
 
+## Unreleased
+
+* **TikTok:** Hushfeed supports TikTok 47.1.4 as well as 47.0.3 and 47.1.3 (#56), and 47.0.3 stays supported. All 98 patches apply to each of the three. The trimming patches know 47.1.4's rebuilt libraries and language packs, and Block P2P video relay has nothing to remove from 47.1.4's split bundle, which leaves those libraries out, so it says so instead of refusing the bundle.
+
 ## 0.65.0 (2026-09-29)
 
 * **TikTok:** The Screen time page shows Start today over's result straight away, and a page left open while the day starts over shows what the new day changed. Both used to keep the old numbers and switches until you left the page and opened it again.
