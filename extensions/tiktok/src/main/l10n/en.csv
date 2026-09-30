@@ -161,10 +161,12 @@ And %1$s more saves,And %1$s more saves
 And one more save,And one more save
 Animated sticker format,Animated sticker format
 Answer TikTok's location requests with nothing. The region settings change the locale and timezone. This switch stops the coordinates.,Answer TikTok's location requests with nothing. The region settings change the locale and timezone. This switch stops the coordinates.
+"Answer TikTok's own checks of how it was signed and installed the way the Play Store app would. For follows or likes that undo themselves on a refresh. TikTok can also check from native code this doesn't reach, so it may not help.","Answer TikTok's own checks of how it was signed and installed the way the Play Store app would. For follows or likes that undo themselves on a refresh. TikTok can also check from native code this doesn't reach, so it may not help."
 Answer TikTok's reads of your contacts with an empty list. Find Friends and People you may know lose access to your contact list.,Answer TikTok's reads of your contacts with an empty list. Find Friends and People you may know lose access to your contact list.
 "Answer TikTok's scan of the apps on this phone with an empty list. A check for one named app, which TikTok also uses to open an app you tap, is left alone.","Answer TikTok's scan of the apps on this phone with an empty list. A check for one named app, which TikTok also uses to open an app you tap, is left alone."
 App,App
 App AB,App AB
+App checks,App checks
 Appearance,Appearance
 Applies to both video and photo downloads.,Applies to both video and photo downloads.
 Apply,Apply
@@ -705,6 +707,7 @@ Log diagnostics,Log diagnostics
 "Logging, hook status and reports","Logging, hook status and reports"
 Long press,Long press
 Long-press Home for Hushfeed settings,Long-press Home for Hushfeed settings
+Look like the store app to TikTok's checks,Look like the store app to TikTok's checks
 Lowest,Lowest
 Make TikTok yours.,Make TikTok yours.
 Manager,Manager

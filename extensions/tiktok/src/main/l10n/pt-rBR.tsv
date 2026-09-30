@@ -1429,3 +1429,6 @@ A different account is signed in. Switch back to the one you set this up on, or 
 TikTok's messages didn't start in time. It tries again at %1$s.	As mensagens do TikTok não iniciaram a tempo. A próxima tentativa é às %1$s.
 The message didn't go through. It tries again at %1$s.	A mensagem não foi enviada. A próxima tentativa é às %1$s.
 Found %1$s in your chats.	%1$s encontrado nas suas conversas.
+App checks	Verificações do app
+Look like the store app to TikTok's checks	Parecer o app da loja para as verificações do TikTok
+Answer TikTok's own checks of how it was signed and installed the way the Play Store app would. For follows or likes that undo themselves on a refresh. TikTok can also check from native code this doesn't reach, so it may not help.	Responde às próprias verificações do TikTok sobre como ele foi assinado e instalado como o app da Play Store faria. Para seguidos ou curtidas que se desfazem sozinhos ao atualizar. O TikTok também pode verificar por código nativo que isto não alcança, então pode não ajudar.

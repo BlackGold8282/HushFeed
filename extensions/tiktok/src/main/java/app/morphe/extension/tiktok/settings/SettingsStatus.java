@@ -111,6 +111,7 @@ public class SettingsStatus {
     public static boolean resourceGovernorEnabled = false;
     public static boolean browserPrivacyGuardEnabled = false;
     public static boolean cameraMicIndicatorEnabled = false;
+    public static boolean storeIdentityEnabled = false;
 
     public static void enableContactListBlocker() {
         contactListBlockerEnabled = true;
@@ -138,6 +139,10 @@ public class SettingsStatus {
 
     public static void enableCameraMicIndicator() {
         cameraMicIndicatorEnabled = true;
+    }
+
+    public static void enableStoreIdentity() {
+        storeIdentityEnabled = true;
     }
 
     public static void enableFeedFilter() {

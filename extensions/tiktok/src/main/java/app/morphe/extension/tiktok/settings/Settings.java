@@ -589,6 +589,9 @@ public class Settings extends BaseSettings {
     // them, are built on that bridge and stop working without it.
     public static final BooleanSetting BLOCK_WEBVIEW_JS_INTERFACES = new BooleanSetting("block_webview_js_interfaces", FALSE);
     public static final BooleanSetting CAMERA_MIC_INDICATOR = new BooleanSetting("camera_mic_indicator", TRUE);
+    // On once the patch is picked, which is the opt-in. A restart, because TikTok works its
+    // signature hash out once and keeps it.
+    public static final BooleanSetting STORE_IDENTITY = new BooleanSetting("store_identity", TRUE, true);
     // Feed toolbar controls. The LIVE button shares HIDE_LIVE_ENTRANCE with the overlay hider.
     public static final BooleanSetting HIDE_FEED_FOLLOW_BUTTON =
             new BooleanSetting("hide_feed_follow_button", FALSE, true);

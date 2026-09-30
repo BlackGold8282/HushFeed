@@ -1432,3 +1432,6 @@ A different account is signed in. Switch back to the one you set this up on, or 
 TikTok's messages didn't start in time. It tries again at %1$s.	Die Nachrichten von TikTok sind nicht rechtzeitig gestartet. Um %1$s wird es erneut versucht.
 The message didn't go through. It tries again at %1$s.	Die Nachricht ist nicht durchgegangen. Um %1$s wird es erneut versucht.
 Found %1$s in your chats.	%1$s in deinen Chats gefunden.
+App checks	App-Prüfungen
+Look like the store app to TikTok's checks	Für TikToks Prüfungen wie die Store-App wirken
+Answer TikTok's own checks of how it was signed and installed the way the Play Store app would. For follows or likes that undo themselves on a refresh. TikTok can also check from native code this doesn't reach, so it may not help.	Beantwortet TikToks eigene Prüfungen, wie es signiert und installiert wurde, so wie es die Play-Store-App täte. Für Follows oder Likes, die sich beim Aktualisieren selbst rückgängig machen. TikTok kann auch aus nativem Code prüfen, den dies nicht erreicht, daher hilft es womöglich nicht.
