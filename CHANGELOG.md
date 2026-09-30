@@ -2,7 +2,7 @@
 
 Every Hushfeed release, newest first.
 
-## Unreleased
+## 0.65.0 (2026-09-29)
 
 * **TikTok:** The Screen time page shows Start today over's result straight away, and a page left open while the day starts over shows what the new day changed. Both used to keep the old numbers and switches until you left the page and opened it again.
 * **TikTok:** Resource and battery governor's description, and the Block motion sensors switch it adds to Hushfeed's settings, no longer claim a battery saving that was never measured. They say which sensors it stops TikTok listening to.
