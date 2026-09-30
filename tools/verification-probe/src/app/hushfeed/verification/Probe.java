@@ -679,22 +679,38 @@ public final class Probe extends Instrumentation {
                     }
                     case "feedmute": {
                         // What Mute feed videos matches on: each engine it has seen with the
-                        // source id TikTok's player reports for it, the videos the controller asked
-                        // for, and the one on screen. Ids by their last six digits only.
+                        // source id TikTok's player reports for it, whether it counts as a feed
+                        // engine and whether the engine is muted right now, the videos the
+                        // controller asked for, and the one on screen. Ids by their last six
+                        // digits only.
                         Class<?> mute = loader.loadClass("app.morphe.extension.tiktok.playback.FeedMute");
                         Field enginesField = mute.getDeclaredField("ENGINES");
                         enginesField.setAccessible(true);
+                        Field feedEnginesField = mute.getDeclaredField("FEED_ENGINES");
+                        feedEnginesField.setAccessible(true);
                         Field playsField = mute.getDeclaredField("PLAYS");
                         playsField.setAccessible(true);
                         Method sourceId = mute.getDeclaredMethod("engineSourceId", Object.class);
                         sourceId.setAccessible(true);
+                        Method isMute = mute.getDeclaredMethod("engineIsMute", Object.class);
+                        isMute.setAccessible(true);
                         StringBuilder out = new StringBuilder("engines=");
                         Map<?, ?> engines = (Map<?, ?>) enginesField.get(null);
+                        Map<?, ?> feedEngines = (Map<?, ?>) feedEnginesField.get(null);
+                        List<Object> seen;
                         synchronized (engines) {
-                            for (Object engine : new ArrayList<>(engines.keySet())) {
-                                out.append(Integer.toHexString(System.identityHashCode(engine))).append(':')
-                                        .append(tail(sourceId.invoke(null, engine))).append(' ');
+                            seen = new ArrayList<>(engines.keySet());
+                        }
+                        for (Object engine : seen) {
+                            boolean feed;
+                            synchronized (feedEngines) {
+                                feed = feedEngines.containsKey(engine);
                             }
+                            out.append(Integer.toHexString(System.identityHashCode(engine))).append(':')
+                                    .append(tail(sourceId.invoke(null, engine)))
+                                    .append(feed ? ":feed" : "")
+                                    .append(Boolean.TRUE.equals(isMute.invoke(null, engine)) ? ":muted" : ":sound")
+                                    .append(' ');
                         }
                         out.append("| plays=");
                         Map<?, ?> plays = (Map<?, ?>) playsField.get(null);
