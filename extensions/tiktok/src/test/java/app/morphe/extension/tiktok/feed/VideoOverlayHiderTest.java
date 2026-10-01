@@ -953,4 +953,66 @@ public class VideoOverlayHiderTest {
             assertEquals(0, detailDecor.getSystemUiVisibility() & fullscreen);
         }
     }
+
+    /**
+     * A video opened from a profile has an Add comment bar laid over a strip that holds its
+     * height under the pager (#50). The switch takes both away there and gives them back when
+     * it goes off. The main feed has the tabs in that place, so a view there with either id is
+     * left alone.
+     */
+    @Test
+    public void theCommentBarLeavesAVideoOpenedFromAProfile() {
+        int barId = 0x7f0a0210;
+        int stripId = 0x7f0a0211;
+        int cellId = 0x7f0a0201;
+        VideoOverlayHider.resolveForTests("47.0.3:qo4", barId);
+        VideoOverlayHider.resolveForTests("47.0.3:cn8", stripId);
+        // With the cell root known, furniture is looked for inside cells only; the bar and its
+        // strip sit outside every cell, under the pager, as on the phone.
+        VideoOverlayHider.resolveForTests("view_rootview", cellId);
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var main = Robolectric.buildActivity(Activity.class).setup();
+             var detailController = Robolectric.buildActivity(
+                     com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            FrameLayout feed = new FrameLayout(main.get());
+            View feedStrip = new View(main.get());
+            feedStrip.setId(stripId);
+            feed.addView(feedStrip);
+            main.get().setContentView(feed);
+            VideoOverlayHider.install(main.get());
+            org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+            main.get().findViewById(android.R.id.content).getViewTreeObserver().dispatchOnGlobalLayout();
+            assertEquals(View.VISIBLE, feedStrip.getVisibility());
+
+            Activity detail = detailController.get();
+            LinearLayout pagerColumn = new LinearLayout(detail);
+            pagerColumn.setOrientation(LinearLayout.VERTICAL);
+            FrameLayout cell = new FrameLayout(detail);
+            cell.setId(cellId);
+            pagerColumn.addView(cell, new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
+            View strip = new View(detail);
+            strip.setId(stripId);
+            pagerColumn.addView(strip, new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, 138));
+            FrameLayout root = new FrameLayout(detail);
+            root.addView(pagerColumn);
+            View bar = new View(detail);
+            bar.setId(barId);
+            root.addView(bar);
+            detail.setContentView(root);
+            detailController.resume();
+
+            detail.findViewById(android.R.id.content).getViewTreeObserver().dispatchOnGlobalLayout();
+            assertEquals(View.GONE, bar.getVisibility());
+            assertEquals(View.GONE, strip.getVisibility());
+
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+            detail.findViewById(android.R.id.content).getViewTreeObserver().dispatchOnGlobalLayout();
+            assertEquals(View.VISIBLE, bar.getVisibility());
+            assertEquals(View.VISIBLE, strip.getVisibility());
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+        }
+    }
 }

@@ -65,6 +65,10 @@ import java.util.WeakHashMap;
  *                         to that from 0.35.0 hid nothing in the right column (S22, 2026-09-17,
  *                         read off the live tree with the probe's views action).
  *   id/uvy                the strip across the top holding For You, Following and the rest
+ *   id/qo4 id/cn8         on a video opened from a profile, a hashtag or a sound, the Add
+ *                         comment bar and the plain View under the pager that keeps its
+ *                         138 px (S22). Clear display hides the bar's frame and keeps the
+ *                         strip, so both go and the pager takes the room back (#50)
  *   id/i98 id/g6r id/ep7  the avatar, like and comment controls
  *   id/i7r id/pnp id/w_2  the favourite, music and share controls
  *   id/g6t id/ej_         the rows under like, comment, favourite and share
@@ -89,6 +93,8 @@ public final class VideoOverlayHider {
     private static final String[] ACTION_BAR_IDS = {"47.0.3:liy", "47.1.3:llj", "47.1.4:llj"};
     private static final String[] SURVEY_IDS = {"47.0.3:f7u", "47.1.3:f98", "47.1.4:f98"};
     private static final String[] TAB_STRIP_IDS = {"47.0.3:uvy", "47.1.3:uzf", "47.1.4:uzf"};
+    private static final String[] DETAIL_COMMENT_BAR_IDS = {"47.0.3:qo4", "47.1.3:qqw", "47.1.4:qqw"};
+    private static final String[] DETAIL_COMMENT_STRIP_IDS = {"47.0.3:cn8", "47.1.3:cnk", "47.1.4:cnk"};
     /**
      * The feed cell root. Furniture is only hidden underneath one: Hide feed surveys used to
      * take every survey card id in the window, and on the profile that is the Favorites tab's whole
@@ -170,7 +176,9 @@ public final class VideoOverlayHider {
     private static final int ACTION_BAR_TARGET = 2;
     private static final int SURVEY_TARGET = 3;
     private static final int TAB_STRIP_TARGET = 4;
-    private static final int RAIL_TARGET_START = 5;
+    private static final int DETAIL_COMMENT_BAR_TARGET = 5;
+    private static final int DETAIL_COMMENT_STRIP_TARGET = 6;
+    private static final int RAIL_TARGET_START = 7;
     private static final int COUNT_ROW_TARGET_START = RAIL_TARGET_START + RAIL_BUTTON_IDS.length;
     private static final int COUNT_TEXT_TARGET_START = COUNT_ROW_TARGET_START
             + RAIL_COUNT_ROW_IDS.length;
@@ -319,6 +327,8 @@ public final class VideoOverlayHider {
             // the mode. The persisted setting cannot be used here: the automatic path never
             // writes it, so it would answer false for exactly the case this is meant to fix.
             boolean tabStrip = !detailPager && RememberClearDisplayPatch.isClearDisplayNow();
+            // The comment bar is the detail pager's own; the main feed has the tabs there.
+            boolean detailCommentBar = detailPager && Settings.HIDE_DETAIL_COMMENT_BAR.get();
             boolean counts = Settings.HIDE_RAIL_COUNTS.get();
             boolean[] rail = TRAVERSAL.rail;
             updateRailButtonsWanted(rail);
@@ -336,7 +346,7 @@ public final class VideoOverlayHider {
             } catch (NumberFormatException ignored) {
             }
             touchScale = Math.min(MAX_TOUCH_SCALE, Math.max(1f, touchScale));
-            if (caption || music || actionBar || surveys || tabStrip || anyRail
+            if (caption || music || actionBar || surveys || tabStrip || detailCommentBar || anyRail
                     || !HIDDEN_HERE.isEmpty() || touchScale != 1f || scaledLastPass) {
                 ViewGroup root = activity.findViewById(android.R.id.content);
                 int[] ids = TRAVERSAL.ids;
@@ -347,6 +357,8 @@ public final class VideoOverlayHider {
                 wanted[ACTION_BAR_TARGET] = actionBar;
                 wanted[SURVEY_TARGET] = surveys;
                 wanted[TAB_STRIP_TARGET] = tabStrip;
+                wanted[DETAIL_COMMENT_BAR_TARGET] = detailCommentBar;
+                wanted[DETAIL_COMMENT_STRIP_TARGET] = detailCommentBar;
                 for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
                     wanted[RAIL_TARGET_START + i] = rail[i];
                 }
@@ -364,7 +376,7 @@ public final class VideoOverlayHider {
                         ids[candidateAt] = resolveIdentifier(
                                 activity, APP_PACKAGE, name, false);
                         hidden[candidateAt] = hideTarget;
-                        needsCell[candidateAt] = target != TAB_STRIP_TARGET;
+                        needsCell[candidateAt] = !outsideCells(target);
                         candidateAt++;
                     }
                 }
@@ -539,13 +551,15 @@ public final class VideoOverlayHider {
     }
 
     private static String[][] traversalTargetIds() {
-        String[][] targets = new String[5 + RAIL_BUTTON_IDS.length
+        String[][] targets = new String[RAIL_TARGET_START + RAIL_BUTTON_IDS.length
                 + RAIL_COUNT_ROW_IDS.length + RAIL_COUNT_TEXT_IDS.length][];
         targets[CAPTION_TARGET] = CAPTION_IDS;
         targets[MUSIC_TARGET] = MUSIC_IDS;
         targets[ACTION_BAR_TARGET] = ACTION_BAR_IDS;
         targets[SURVEY_TARGET] = SURVEY_IDS;
         targets[TAB_STRIP_TARGET] = TAB_STRIP_IDS;
+        targets[DETAIL_COMMENT_BAR_TARGET] = DETAIL_COMMENT_BAR_IDS;
+        targets[DETAIL_COMMENT_STRIP_TARGET] = DETAIL_COMMENT_STRIP_IDS;
         for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
             targets[RAIL_TARGET_START + i] = RAIL_BUTTON_IDS[i];
         }
@@ -554,6 +568,11 @@ public final class VideoOverlayHider {
             targets[COUNT_TEXT_TARGET_START + i] = RAIL_COUNT_TEXT_IDS[i];
         }
         return targets;
+    }
+
+    /** The tab strip above the cells and the detail pager's comment bar below them. */
+    private static boolean outsideCells(int target) {
+        return target >= TAB_STRIP_TARGET && target < RAIL_TARGET_START;
     }
 
     private static int candidateCount(String[][] targets) {

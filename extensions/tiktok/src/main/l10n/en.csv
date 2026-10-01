@@ -568,6 +568,7 @@ Hide the Tako chat,Hide the Tako chat
 Hide the actions row of the share sheet.,Hide the actions row of the share sheet.
 Hide the add people icon,Hide the add people icon
 Hide the caption,Hide the caption
+Hide the comment bar on opened videos,Hide the comment bar on opened videos
 Hide the description under the creator's name on the feed.,Hide the description under the creator's name on the feed.
 Hide the event badge,Hide the event badge
 Hide the flag button TikTok puts above the creator's picture in some regions. You can still report a video from the share menu.,Hide the flag button TikTok puts above the creator's picture in some regions. You can still report a video from the share menu.
@@ -1167,6 +1168,7 @@ Subtitle language,Subtitle language
 Subtitles,Subtitles
 Swipe left,Swipe left
 System,System
+"Take the Add comment bar off videos you open from a profile or a hashtag, so the video fills the screen down to the bottom. The comment button on the right still opens comments.","Take the Add comment bar off videos you open from a profile or a hashtag, so the video fills the screen down to the bottom. The comment button on the right still opens comments."
 Takes TikTok's own Auto scroll action out of the video panel. Auto-advance keeps working.,Takes TikTok's own Auto scroll action out of the video panel. Auto-advance keeps working.
 Tap Repost on the bar under a video twice within %1$d seconds. A repost with a note is left alone.,Tap Repost on the bar under a video twice within %1$d seconds. A repost with a note is left alone.
 Tap a comment's heart twice within %1$d seconds. A double tap on the comment needs a second one too. Removing a like stays immediate.,Tap a comment's heart twice within %1$d seconds. A double tap on the comment needs a second one too. Removing a like stays immediate.
