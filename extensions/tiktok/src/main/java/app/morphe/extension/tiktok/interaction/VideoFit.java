@@ -279,14 +279,16 @@ public final class VideoFit {
         @Override
         public void onLayoutChange(View space, int left, int top, int right, int bottom,
                                    int oldLeft, int oldTop, int oldRight, int oldBottom) {
-            int width = right - left;
-            int height = bottom - top;
-            if (width <= 0 || height <= 0 || (width == spaceWidth && height == spaceHeight)) return;
+            // A watch whose video left this space goes first, whatever size the pass reported:
+            // a recycled page that never changes size again would keep it forever otherwise.
             View view = video.get();
             if (view == null || view.getParent() != space) {
                 space.removeOnLayoutChangeListener(this);
                 return;
             }
+            int width = right - left;
+            int height = bottom - top;
+            if (width <= 0 || height <= 0 || (width == spaceWidth && height == spaceHeight)) return;
             // After the layout pass that reported the size, not inside it.
             Utils.runOnMainThread(() -> refit(view, this));
         }

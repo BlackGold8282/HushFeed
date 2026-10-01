@@ -619,6 +619,45 @@ public class VideoFitTest {
         }
     }
 
+    public static final class RecordingSpace extends FrameLayout {
+        int removed;
+        RecordingSpace(Context context) { super(context); }
+        @Override public void removeOnLayoutChangeListener(OnLayoutChangeListener listener) {
+            removed++;
+            super.removeOnLayoutChangeListener(listener);
+        }
+    }
+
+    /** A space whose video has gone lets go of its watch on its next pass, at any size. */
+    @Test public void aWatchLetsGoOnceItsVideoLeavesEvenAtTheSameSize() {
+        try (var controller = Robolectric.buildActivity(android.app.Activity.class).setup().visible()) {
+            var activity = controller.get();
+            Utils.setContext(activity);
+            FrameLayout page = new FrameLayout(activity);
+            RecordingSpace space = new RecordingSpace(activity);
+            View video = new View(activity);
+            page.addView(space);
+            space.addView(video);
+            page.layout(0, 0, 1080, 2213);
+            space.layout(0, 0, 1080, 1500);
+            video.setLayoutParams(new FrameLayout.LayoutParams(1245, 2213));
+            Settings.FIT_VIDEO_TO_SCREEN.save(true);
+            VideoFit.fitted(video, new Result(1245, 2213, -82.5f, 0f, null));
+            assertEquals(0, space.removed);
+
+            // The page is recycled: the video goes, and the space is laid out again at its size.
+            space.removeView(video);
+            int exactly = View.MeasureSpec.EXACTLY;
+            space.measure(View.MeasureSpec.makeMeasureSpec(1080, exactly),
+                    View.MeasureSpec.makeMeasureSpec(1500, exactly));
+            space.layout(0, 0, 1080, 1500);
+            assertEquals(1, space.removed);
+        } finally {
+            Settings.FIT_VIDEO_TO_SCREEN.save(false);
+            VideoFit.resetReportForTests();
+        }
+    }
+
     @Test public void aStoryFitStopsOwningTheResultAfterBothOffsets() {
         try (var controller = Robolectric.buildActivity(android.app.Activity.class).setup().visible()) {
             var activity = controller.get();
