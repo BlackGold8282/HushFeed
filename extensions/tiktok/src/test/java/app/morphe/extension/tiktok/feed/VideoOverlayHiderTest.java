@@ -584,17 +584,18 @@ public class VideoOverlayHiderTest {
         // insets report it visible, so the layout pass must not answer with another hide.
         try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
             Activity activity = controller.get();
-            assertTrue(VideoOverlayHider.rehideAllowed(android.os.SystemClock.uptimeMillis()));
+            View decor = activity.getWindow().getDecorView();
+            assertTrue(VideoOverlayHider.rehideAllowed(decor, android.os.SystemClock.uptimeMillis()));
 
             VideoOverlayHider.setStatusBarHidden(activity, true);
             // Robolectric's clock moves a few milliseconds during the hide, so the two
             // probes sit well inside and just past the window rather than on its edge.
             long hiddenAt = android.os.SystemClock.uptimeMillis();
-            assertFalse(VideoOverlayHider.rehideAllowed(hiddenAt + VideoOverlayHider.STATUS_BAR_PEEK_MS / 2));
-            assertTrue(VideoOverlayHider.rehideAllowed(hiddenAt + VideoOverlayHider.STATUS_BAR_PEEK_MS));
+            assertFalse(VideoOverlayHider.rehideAllowed(decor, hiddenAt + VideoOverlayHider.STATUS_BAR_PEEK_MS / 2));
+            assertTrue(VideoOverlayHider.rehideAllowed(decor, hiddenAt + VideoOverlayHider.STATUS_BAR_PEEK_MS));
 
             VideoOverlayHider.setStatusBarHidden(activity, false);
-            assertTrue(VideoOverlayHider.rehideAllowed(hiddenAt + 1));
+            assertTrue(VideoOverlayHider.rehideAllowed(decor, hiddenAt + 1));
         }
     }
 
@@ -853,7 +854,7 @@ public class VideoOverlayHiderTest {
     /**
      * A video opened from a creator's grid plays in TikTok's detail pager, a second activity with
      * the same cell and the same right column ids (#47). The hides follow it there as it comes to
-     * the front; the status bar is left as TikTok set it, since that switch is the main feed's.
+     * the front, the status bar included (#50).
      */
     @Test
     public void theHidesFollowAVideoOpenedFromAProfile() {
@@ -881,12 +882,15 @@ public class VideoOverlayHiderTest {
             detail.findViewById(android.R.id.content).getViewTreeObserver().dispatchOnGlobalLayout();
 
             assertEquals(View.GONE, like.getVisibility());
-            assertEquals(0, detail.getWindow().getDecorView().getSystemUiVisibility()
+            assertNotEquals(0, detail.getWindow().getDecorView().getSystemUiVisibility()
                     & View.SYSTEM_UI_FLAG_FULLSCREEN);
 
             Settings.HIDE_RAIL_LIKE.save(false);
+            Settings.HIDE_STATUS_BAR.save(false);
             detail.findViewById(android.R.id.content).getViewTreeObserver().dispatchOnGlobalLayout();
             assertEquals(View.VISIBLE, like.getVisibility());
+            assertEquals(0, detail.getWindow().getDecorView().getSystemUiVisibility()
+                    & View.SYSTEM_UI_FLAG_FULLSCREEN);
         } finally {
             Settings.HIDE_RAIL_LIKE.save(false);
             Settings.HIDE_STATUS_BAR.save(false);
@@ -914,6 +918,39 @@ public class VideoOverlayHiderTest {
             VideoOverlayHider.setStatusBarHidden(activity, true);
             VideoOverlayHider.setStatusBarHidden(activity, false);
             assertNotEquals(0, decor.getSystemUiVisibility() & fullscreen);
+        }
+    }
+
+    /**
+     * The main feed and a video opened from a profile are two windows (#50). Each one's bar is
+     * given back only where this class hid it, and each has its own peek window.
+     */
+    @Test
+    public void eachWindowGivesBackOnlyTheStatusBarItHid() {
+        try (var main = Robolectric.buildActivity(Activity.class).setup();
+             var detail = Robolectric.buildActivity(Activity.class).setup()) {
+            View mainDecor = main.get().getWindow().getDecorView();
+            View detailDecor = detail.get().getWindow().getDecorView();
+            int fullscreen = View.SYSTEM_UI_FLAG_FULLSCREEN;
+
+            VideoOverlayHider.setStatusBarHidden(main.get(), true);
+            long now = android.os.SystemClock.uptimeMillis();
+            assertFalse(VideoOverlayHider.rehideAllowed(mainDecor, now));
+            assertTrue("The other window has no hide of its own",
+                    VideoOverlayHider.rehideAllowed(detailDecor, now));
+
+            // Nothing was hidden in the detail window, so giving back there leaves the feed alone.
+            VideoOverlayHider.setStatusBarHidden(detail.get(), false);
+            assertNotEquals(0, mainDecor.getSystemUiVisibility() & fullscreen);
+
+            VideoOverlayHider.setStatusBarHidden(detail.get(), true);
+            VideoOverlayHider.setStatusBarHidden(main.get(), false);
+            assertEquals(0, mainDecor.getSystemUiVisibility() & fullscreen);
+            assertNotEquals("Giving back the feed's bar leaves the detail page's away",
+                    0, detailDecor.getSystemUiVisibility() & fullscreen);
+
+            VideoOverlayHider.setStatusBarHidden(detail.get(), false);
+            assertEquals(0, detailDecor.getSystemUiVisibility() & fullscreen);
         }
     }
 }

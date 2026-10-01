@@ -203,9 +203,13 @@ public final class VideoOverlayHider {
     private static WeakReference<Application> followed = new WeakReference<>(null);
 
     private static WeakReference<Activity> activityReference = new WeakReference<>(null);
-    /** Whether this class, rather than TikTok, is the one holding the status bar away. */
-    private static boolean statusBarHiddenHere;
-    private static long statusBarHiddenAt;
+    /**
+     * The windows whose status bar this class, rather than TikTok, is holding away, by decor
+     * view, with when it last hid it. One per window: the main feed and a video opened from a
+     * profile, a hashtag or a sound (DetailActivity) are two, and one flag for both would give
+     * back the wrong one's bar (#50).
+     */
+    private static final Map<View, Long> STATUS_BAR_HIDDEN_AT = new WeakHashMap<>();
     private static final GlobalLayoutHook LAYOUT_HOOK = new GlobalLayoutHook();
 
     private VideoOverlayHider() {
@@ -413,7 +417,7 @@ public final class VideoOverlayHider {
                 }
             }
 
-            if (!detailPager) setStatusBarHidden(activity, Settings.HIDE_STATUS_BAR.get());
+            setStatusBarHidden(activity, Settings.HIDE_STATUS_BAR.get());
         } catch (Throwable ex) {
             Logger.printException(() -> "Video overlay hider failed", ex);
         }
@@ -718,7 +722,7 @@ public final class VideoOverlayHider {
                 return;
             }
             long now = SystemClock.uptimeMillis();
-            if (!rehideAllowed(now)) {
+            if (!rehideAllowed(decor, now)) {
                 return;
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -732,12 +736,10 @@ public final class VideoOverlayHider {
             } else {
                 decor.setSystemUiVisibility(decor.getSystemUiVisibility() | LEGACY_STATUS_BAR_FLAGS);
             }
-            statusBarHiddenHere = true;
-            statusBarHiddenAt = now;
+            STATUS_BAR_HIDDEN_AT.put(decor, now);
             return;
         }
-        if (statusBarHiddenHere) {
-            statusBarHiddenHere = false;
+        if (STATUS_BAR_HIDDEN_AT.remove(decor) != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 WindowInsetsController controller = decor.getWindowInsetsController();
                 if (controller != null) {
@@ -750,11 +752,12 @@ public final class VideoOverlayHider {
     }
 
     /**
-     * False while a hide this class issued is younger than the peek window: the bar is
-     * either a swipe peek the system will end by itself, or the request is still landing.
+     * False while a hide this class issued on that window is younger than the peek window: the
+     * bar is either a swipe peek the system will end by itself, or the request is still landing.
      */
-    static boolean rehideAllowed(long now) {
-        return !statusBarHiddenHere || now - statusBarHiddenAt >= STATUS_BAR_PEEK_MS;
+    static boolean rehideAllowed(View decor, long now) {
+        Long hiddenAt = STATUS_BAR_HIDDEN_AT.get(decor);
+        return hiddenAt == null || now - hiddenAt >= STATUS_BAR_PEEK_MS;
     }
 
     private static boolean isStatusBarHidden(View decor) {
