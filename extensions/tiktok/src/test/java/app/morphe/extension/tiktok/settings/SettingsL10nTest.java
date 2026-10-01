@@ -819,6 +819,24 @@ public class SettingsL10nTest {
                 "Hide the caption"));
     }
 
+    @Test
+    public void englishAheadOfAnotherLanguageKeepsTheSettingsEnglish() {
+        // English is the text itself. A phone set to English and then German runs TikTok in
+        // English, and the settings used to skip past it to the German table.
+        Configuration configuration = new Configuration(
+                RuntimeEnvironment.getApplication().getResources().getConfiguration());
+        configuration.setLocales(new LocaleList(new Locale("en", "US"), new Locale("de", "DE")));
+        assertEquals("Hide the caption", L10n.t(
+                RuntimeEnvironment.getApplication().createConfigurationContext(configuration),
+                "Hide the caption"));
+        // A language with no table ahead of English falls through to English and stops there.
+        configuration.setLocales(new LocaleList(new Locale("fr", "FR"), new Locale("en", "GB"),
+                new Locale("de", "DE")));
+        assertEquals("Hide the caption", L10n.t(
+                RuntimeEnvironment.getApplication().createConfigurationContext(configuration),
+                "Hide the caption"));
+    }
+
     /** A context whose resources report one locale, which is what the lookup reads. */
     private static Context contextFor(String language, String country) {
         Configuration configuration = new Configuration(
