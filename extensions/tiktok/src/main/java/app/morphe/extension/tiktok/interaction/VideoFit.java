@@ -656,10 +656,16 @@ public final class VideoFit {
 
         @Override public List<String> lines() {
             List<String> lines = new ArrayList<>();
-            lines.add("Fit the video to the screen: " + (Settings.FIT_VIDEO_TO_SCREEN.get() ? "on" : "off"));
-            lines.add("Fill the screen with the video: " + (Settings.FILL_VIDEO_TO_SCREEN.get() ? "on" : "off"));
-            // Counted per ask, and the feed asks twice for each video it shows.
-            lines.add("Asks since TikTok started: " + RESIZED.get() + " resized the video, "
+            // The saved choices: Pause reads both as off, and says so on a line of its own.
+            boolean fit = Settings.FIT_VIDEO_TO_SCREEN.savedValue();
+            boolean fill = Settings.FILL_VIDEO_TO_SCREEN.savedValue();
+            lines.add("Fit the video to the screen: " + (fit ? "on" : "off"));
+            lines.add("Fill the screen with the video: " + (fill ? "on" : "off"));
+            if ((fit || fill) && !Settings.FIT_VIDEO_TO_SCREEN.get() && !Settings.FILL_VIDEO_TO_SCREEN.get()) {
+                lines.add("Hushfeed is paused, so videos keep TikTok's size");
+            }
+            // Counted per check, and the feed checks twice for each video it shows.
+            lines.add("Fit checks since TikTok started: " + RESIZED.get() + " resized the video, "
                     + LEFT.get() + " left it at TikTok's size");
             synchronized (DECISIONS) {
                 if (!DECISIONS.isEmpty()) lines.add("The last " + DECISIONS.size() + ", oldest first:");

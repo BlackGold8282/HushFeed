@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import app.morphe.extension.tiktok.SettingsContextRule;
 import app.morphe.extension.tiktok.interaction.narrowed.NarrowedResult;
 import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.settings.PausedProcess;
 import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
 import app.morphe.extension.tiktok.settings.preference.categories.PlaybackPreferenceCategory;
@@ -520,7 +521,7 @@ public class VideoFitTest {
             java.util.List<String> lines = VideoFit.Report.INSTANCE.lines();
             assertEquals("Fit the video to the screen: on", lines.get(0));
             assertEquals("Fill the screen with the video: off", lines.get(1));
-            assertEquals("Asks since TikTok started: 2 resized the video, 1 left it at TikTok's size", lines.get(2));
+            assertEquals("Fit checks since TikTok started: 2 resized the video, 1 left it at TikTok's size", lines.get(2));
             assertEquals("The last 2, oldest first:", lines.get(3));
             String above = ". Above the video: FrameLayout 1080x1500, FrameLayout 1080x2213 (the page); window 1080x2213";
             assertEquals("Fit, feed: TikTok's size 1245x2213, space 1080x1500, made 844x1500" + above + " (2 in a row)",
@@ -530,6 +531,30 @@ public class VideoFitTest {
         } finally {
             Settings.FIT_VIDEO_TO_SCREEN.save(false);
             VideoFit.resetReportForTests();
+        }
+    }
+
+    /** Under Pause both switches read off; the report keeps the choice and says why nothing fits. */
+    @Test public void aPausedReportKeepsTheChoiceAndSaysItIsPaused() {
+        VideoFit.resetReportForTests();
+        Settings.FILL_VIDEO_TO_SCREEN.save(true);
+        PausedProcess.set(true);
+        try {
+            assertEquals(java.util.List.of("Fit the video to the screen: off",
+                    "Fill the screen with the video: on",
+                    "Hushfeed is paused, so videos keep TikTok's size",
+                    "Fit checks since TikTok started: 0 resized the video, 0 left it at TikTok's size"),
+                    VideoFit.Report.INSTANCE.lines());
+        } finally {
+            PausedProcess.set(false);
+            Settings.FILL_VIDEO_TO_SCREEN.save(false);
+        }
+        // Not paused, the line goes.
+        Settings.FIT_VIDEO_TO_SCREEN.save(true);
+        try {
+            assertFalse(VideoFit.Report.INSTANCE.lines().contains("Hushfeed is paused, so videos keep TikTok's size"));
+        } finally {
+            Settings.FIT_VIDEO_TO_SCREEN.save(false);
         }
     }
 
