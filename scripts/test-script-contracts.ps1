@@ -1638,8 +1638,15 @@ try {
 
     # The control: a file no gate reads runs no gate, so a marker below is the routing talking.
     Invoke-Hook -Paths @('CONTRIBUTING.md')
-    Assert-True (-not (Test-Path -LiteralPath $factsMarker)) `
-        'The release check ran for a push that changed nothing it reads.'
+    Assert-True (-not (Test-Path -LiteralPath $factsMarker) -and
+        -not (Test-Path -LiteralPath $contractsMarker)) `
+        'An unread documentation change selected release or catalog contracts.'
+
+    foreach ($catalogPin in @('gradle.properties', 'gradle/wrapper/gradle-wrapper.properties')) {
+        Invoke-Hook -Paths @($catalogPin)
+        Assert-True (Test-Path -LiteralPath $contractsMarker) `
+            "A consumed build pin $catalogPin skipped catalog contracts."
+    }
 
     Invoke-Hook -Paths @('release-receipt-0.31.0.json')
     Assert-True (Test-Path -LiteralPath $factsMarker) `
@@ -1811,12 +1818,19 @@ try {
         $env:GITHUB_TOKEN = $null
         # The files the tests read from outside the source folders reach the build too: a push
         # that changed only one of them ran the release facts check at most.
-        foreach ($pin in @('gradle/libs.versions.toml', 'gradle/verification-metadata.xml',
+        foreach ($pin in @('patches/src/main/kotlin/app/morphe/patches/tiktok/Any.kt',
+                'gradle/libs.versions.toml', 'gradle/verification-metadata.xml',
                 'settings.gradle.kts', 'build.gradle.kts', 'patches/build.gradle.kts',
                 'README.md', 'NOTICE', 'patches-list.json', 'patches-bundle.png', 'assets/readme-hero.png',
                 'concepts/marketing/2026-09-12/selected/hero-final.png')) {
+            Remove-Item -LiteralPath $contractsMarker -Force -ErrorAction SilentlyContinue
             Assert-Throws { & $prePushScript -Root $hookRoot -ChangedPaths @($pin) 6> $null } `
                 '*GITHUB_ACTOR*' "A push that changed $pin did not reach the build gates."
+            if ($pin -notin @('README.md', 'NOTICE', 'patches-bundle.png', 'assets/readme-hero.png',
+                    'concepts/marketing/2026-09-12/selected/hero-final.png')) {
+                Assert-True (Test-Path -LiteralPath $contractsMarker) `
+                    "A patch or catalog input $pin skipped the script contracts before its build."
+            }
         }
         # And the control: a file the build branch has no interest in must not reach it.
         & $prePushScript -Root $hookRoot -ChangedPaths @('CONTRIBUTING.md') 6> $null
@@ -1964,6 +1978,23 @@ try {
                     Copy-Item -LiteralPath (Join-Path $hookRoot "scripts/$script") -Destination (Join-Path $firstPatchRoot 'scripts')
                 }
                 Copy-Item -LiteralPath $stubCatalog -Destination (Join-Path $firstPatchRoot 'patches-list.json')
+                # An unnamed resource dependency is present in native reports, but is not a
+                # separately selectable patch. Use the real report reader in the stub suite.
+                Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'patch-report.ps1') -Destination (Join-Path $firstPatchRoot 'scripts')
+                $firstCatalog = Join-Path $firstPatchRoot 'patches-list.json'
+                $closureCatalog = Get-Content -LiteralPath $firstCatalog -Raw | ConvertFrom-Json
+                $closureCatalog.patches[0] | Add-Member -NotePropertyName dependencies -NotePropertyValue @('ResourcePatch')
+                $closureCatalog | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $firstCatalog -Encoding UTF8
+                $closureMarker = Join-Path $hookRoot 'closure-ran.txt'
+                Set-Content -LiteralPath (Join-Path $firstPatchRoot 'scripts/test-script-contracts.ps1') -Encoding UTF8 -Value @(
+                    'param([string]$Root)',
+                    '. (Join-Path $PSScriptRoot ''patch-report.ps1'')',
+                    '$catalog = Get-Content -LiteralPath (Join-Path $Root ''patches-list.json'') -Raw | ConvertFrom-Json',
+                    '$names = @($catalog.patches | ForEach-Object { $_.name })',
+                    '$closure = @(Get-PatchDependencyNames -PatchList $catalog -RequestedNames $names)',
+                    "Add-Content -LiteralPath '$closureMarker' -Value (`"root=`$Root closure=`" + (`$closure -join ','))",
+                    'if (-not (Test-ReportedPatchNames -Expected $names -Actual @($names + ''ResourcePatch'') -AllowedDependencies $closure)) { throw ''The unnamed resource dependency is missing from the catalog closure.'' }',
+                    'exit 0')
                 Set-Content -LiteralPath (Join-Path $firstPatchRoot 'patches-bundle.json') -Encoding UTF8 -Value '{}'
                 Set-Content -LiteralPath (Join-Path $firstPatchRoot $patchSource) -Encoding UTF8 -Value '// patch'
                 # As in the repository: the build's output is not part of the tree the hook checks.
@@ -1998,6 +2029,51 @@ try {
                 $firstCalls = @(Get-ApplyCalls | ForEach-Object { ($_ -split ' ')[0] })
                 Assert-True (($firstCalls -join ',') -eq 'apk=com.zhiliaoapp.musically_1.0.3-100_apkmirror.com.apk,apk=tiktok-1.1.3.apk') `
                     ("A first push with patch sources did not apply the bundle to each declared build once: " + ((Get-ApplyCalls) -join '; '))
+                Assert-True ((Get-Content -LiteralPath $closureMarker -Raw) -like '*closure=ResourcePatch*') `
+                    'A new branch did not check its unnamed resource dependency.'
+
+                # No script changes in either pushed range. The valid catalog passes, and the
+                # invalid one fails before a build. Changing the working catalog must not make
+                # the gate check a different commit from the ref being pushed.
+                Add-Content -LiteralPath (Join-Path $firstPatchRoot $patchSource) -Value '// valid patch-only edit'
+                & git -C $firstPatchRoot add -- $patchSource
+                & git -C $firstPatchRoot commit --quiet -m 'patch-only good'
+                $closureGood = (& git -C $firstPatchRoot rev-parse HEAD).Trim()
+                & git -C $firstPatchRoot branch closure-good $closureGood
+                Remove-Item -LiteralPath $closureMarker -Force
+                & $prePushScript -Root $firstPatchRoot -PushedRefs "refs/heads/closure-good $closureGood refs/heads/good $firstPatchHead" 6> $null
+                Assert-True ($LASTEXITCODE -eq 0 -and (Test-Path -LiteralPath $closureMarker)) `
+                    'A patch-only change skipped its valid dependency contracts.'
+
+                $closureCatalog.patches[0].dependencies = @()
+                $closureCatalog | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $firstCatalog -Encoding UTF8
+                & git -C $firstPatchRoot add patches-list.json
+                & git -C $firstPatchRoot commit --quiet -m 'missing closure entry'
+                $closureBase = (& git -C $firstPatchRoot rev-parse HEAD).Trim()
+                Add-Content -LiteralPath (Join-Path $firstPatchRoot $patchSource) -Value '// invalid patch-only edit'
+                & git -C $firstPatchRoot add -- $patchSource
+                & git -C $firstPatchRoot commit --quiet -m 'patch-only broken'
+                $closureBroken = (& git -C $firstPatchRoot rev-parse HEAD).Trim()
+                & git -C $firstPatchRoot branch closure-broken $closureBroken
+                $goodRef = "refs/heads/closure-good $closureGood refs/heads/good $firstPatchHead"
+                $badRef = "refs/heads/closure-broken $closureBroken refs/heads/broken $closureBase"
+                Remove-Item -LiteralPath $closureMarker -Force
+                & $prePushScript -Root $firstPatchRoot -PushedRefs $goodRef 6> $null
+                $checkedClosure = Get-Content -LiteralPath $closureMarker -Raw
+                Assert-True ($LASTEXITCODE -eq 0 -and $checkedClosure -like '*closure=ResourcePatch*' -and
+                    $checkedClosure -notlike "*root=$firstPatchRoot *") `
+                    'A patch-only ref read the broken catalog in another checkout instead of its own.'
+                Remove-Item -LiteralPath $wrapperMarker -Force -ErrorAction SilentlyContinue
+                Assert-Throws { & $prePushScript -Root $firstPatchRoot -PushedRefs $badRef 6> $null } `
+                    '*unnamed resource dependency is missing*' 'A missing closure entry passed a patch-only push.'
+                Assert-True (-not (Test-Path -LiteralPath $wrapperMarker)) `
+                    'A missing dependency closure was checked only after the build started.'
+                Remove-Item -LiteralPath $closureMarker -Force
+                Assert-Throws { & $prePushScript -Root $firstPatchRoot -PushedRefs "$goodRef`n$badRef" 6> $null } `
+                    '*unnamed resource dependency is missing*' 'One good ref hid a broken patch-only ref in the same push.'
+                $checkedClosure = Get-Content -LiteralPath $closureMarker -Raw
+                Assert-True ($checkedClosure -match 'closure=ResourcePatch' -and $checkedClosure -match 'closure=\s*(\r?\n|$)') `
+                    'A multi-ref push did not check both commits with their own catalog states.'
             } finally {
                 $env:HUSHFEED_BUILD_WRAPPER = $wrapperStub
                 Remove-Item -LiteralPath $firstPatchRoot, $firstPatchWrapper -Recurse -Force -ErrorAction SilentlyContinue

@@ -384,6 +384,15 @@ try {
         $_ -eq 'patches-bundle.png' -or $_ -like 'assets/readme-*' -or $_ -like 'concepts/marketing/*'
     }).Count -gt 0
     $touchesScripts = @($paths | Where-Object { $_ -like 'scripts/*' }).Count -gt 0
+    # Declarations, catalog generation and its consumed build pins can change the unnamed
+    # dependency closure without changing a script. Check that closure before starting a build.
+    $touchesCatalog = @($paths | Where-Object {
+        $_ -like 'patches/src/main/*' -or $_ -eq 'patches-list.json' -or
+        $_ -eq 'patches/build.gradle.kts' -or $_ -eq 'gradle.properties' -or
+        $_ -eq 'gradle/libs.versions.toml' -or $_ -eq 'gradle/verification-metadata.xml' -or
+        $_ -eq 'settings.gradle.kts' -or $_ -eq 'build.gradle.kts' -or
+        $_ -eq 'gradle/wrapper/gradle-wrapper.properties'
+    }).Count -gt 0
     # What decides whether a patch still applies to TikTok: the patches themselves, and the patcher
     # pin, which decides how their fingerprints match.
     # Not on an index push: its release check compares the bundle in patches/build/release byte for
@@ -480,11 +489,11 @@ try {
             'in a clean worktree of the commit instead.')
     }
 
-    if ($touchesScripts) {
+    if ($touchesScripts -or $touchesCatalog) {
         # Script, notice, failure message. The two injected-register suites and the resource
         # table check's run only when their own files moved; each one is the pushed commit's
         # copy, run against that commit.
-        $suites = @(, @('scripts/test-script-contracts.ps1', 'scripts changed, running their contract tests',
+        $suites = @(, @('scripts/test-script-contracts.ps1', 'scripts or catalog inputs changed, running their contract tests',
             'The script contract tests did not pass.'))
         if ($touchesInjectedRegisterVerifier) {
             $suites += , @('scripts/test-injected-registers.ps1', 'injected-register verifier changed, running its fixture tests',
