@@ -84,8 +84,9 @@ import java.util.WeakHashMap;
  * pass, since TikTok shows the prompt again for each video that has something to search.
  */
 public final class VideoOverlayHider {
-    private static final String APP_PACKAGE = "com.zhiliaoapp.musically";
-    private static final String SEARCH_MODULE_PACKAGE = APP_PACKAGE + ".df_search_biz";
+    // TikTok's own ids are looked up under the running package, which a cloned build renames
+    // along with its resource table (#59). Feature modules keep their original names there.
+    private static final String SEARCH_MODULE_PACKAGE = "com.zhiliaoapp.musically.df_search_biz";
     private static final String[] VISUAL_SEARCH_LAYER_IDS = {"fo"};
     private static final String[] VISUAL_SEARCH_PILL_IDS = {"d4"};
     private static final String[] LIVE_ENTRANCE_IDS = {"47.0.3:k_5", "47.1.3:kam", "47.1.4:kam"};
@@ -318,7 +319,7 @@ public final class VideoOverlayHider {
             // The LIVE entrance is the main feed's; looked for in the detail pager it was reported
             // missing on every pass, and the hook table called the overlay hooks broken.
             if (Settings.HIDE_LIVE_ENTRANCE.get() && !detailPager) {
-                hide(activity, APP_PACKAGE, LIVE_ENTRANCE_IDS);
+                hide(activity, activity.getPackageName(), LIVE_ENTRANCE_IDS);
             }
 
             // These are ordinary feed furniture rather than a prompt, so they come back
@@ -384,7 +385,7 @@ public final class VideoOverlayHider {
                     boolean hideTarget = wanted[target];
                     for (String name : TRAVERSAL_TARGET_IDS[target]) {
                         ids[candidateAt] = resolveIdentifier(
-                                activity, APP_PACKAGE, name, false);
+                                activity, activity.getPackageName(), name, false);
                         hidden[candidateAt] = hideTarget;
                         needsCell[candidateAt] = !outsideCells(target);
                         candidateAt++;
@@ -395,13 +396,13 @@ public final class VideoOverlayHider {
                 for (List<View> views : found) {
                     views.clear();
                 }
-                int cellId = identifier(activity, APP_PACKAGE, CELL_ROOT_ID);
+                int cellId = identifier(activity, activity.getPackageName(), CELL_ROOT_ID);
                 try {
                     collect(root, ids, found, cellId, cellId == 0, needsCell);
                     // Only a strip this class hid is ever put back, and that one was the
                     // column's, so the column is looked up only while the strip is wanted.
                     if (detailCommentBar) {
-                        keepColumnStrips(found, identifier(activity, APP_PACKAGE, PAGER_COLUMN_ID));
+                        keepColumnStrips(found, identifier(activity, activity.getPackageName(), PAGER_COLUMN_ID));
                     }
                     selectCurrentTargets(found, TRAVERSAL.selected);
                     pairDetailCommentBar(hidden, TRAVERSAL.selected);
@@ -867,7 +868,7 @@ public final class VideoOverlayHider {
 
     /** Lets a test stand in for a TikTok resource id, which only the real APK resolves. */
     static void resolveForTests(String name, int id) {
-        RESOURCE_IDS.putForTests(APP_PACKAGE, name, id);
+        RESOURCE_IDS.putForTests(Utils.getContext().getPackageName(), name, id);
     }
 
     static void resolveSearchModuleForTests(String name, int id) {
