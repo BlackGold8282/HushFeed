@@ -2479,8 +2479,8 @@ public final class L10nTranslations {
                 "Nach links wischen");
         table.put("System",
                 "System");
-        table.put("Take the Add comment bar off videos you open from a profile or a hashtag, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
-                "Blende die Kommentarleiste unter Videos aus, die du über ein Profil oder einen Hashtag öffnest, damit das Video den Bildschirm bis ganz unten füllt. Die Kommentar-Schaltfläche rechts öffnet die Kommentare weiterhin.");
+        table.put("Take the Add comment bar off videos you open from a profile, a hashtag, a sound or search, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
+                "Blende die Kommentarleiste unter Videos aus, die du über ein Profil, einen Hashtag, einen Sound oder die Suche öffnest, damit das Video den Bildschirm bis ganz unten füllt. Die Kommentar-Schaltfläche rechts öffnet die Kommentare weiterhin.");
         table.put("Takes TikTok's own Auto scroll action out of the video panel. Auto-advance keeps working.",
                 "Entfernt TikToks eigene Auto-Scroll-Aktion aus dem Videomenü. Videos werden weiterhin automatisch weitergeschaltet.");
         table.put("Tap Repost on the bar under a video twice within %1$d seconds. A repost with a note is left alone.",
@@ -5488,8 +5488,8 @@ public final class L10nTranslations {
                 "Deslizar a la izquierda");
         table.put("System",
                 "Sistema");
-        table.put("Take the Add comment bar off videos you open from a profile or a hashtag, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
-                "Quita la barra para escribir un comentario de los videos que abres desde un perfil o un hashtag, para que el video ocupe la pantalla hasta abajo. El botón de comentarios de la derecha sigue abriendo los comentarios.");
+        table.put("Take the Add comment bar off videos you open from a profile, a hashtag, a sound or search, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
+                "Quita la barra para escribir un comentario de los videos que abres desde un perfil, un hashtag, un sonido o la búsqueda, para que el video ocupe la pantalla hasta abajo. El botón de comentarios de la derecha sigue abriendo los comentarios.");
         table.put("Takes TikTok's own Auto scroll action out of the video panel. Auto-advance keeps working.",
                 "Quita la acción Auto scroll de TikTok del panel del vídeo. Los vídeos siguen avanzando automáticamente.");
         table.put("Tap Repost on the bar under a video twice within %1$d seconds. A repost with a note is left alone.",
@@ -8497,8 +8497,8 @@ public final class L10nTranslations {
                 "Geser ke kiri");
         table.put("System",
                 "Sistem");
-        table.put("Take the Add comment bar off videos you open from a profile or a hashtag, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
-                "Hapus bilah untuk menulis komentar dari video yang kamu buka dari profil atau hashtag, agar video memenuhi layar sampai ke bawah. Tombol komentar di kanan tetap membuka komentar.");
+        table.put("Take the Add comment bar off videos you open from a profile, a hashtag, a sound or search, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
+                "Sembunyikan bilah untuk menulis komentar di video yang kamu buka dari profil, hashtag, suara, atau pencarian, agar video memenuhi layar sampai ke bawah. Tombol komentar di kanan tetap membuka komentar.");
         table.put("Takes TikTok's own Auto scroll action out of the video panel. Auto-advance keeps working.",
                 "Menghapus aksi Auto scroll milik TikTok dari panel video. Video tetap dilanjutkan secara otomatis.");
         table.put("Tap Repost on the bar under a video twice within %1$d seconds. A repost with a note is left alone.",
@@ -11506,8 +11506,8 @@ public final class L10nTranslations {
                 "Scorri verso sinistra");
         table.put("System",
                 "Sistema");
-        table.put("Take the Add comment bar off videos you open from a profile or a hashtag, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
-                "Togli la barra per scrivere un commento dai video che apri da un profilo o da un hashtag, così il video riempie lo schermo fino in fondo. Il pulsante dei commenti a destra continua ad aprire i commenti.");
+        table.put("Take the Add comment bar off videos you open from a profile, a hashtag, a sound or search, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
+                "Togli la barra per scrivere un commento dai video che apri da un profilo, un hashtag, un audio o dalla ricerca, così il video riempie lo schermo fino in fondo. Il pulsante dei commenti a destra continua ad aprire i commenti.");
         table.put("Takes TikTok's own Auto scroll action out of the video panel. Auto-advance keeps working.",
                 "Rimuove la funzione Scorrimento automatico di TikTok dal pannello video. L'avanzamento automatico continua a funzionare.");
         table.put("Tap Repost on the bar under a video twice within %1$d seconds. A repost with a note is left alone.",
@@ -14515,8 +14515,8 @@ public final class L10nTranslations {
                 "Deslizar para a esquerda");
         table.put("System",
                 "Sistema");
-        table.put("Take the Add comment bar off videos you open from a profile or a hashtag, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
-                "Tire a barra para adicionar comentário dos vídeos que você abre por um perfil ou uma hashtag, para o vídeo ocupar a tela até embaixo. O botão de comentários à direita continua abrindo os comentários.");
+        table.put("Take the Add comment bar off videos you open from a profile, a hashtag, a sound or search, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
+                "Tire a barra para adicionar comentário dos vídeos que você abre por um perfil, uma hashtag, um som ou pela pesquisa, para o vídeo ocupar a tela até embaixo. O botão de comentários à direita continua abrindo os comentários.");
         table.put("Takes TikTok's own Auto scroll action out of the video panel. Auto-advance keeps working.",
                 "Remove a ação Auto scroll do TikTok do painel do vídeo. Os vídeos continuam avançando automaticamente.");
         table.put("Tap Repost on the bar under a video twice within %1$d seconds. A repost with a note is left alone.",
@@ -17748,8 +17748,8 @@ public final class L10nTranslations {
                 "Свайп влево");
         table.put("System",
                 "Система");
-        table.put("Take the Add comment bar off videos you open from a profile or a hashtag, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
-                "Убирать строку для ввода комментария под видео, открытыми из профиля или по хештегу, чтобы видео занимало экран до самого низа. Кнопка комментариев справа по-прежнему открывает комментарии.");
+        table.put("Take the Add comment bar off videos you open from a profile, a hashtag, a sound or search, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
+                "Убирать строку для ввода комментария под видео, открытыми из профиля, по хештегу, со страницы звука или из поиска, чтобы видео занимало экран до самого низа. Кнопка комментариев справа по-прежнему открывает комментарии.");
         table.put("Takes TikTok's own Auto scroll action out of the video panel. Auto-advance keeps working.",
                 "Убирает собственную функцию автопрокрутки TikTok из панели видео. Автоматическое переключение продолжает работать.");
         table.put("Tap Repost on the bar under a video twice within %1$d seconds. A repost with a note is left alone.",
@@ -20793,8 +20793,8 @@ public final class L10nTranslations {
                 "Sola kaydır");
         table.put("System",
                 "Sistem");
-        table.put("Take the Add comment bar off videos you open from a profile or a hashtag, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
-                "Bir profilden veya hashtag'den açtığın videolardaki yorum yazma çubuğunu kaldır, böylece video ekranı en alta kadar doldurur. Sağdaki yorum düğmesi yorumları açmaya devam eder.");
+        table.put("Take the Add comment bar off videos you open from a profile, a hashtag, a sound or search, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
+                "Bir profilden, hashtag'den, sesten veya aramadan açtığın videolardaki yorum yazma çubuğunu kaldır, böylece video ekranı en alta kadar doldurur. Sağdaki yorum düğmesi yorumları açmaya devam eder.");
         table.put("Takes TikTok's own Auto scroll action out of the video panel. Auto-advance keeps working.",
                 "TikTok'un kendi Otomatik kaydırma eylemini video panelinden kaldırır. Videolar otomatik geçmeye devam eder.");
         table.put("Tap Repost on the bar under a video twice within %1$d seconds. A repost with a note is left alone.",

@@ -236,7 +236,7 @@ public final class InterfacePreferenceCategory extends ConditionalPreferenceCate
             addPreference(new TogglePreference(
                     context,
                     "Hide the comment bar on opened videos",
-                    "Take the Add comment bar off videos you open from a profile or a hashtag, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
+                    "Take the Add comment bar off videos you open from a profile, a hashtag, a sound or search, so the video fills the screen down to the bottom. The comment button on the right still opens comments.",
                     Settings.HIDE_DETAIL_COMMENT_BAR
             ));
         }
