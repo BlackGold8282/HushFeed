@@ -22,9 +22,11 @@ import java.io.File
  *
  * The patch swaps the typeface at the exit of TikTok's text font engine. This pins that the patch's
  * own rule finds the engine's two implementations and nothing else, that both of their build
- * methods end in a typeface return the hook can stand at, and that the fonts the patch promises to
- * leave alone never reach the engine: icons are drawn by TuxIconDrawable without any typeface, and
- * the @ and # font and the gift combo font are not among the engine's files.
+ * methods return a typeface somewhere the hook can stand, and two things behind the promise to
+ * leave the other fonts alone: icons are drawn by TuxIconDrawable without any typeface, and none
+ * of the font files the engine names itself is the @ and # font or the gift combo font. A caller
+ * handing the asset loader one of those paths is not something a constant scan can rule out;
+ * that half is the device check.
  */
 class SystemFontAnchorsTest {
     @Test
