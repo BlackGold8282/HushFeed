@@ -671,6 +671,10 @@ public class Settings extends BaseSettings {
     public static final StringSetting SHARE_HIDDEN_ITEMS_LIVE =
             new StringSetting("share_hidden_items_live", SHARE_HIDDEN_ITEMS_FOLLOW_VIDEO);
     public static final StringSetting SHARE_ACTION_CATALOG = new StringSetting("share_action_catalog", "");
+    // Profile shortcuts (#49): the pills under your bio. Names or kinds to hide, comma separated,
+    // and the ones TikTok has sent to this phone, which the checklist offers.
+    public static final StringSetting HIDDEN_PROFILE_SHORTCUTS = new StringSetting("hidden_profile_shortcuts", "");
+    public static final StringSetting PROFILE_SHORTCUT_CATALOG = new StringSetting("profile_shortcut_catalog", "");
     // Package names of the apps added to the Share via row, comma separated, in the order picked.
     public static final StringSetting SHARE_ADDED_APPS = new StringSetting("share_added_apps", "");
     public static final BooleanSetting DISABLE_LONG_PRESS_QUICK_SHARE =
@@ -707,7 +711,7 @@ public class Settings extends BaseSettings {
                 REMEMBERED_SPEED, SESSION_BUDGET_STATE, BLOCK_AUTHOR_BUTTON_POSITION,
                 LOCAL_HIDE_BUTTON_POSITION, BLOCK_SOUND_BUTTON_POSITION, NOT_INTERESTED_BUTTON_POSITION,
                 FEED_MUTE_BUTTON_POSITION,
-                SHARE_ACTION_CATALOG, DIAGNOSTIC_REPORT_SALT, AUTO_STREAK_STATE,
+                SHARE_ACTION_CATALOG, PROFILE_SHORTCUT_CATALOG, DIAGNOSTIC_REPORT_SALT, AUTO_STREAK_STATE,
                 // The budget's day is worked out from this hour. Paused, the budget counts
                 // nothing and holds nothing, but its record still has to name the right day.
                 SESSION_BUDGET_RESET_HOUR);

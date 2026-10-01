@@ -268,6 +268,7 @@ Close,Close
 "Comma separated country codes. Videos posted from these are hidden, whatever the list above says.","Comma separated country codes. Videos posted from these are hidden, whatever the list above says."
 "Comma separated language codes, like en, es. A video whose original caption is in another language is hidden. Videos with no caption, or only translated ones, always stay.","Comma separated language codes, like en, es. A video whose original caption is in another language is hidden. Videos with no caption, or only translated ones, always stay."
 "Comma separated list of any other Inbox row titles to hide, matched exactly. Use this for anything not listed above.","Comma separated list of any other Inbox row titles to hide, matched exactly. Use this for anything not listed above."
+"Comma separated names exactly as the row under a profile's bio shows them, such as TikTok Studio or Your orders. Restart TikTok to apply this.","Comma separated names exactly as the row under a profile's bio shows them, such as TikTok Studio or Your orders. Restart TikTok to apply this."
 "Comma separated names exactly as the share sheet shows them: friends in the Send to row, share targets such as Facebook, and actions such as Create group or Repost. Stable keys such as copy, save and dislike also work before the sheet opens.","Comma separated names exactly as the share sheet shows them: friends in the Send to row, share targets such as Facebook, and actions such as Create group or Repost. Stable keys such as copy, save and dislike also work before the sheet opens."
 Comma separated sound ids recorded by the player's sound button. Remove one to unblock it.,Comma separated sound ids recorded by the player's sound button. Remove one to unblock it.
 Comma separated usernames or display names whose comments are hidden.,Comma separated usernames or display names whose comments are hidden.
@@ -533,6 +534,8 @@ Hide photo posts from the feed.,Hide photo posts from the feed.
 Hide picture comments,Hide picture comments
 "Hide place badges on videos, including cards with multiple places. Videos and your location permissions stay unchanged.","Hide place badges on videos, including cards with multiple places. Videos and your location permissions stay unchanged."
 Hide playlist videos,Hide playlist videos
+Hide profile shortcuts,Hide profile shortcuts
+Hide profile shortcuts by name,Hide profile shortcuts by name
 Hide promotional music,Hide promotional music
 Hide recommended searches before you type on TikTok's search page. Your search history stays. This doesn't hide suggestions above comments.,Hide recommended searches before you type on TikTok's search page. Your search history stays. This doesn't hide suggestions above comments.
 Hide recorded LIVE broadcasts from the feed.,Hide recorded LIVE broadcasts from the feed.
@@ -780,6 +783,7 @@ No matching diagnostics found,No matching diagnostics found
 No matching settings,No matching settings
 No other app takes shared text,No other app takes shared text
 No preset selected. Choose a preset above.,No preset selected. Choose a preset above.
+No profile shortcuts have been seen yet,No profile shortcuts have been seen yet
 "No recording yet. Start one, use a feature, then return here.","No recording yet. Start one, use a feature, then return here."
 No seen videos recorded yet.,No seen videos recorded yet.
 No share actions have been seen yet,No share actions have been seen yet
@@ -848,6 +852,7 @@ Open the feed once so Hushfeed can see which bottom tabs TikTok loaded.,Open the
 Open the feed once so Hushfeed can see which tabs TikTok loaded.,Open the feed once so Hushfeed can see which tabs TikTok loaded.
 Open the profile again and try once more,Open the profile again and try once more
 Open the story again and try once more,Open the story again and try once more
+"Open your profile once, then return here to choose its shortcuts.","Open your profile once, then return here to choose its shortcuts."
 Opens github.com in your browser,Opens github.com in your browser
 Operator code,Operator code
 Operator name,Operator name
@@ -879,6 +884,7 @@ Photos and stickers,Photos and stickers
 "Pick apps to add to the Share via row, before More. Each gets the same link the other apps get.","Pick apps to add to the Share via row, before More. Each gets the same link the other apps get."
 Pick the actions to remove from the share sheet. Names you typed by hand that TikTok hasn't shown yet stay in the list above.,Pick the actions to remove from the share sheet. Names you typed by hand that TikTok hasn't shown yet stay in the list above.
 Pick the buttons to take off the column. The rest stay where they are.,Pick the buttons to take off the column. The rest stay where they are.
+"Pick the shortcuts to remove from the row under a profile's bio, such as TikTok Studio or Your orders. Restart TikTok to apply this.","Pick the shortcuts to remove from the row under a profile's bio, such as TikTok Studio or Your orders. Restart TikTok to apply this."
 "Play feed videos without sound and leave the phone's volume alone. Music from another app keeps playing while it's on. DMs, stories and LIVE keep their sound.","Play feed videos without sound and leave the phone's volume alone. Music from another app keeps playing while it's on. DMs, stories and LIVE keep their sound."
 Play videos TikTok has classified without the overlay asking to be tapped through first.,Play videos TikTok has classified without the overlay asking to be tapped through first.
 Playback,Playback

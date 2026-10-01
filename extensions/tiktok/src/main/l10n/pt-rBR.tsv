@@ -79,6 +79,7 @@ Added to this account.	Adicionados a esta conta.
 Caption languages	Idiomas de legenda
 Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds, countries and caption languages, and seen videos still apply.	Nomes de conta ou ids de usuário separados por vírgula. Os vídeos deles ficam quando só um filtro por tipo de publicação, rótulos, idade, duração ou números os esconderia. Anúncios, criadores, palavras, sons, países e idiomas de legenda bloqueados e vídeos já vistos continuam valendo.
 Comma separated language codes, like en, es. A video whose original caption is in another language is hidden. Videos with no caption, or only translated ones, always stay.	Códigos de idioma separados por vírgula, como en, es. Um vídeo cuja legenda original está em outro idioma é ocultado. Vídeos sem legenda, ou só com legendas traduzidas, sempre ficam.
+Comma separated names exactly as the row under a profile's bio shows them, such as TikTok Studio or Your orders. Restart TikTok to apply this.	Nomes separados por vírgula, exatamente como aparecem na linha abaixo da bio de um perfil, como TikTok Studio ou Seus pedidos. Reinicie o TikTok para aplicar.
 Couldn't add the older seen videos. Try again.	Não foi possível adicionar os vídeos vistos anteriores. Tente de novo.
 Couldn't copy the report. Use Save report instead.	Não foi possível copiar o relatório. Use “Salvar relatório”.
 Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.	Não foi possível ler os valores atuais do TikTok (%1$s). Atualize os valores pelo menu para tentar de novo.
@@ -89,6 +90,8 @@ Forget the %1$s videos @%2$s has seen.	Esquecer os %1$s vídeos que @%2$s viu.
 Forget the seen video.	Esquecer o vídeo visto.
 Forget the video @%2$s has seen.	Esquecer o vídeo que @%2$s viu.
 Got it	Entendi
+Hide profile shortcuts	Ocultar atalhos do perfil
+Hide profile shortcuts by name	Ocultar atalhos do perfil pelo nome
 Hide the status bar in LIVE rooms	Ocultar a barra de status nas LIVEs
 How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.	Quanto de um vídeo você assiste antes que ele seja ocultado na próxima vez. Com zero, conta depois de alguns segundos.
 Later	Mais tarde
@@ -97,10 +100,13 @@ Let a LIVE fill the screen up to the top edge. The status bar comes back when yo
 Loading the gate list and TikTok's current values…	Carregando a lista de gates e os valores atuais do TikTok…
 New value	Novo valor
 No app on this phone opens that file	Nenhum app neste celular abre esse arquivo
+No profile shortcuts have been seen yet	Nenhum atalho do perfil apareceu ainda
 One video was recorded before each account kept its own list. It hides nothing until you add it here.	Um vídeo foi registrado antes de cada conta ter sua própria lista. Ele não oculta nada até você adicioná-lo aqui.
 Only these caption languages	Só estes idiomas de legenda
 Open	Abrir
+Open your profile once, then return here to choose its shortcuts.	Abra seu perfil uma vez e volte aqui para escolher os atalhos.
 Photos can't be saved to the folder in that file, so your photo folder was kept	Fotos não podem ser salvas na pasta desse arquivo, então sua pasta de fotos foi mantida
+Pick the shortcuts to remove from the row under a profile's bio, such as TikTok Studio or Your orders. Restart TikTok to apply this.	Escolha os atalhos que saem da linha abaixo da bio de um perfil, como TikTok Studio ou Seus pedidos. Reinicie o TikTok para aplicar.
 Preview shortened. Save report keeps the full report.	Prévia encurtada. “Salvar relatório” mantém o relatório completo.
 Refreshing TikTok's current values…	Atualizando os valores atuais do TikTok…
 Restart TikTok to apply this	Reinicie o TikTok para aplicar

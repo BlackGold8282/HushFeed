@@ -112,6 +112,7 @@ Added to this account.	Добавлено к этому аккаунту.
 Caption languages	Языки субтитров
 Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds, countries and caption languages, and seen videos still apply.	Через запятую: имена аккаунтов или ID пользователей. Их видео остаются, если скрыть их может только фильтр по типу публикации, её меткам, возрасту, длительности или числовым показателям. Реклама, заблокированные авторы, слова, звуки, страны, языки субтитров и просмотренные видео по-прежнему учитываются.
 Comma separated language codes, like en, es. A video whose original caption is in another language is hidden. Videos with no caption, or only translated ones, always stay.	Через запятую: коды языков, например en, es. Видео, чьи исходные субтитры на другом языке, скрываются. Видео без субтитров или только с переведёнными всегда остаются.
+Comma separated names exactly as the row under a profile's bio shows them, such as TikTok Studio or Your orders. Restart TikTok to apply this.	Названия через запятую, точно как в строке под описанием профиля, например TikTok Studio или «Ваши заказы». Перезапустите TikTok, чтобы это применить.
 Couldn't add the older seen videos. Try again.	Не удалось добавить старые просмотренные видео. Попробуйте снова.
 Couldn't copy the report. Use Save report instead.	Не удалось скопировать отчёт. Используйте вместо этого «Сохранить отчёт».
 Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.	Не удалось прочитать текущие значения TikTok (%1$s). Обновите значения через меню, чтобы попробовать снова.
@@ -125,6 +126,8 @@ Forget the %1$s videos @%2$s has seen.|many	Забыть %1$s видео, про
 Forget the seen video.	Забыть просмотренное видео.
 Forget the video @%2$s has seen.	Забыть видео, просмотренное аккаунтом @%2$s.
 Got it	Понятно
+Hide profile shortcuts	Скрыть ярлыки профиля
+Hide profile shortcuts by name	Скрыть ярлыки профиля по названию
 Hide the status bar in LIVE rooms	Скрывать строку состояния в LIVE-трансляциях
 How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.	Какую часть видео нужно посмотреть, чтобы оно в следующий раз считалось просмотренным. При значении «0» оно засчитывается уже через несколько секунд.
 Later	Позже
@@ -133,10 +136,13 @@ Let a LIVE fill the screen up to the top edge. The status bar comes back when yo
 Loading the gate list and TikTok's current values…	Загрузка списка переключателей и текущих значений TikTok…
 New value	Новое значение
 No app on this phone opens that file	Ни одно приложение на этом телефоне не открывает такой файл
+No profile shortcuts have been seen yet	Ярлыки профиля пока не встречались
 One video was recorded before each account kept its own list. It hides nothing until you add it here.	Одно видео было записано до того, как у каждого аккаунта появился свой список. Оно ничего не скрывает, пока вы не добавите его сюда.
 Only these caption languages	Только эти языки субтитров
 Open	Открыть
+Open your profile once, then return here to choose its shortcuts.	Откройте свой профиль один раз, затем вернитесь сюда, чтобы выбрать ярлыки.
 Photos can't be saved to the folder in that file, so your photo folder was kept	Фото нельзя сохранить в папку из этого файла, поэтому ваша папка для фото осталась прежней
+Pick the shortcuts to remove from the row under a profile's bio, such as TikTok Studio or Your orders. Restart TikTok to apply this.	Выберите ярлыки, которые нужно убрать из строки под описанием профиля, например TikTok Studio или «Ваши заказы». Перезапустите TikTok, чтобы это применить.
 Preview shortened. Save report keeps the full report.	Превью сокращено. «Сохранить отчёт» сохраняет отчёт полностью.
 Refreshing TikTok's current values…	Обновление текущих значений TikTok…
 Restart TikTok to apply this	Перезапустите TikTok, чтобы это применить

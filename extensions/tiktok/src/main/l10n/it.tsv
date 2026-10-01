@@ -82,6 +82,7 @@ Added to this account.	Aggiunto a questo account.
 Caption languages	Lingue dei sottotitoli
 Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds, countries and caption languages, and seen videos still apply.	Handle degli account o ID utente separati da virgole. I loro video restano visibili quando solo un filtro sul tipo di post, le sue etichette, l'età, la durata o i numeri li nasconderebbe. Pubblicità, creator bloccati, parole, audio, paesi e lingue dei sottotitoli, oltre ai video già visti, continuano ad applicarsi.
 Comma separated language codes, like en, es. A video whose original caption is in another language is hidden. Videos with no caption, or only translated ones, always stay.	Codici lingua separati da virgole, ad esempio en, es. Un video il cui sottotitolo originale è in un'altra lingua viene nascosto. I video senza sottotitoli, o con soli sottotitoli tradotti, restano sempre visibili.
+Comma separated names exactly as the row under a profile's bio shows them, such as TikTok Studio or Your orders. Restart TikTok to apply this.	Nomi separati da virgole, esattamente come li mostra la riga sotto la bio di un profilo, come TikTok Studio o I tuoi ordini. Riavvia TikTok per applicare la modifica.
 Couldn't add the older seen videos. Try again.	Non è stato possibile aggiungere i video già visti più vecchi. Riprova.
 Couldn't copy the report. Use Save report instead.	Non è stato possibile copiare il rapporto. Usa invece Salva rapporto.
 Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.	Non è stato possibile leggere i valori attuali di TikTok (%1$s). Aggiorna i valori dal menu per riprovare.
@@ -92,6 +93,8 @@ Forget the %1$s videos @%2$s has seen.	Dimentica i %1$s video visti da @%2$s.
 Forget the seen video.	Dimentica il video visto.
 Forget the video @%2$s has seen.	Dimentica il video visto da @%2$s.
 Got it	Capito
+Hide profile shortcuts	Nascondi le scorciatoie del profilo
+Hide profile shortcuts by name	Nascondi le scorciatoie del profilo per nome
 Hide the status bar in LIVE rooms	Nascondi la barra di stato nelle stanze LIVE
 How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.	Quanto di un video guardi prima che venga nascosto la volta successiva. Zero lo conta dopo pochi secondi.
 Later	Più tardi
@@ -100,10 +103,13 @@ Let a LIVE fill the screen up to the top edge. The status bar comes back when yo
 Loading the gate list and TikTok's current values…	Caricamento dell'elenco gate e dei valori attuali di TikTok…
 New value	Nuovo valore
 No app on this phone opens that file	Nessuna app su questo telefono apre quel file
+No profile shortcuts have been seen yet	Nessuna scorciatoia del profilo ancora vista
 One video was recorded before each account kept its own list. It hides nothing until you add it here.	Un video è stato registrato prima che ogni account avesse una propria lista. Non nasconde nulla finché non lo aggiungi qui.
 Only these caption languages	Solo queste lingue dei sottotitoli
 Open	Apri
+Open your profile once, then return here to choose its shortcuts.	Apri il tuo profilo una volta, poi torna qui per scegliere le sue scorciatoie.
 Photos can't be saved to the folder in that file, so your photo folder was kept	Le foto non possono essere salvate nella cartella indicata in quel file, quindi è stata mantenuta la tua cartella foto
+Pick the shortcuts to remove from the row under a profile's bio, such as TikTok Studio or Your orders. Restart TikTok to apply this.	Scegli le scorciatoie da togliere dalla riga sotto la bio di un profilo, come TikTok Studio o I tuoi ordini. Riavvia TikTok per applicare la modifica.
 Preview shortened. Save report keeps the full report.	Anteprima accorciata. Salva rapporto conserva il rapporto completo.
 Refreshing TikTok's current values…	Aggiornamento dei valori attuali di TikTok…
 Restart TikTok to apply this	Riavvia TikTok per applicare la modifica

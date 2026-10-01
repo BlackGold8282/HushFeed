@@ -80,6 +80,7 @@ Added to this account.,Ditambahkan ke akun ini.
 Caption languages,Bahasa takarir
 "Comma separated account handles or user ids. Their videos stay when only a filter on the kind of post, its labels, age, length or counts would hide them. Ads, blocked creators, words, sounds, countries and caption languages, and seen videos still apply.","Nama akun atau id pengguna yang dipisahkan koma. Video mereka tetap ada bila hanya filter jenis postingan, label, umur, durasi, atau jumlahnya yang akan menyembunyikannya. Iklan, kreator, kata, suara, negara, dan bahasa takarir yang diblokir, serta video yang sudah ditonton tetap berlaku."
 "Comma separated language codes, like en, es. A video whose original caption is in another language is hidden. Videos with no caption, or only translated ones, always stay.","Kode bahasa yang dipisahkan koma, seperti en, es. Video yang takarir aslinya dalam bahasa lain disembunyikan. Video tanpa takarir, atau hanya dengan takarir terjemahan, selalu tetap ada."
+"Comma separated names exactly as the row under a profile's bio shows them, such as TikTok Studio or Your orders. Restart TikTok to apply this.","Nama dipisahkan koma, persis seperti yang ditampilkan baris di bawah bio profil, seperti TikTok Studio atau Pesananmu. Mulai ulang TikTok agar berlaku."
 Couldn't add the older seen videos. Try again.,Tidak dapat menambahkan video lama yang dilihat. Coba lagi.
 Couldn't copy the report. Use Save report instead.,Laporan tidak bisa disalin. Gunakan Simpan laporan.
 Couldn't read TikTok's current values (%1$s). Refresh values from the menu to try again.,Tidak bisa membaca nilai TikTok saat ini (%1$s). Perbarui nilai dari menu untuk mencoba lagi.
@@ -90,15 +91,20 @@ Forget the %1$s videos @%2$s has seen.,Lupakan %1$s video yang telah dilihat @%2
 Forget the seen video.,Lupakan video yang telah dilihat.
 Forget the video @%2$s has seen.,Lupakan video yang telah dilihat @%2$s.
 Got it,Mengerti
+Hide profile shortcuts,Sembunyikan pintasan profil
+Hide profile shortcuts by name,Sembunyikan pintasan profil berdasarkan nama
 Hide the status bar in LIVE rooms,Sembunyikan bilah status di ruang LIVE
 How much of a video you watch before it's hidden next time. Zero counts it after a few seconds.,Berapa banyak video yang kamu tonton sebelum video itu disembunyikan lain kali. Nol menghitungnya setelah beberapa detik.
 Later,Nanti
 Let a LIVE fill the screen up to the top edge. The status bar comes back when you leave the LIVE. Swipe down from the top to peek at it.,Biarkan LIVE memenuhi layar sampai tepi atas. Bilah status kembali saat kamu keluar dari LIVE. Geser ke bawah dari atas untuk melihatnya sebentar.
 Loading the gate list and TikTok's current values…,Memuat daftar gate dan nilai TikTok saat ini…
 New value,Nilai baru
+No profile shortcuts have been seen yet,Belum ada pintasan profil yang terlihat
 One video was recorded before each account kept its own list. It hides nothing until you add it here.,Satu video direkam sebelum setiap akun punya daftarnya sendiri. Video itu tidak menyembunyikan apa pun sampai kamu menambahkannya di sini.
 Only these caption languages,Hanya bahasa takarir ini
+"Open your profile once, then return here to choose its shortcuts.","Buka profilmu sekali, lalu kembali ke sini untuk memilih pintasannya."
 "Photos can't be saved to the folder in that file, so your photo folder was kept","Foto tidak bisa disimpan ke folder di file itu, jadi folder fotomu tetap dipakai"
+"Pick the shortcuts to remove from the row under a profile's bio, such as TikTok Studio or Your orders. Restart TikTok to apply this.","Pilih pintasan yang dihapus dari baris di bawah bio profil, seperti TikTok Studio atau Pesananmu. Mulai ulang TikTok agar berlaku."
 Preview shortened. Save report keeps the full report.,Pratinjau dipersingkat. Simpan laporan menyimpan laporan lengkap.
 Refreshing TikTok's current values…,Memperbarui nilai TikTok saat ini…
 Restart TikTok to apply this,Mulai ulang TikTok agar berlaku
