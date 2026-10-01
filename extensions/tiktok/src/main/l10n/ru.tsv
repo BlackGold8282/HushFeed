@@ -143,6 +143,7 @@ Restart TikTok to apply this	Перезапустите TikTok, чтобы эт�
 Save report	Сохранить отчёт
 Stay on the video in full screen	Оставаться на видео в полноэкранном режиме
 Stickers can't be saved to the folder in that file, so your sticker folder was kept	Стикеры нельзя сохранить в папку из этого файла, поэтому ваша папка для стикеров осталась прежней
+Stop TikTok's benchmark runs	Остановить тесты производительности TikTok
 That creator pattern could stall the feed, so it was skipped: %1$s	Этот шаблон автора мог замедлить ленту, поэтому он был пропущен: %1$s
 That creator pattern could stall the feed, so it wasn't added: %1$s	Этот шаблон автора мог замедлить ленту, поэтому он не был добавлен: %1$s
 This key isn't in Hushfeed's list, so its type can't be checked. Reset the override.	Этого ключа нет в списке Hushfeed, поэтому его тип нельзя проверить. Сбросьте переопределение.
@@ -151,6 +152,7 @@ Activity	Активность
 Activity center (PIA)	Центр активности (PIA)
 Add	Добавить
 Block the creator in one tap. Once TikTok confirms, skip to the next video. A small Unblock button appears at the top left for two seconds. You can also unblock later in TikTok's Privacy > Blocked accounts.	Заблокировать автора одним нажатием. После подтверждения TikTok произойдёт переход к следующему видео. Слева вверху на две секунды появится небольшая кнопка «Разблокировать». Разблокировать можно и позже, в TikTok: Конфиденциальность > Заблокированные аккаунты.
+TikTok sometimes tests how fast your phone is in a background process of its own, which can hold a lot of memory. This keeps that process from starting. One that's already running stops when TikTok restarts.	TikTok иногда проверяет скорость телефона в отдельном фоновом процессе, который может занимать много памяти. Этот переключатель не даёт ему запуститься. Уже запущенный процесс остановится после перезапуска TikTok.
 TikTok's own daily screen-time reminder sends the app to the background instead of waiting to be dismissed. Coming straight back leaves the reminder on screen, so the limit stays reachable. Needs a daily limit set under TikTok's Settings and privacy, under Time and well-being.	Собственное дневное напоминание TikTok об экранном времени сворачивает приложение в фон, вместо того чтобы ждать, пока его закроют. Если сразу вернуться, напоминание останется на экране, поэтому лимит по-прежнему можно достичь. Требует дневного лимита, заданного в TikTok в разделе Настройки и конфиденциальность > Время в соцсетях.
 Try a different word or clear the search. Switches from patches you didn't tick in Morphe Manager aren't listed.	Попробуйте другое слово или очистите поиск. Переключатели из патчей, которые вы не отметили в Morphe Manager, здесь не показаны.
 Unblock	Разблокировать

@@ -105,6 +105,7 @@ Restart TikTok to apply this,Mulai ulang TikTok agar berlaku
 Save report,Simpan laporan
 Stay on the video in full screen,Tetap di video saat layar penuh
 "Stickers can't be saved to the folder in that file, so your sticker folder was kept","Stiker tidak bisa disimpan ke folder di file itu, jadi folder stikermu tetap dipakai"
+Stop TikTok's benchmark runs,Hentikan uji benchmark TikTok
 "That creator pattern could stall the feed, so it was skipped: %1$s","Pola kreator itu bisa membuat feed macet, jadi dilewati: %1$s"
 "That creator pattern could stall the feed, so it wasn't added: %1$s","Pola kreator itu bisa membuat feed macet, jadi tidak ditambahkan: %1$s"
 "This key isn't in Hushfeed's list, so its type can't be checked. Reset the override.","Kunci ini tidak ada di daftar Hushfeed, jadi jenisnya tidak bisa diperiksa. Setel ulang penggantian."
@@ -115,6 +116,7 @@ Add,Tambah
 "Block the creator in one tap. Once TikTok confirms, skip to the next video. A small Unblock button appears at the top left for two seconds. You can also unblock later in TikTok's Privacy > Blocked accounts.","Blokir kreator dengan satu ketukan. Setelah TikTok mengonfirmasi, lanjut ke video berikutnya. Tombol Buka blokir kecil muncul di kiri atas selama dua detik. Kamu juga bisa membuka blokir nanti di Privasi > Akun yang diblokir di TikTok."
 No app on this phone opens that file,Tidak ada aplikasi di ponsel ini yang bisa membuka file itu
 Open,Buka
+"TikTok sometimes tests how fast your phone is in a background process of its own, which can hold a lot of memory. This keeps that process from starting. One that's already running stops when TikTok restarts.","TikTok kadang menguji kecepatan ponselmu di proses latar belakangnya sendiri, yang bisa memakai banyak memori. Ini mencegah proses itu dimulai. Proses yang sudah berjalan berhenti saat TikTok dimulai ulang."
 Try a different word or clear the search. Switches from patches you didn't tick in Morphe Manager aren't listed.,Coba kata lain atau hapus pencarian. Sakelar dari patch yang tidak kamu centang di Morphe Manager tidak muncul.
 Unblock,Buka blokir
 Add a button beside the block control to send feedback about the current video.,Tambahkan tombol di samping kontrol blokir untuk mengirim masukan tentang video ini.

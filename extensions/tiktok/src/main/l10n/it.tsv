@@ -110,6 +110,7 @@ Restart TikTok to apply this	Riavvia TikTok per applicare la modifica
 Save report	Salva rapporto
 Stay on the video in full screen	Resta sul video a schermo intero
 Stickers can't be saved to the folder in that file, so your sticker folder was kept	Gli sticker non possono essere salvati nella cartella indicata in quel file, quindi è stata mantenuta la tua cartella sticker
+Stop TikTok's benchmark runs	Interrompi i benchmark di TikTok
 That creator pattern could stall the feed, so it was skipped: %1$s	Quel pattern di creator potrebbe bloccare il feed, quindi è stato saltato: %1$s
 That creator pattern could stall the feed, so it wasn't added: %1$s	Quel pattern di creator potrebbe bloccare il feed, quindi non è stato aggiunto: %1$s
 This key isn't in Hushfeed's list, so its type can't be checked. Reset the override.	Questa chiave non è nella lista di Hushfeed, quindi non è possibile controllarne il tipo. Reimposta la sovrascrizione.
@@ -118,6 +119,7 @@ Activity	Attività
 Activity center (PIA)	Centro attività (PIA)
 Add	Aggiungi
 Block the creator in one tap. Once TikTok confirms, skip to the next video. A small Unblock button appears at the top left for two seconds. You can also unblock later in TikTok's Privacy > Blocked accounts.	Blocca il creator con un tocco. Non appena TikTok conferma, si passa al video successivo. In alto a sinistra compare per due secondi un piccolo pulsante Sblocca. Puoi sbloccarlo anche più tardi in TikTok, in Privacy > Account bloccati.
+TikTok sometimes tests how fast your phone is in a background process of its own, which can hold a lot of memory. This keeps that process from starting. One that's already running stops when TikTok restarts.	A volte TikTok misura la velocità del telefono in un suo processo in background, che può occupare molta memoria. Questa opzione impedisce a quel processo di avviarsi. Se è già in esecuzione, si ferma al riavvio di TikTok.
 TikTok's own daily screen-time reminder sends the app to the background instead of waiting to be dismissed. Coming straight back leaves the reminder on screen, so the limit stays reachable. Needs a daily limit set under TikTok's Settings and privacy, under Time and well-being.	Il promemoria giornaliero sul tempo di utilizzo di TikTok manda l'app in background invece di aspettare di essere chiuso. Tornando subito indietro, il promemoria resta sullo schermo, così il limite resta raggiungibile. Richiede un limite giornaliero impostato in TikTok, in Impostazioni e privacy, sotto Tempo e benessere.
 Try a different word or clear the search. Switches from patches you didn't tick in Morphe Manager aren't listed.	Prova una parola diversa o cancella la ricerca. Gli interruttori delle patch che non hai selezionato in Morphe Manager non compaiono nell'elenco.
 Unblock	Sblocca

@@ -107,6 +107,7 @@ Restart TikTok to apply this	Bunu uygulamak için TikTok'u yeniden başlat
 Save report	Raporu kaydet
 Stay on the video in full screen	Tam ekranda videoda kal
 Stickers can't be saved to the folder in that file, so your sticker folder was kept	Çıkartmalar o dosyadaki klasöre kaydedilemiyor, bu yüzden çıkartma klasörün korundu
+Stop TikTok's benchmark runs	TikTok'un performans testlerini durdur
 That creator pattern could stall the feed, so it was skipped: %1$s	Bu içerik üreticisi kalıbı akışı kilitleyebileceği için atlandı: %1$s
 That creator pattern could stall the feed, so it wasn't added: %1$s	Bu içerik üreticisi kalıbı akışı kilitleyebileceği için eklenmedi: %1$s
 This key isn't in Hushfeed's list, so its type can't be checked. Reset the override.	Bu anahtar Hushfeed listesinde yok, bu yüzden türü denetlenemiyor. Geçersiz kılmayı sıfırla.
@@ -225,6 +226,7 @@ Clear all suggested accounts	Önerilen tüm hesapları temizle
 Clear the recent events, saved crash reports, a recorded screen layout and the hook status above.	Son olayları, kaydedilen çökme raporlarını, kaydedilmiş bir ekran düzenini ve yukarıdaki kanca durumunu temizle.
 Record a screen's layout	Bir ekranın düzenini kaydet
 Tap, then go to the screen with what you want hidden. After %1$d seconds Hushfeed records how that screen is built, without any of its text, for the diagnostic report.	Dokun, sonra gizlemek istediğin şeyin olduğu ekrana git. %1$d saniye sonra Hushfeed o ekranın nasıl kurulduğunu, metnini almadan, tanılama raporu için kaydeder.
+TikTok sometimes tests how fast your phone is in a background process of its own, which can hold a lot of memory. This keeps that process from starting. One that's already running stops when TikTok restarts.	TikTok bazen telefonunun ne kadar hızlı olduğunu kendi arka plan işleminde test eder ve bu işlem çok fazla bellek kullanabilir. Bu ayar o işlemin başlamasını engeller. Zaten çalışan bir işlem, TikTok yeniden başladığında durur.
 Waiting to record. Go to the screen you want recorded.	Kayıt bekleniyor. Kaydedilmesini istediğin ekrana git.
 A screen's layout is recorded. Export the diagnostic report to send it, or tap to record another.	Bir ekran düzeni kaydedildi. Göndermek için tanılama raporunu dışa aktar ya da başka birini kaydetmek için dokun.
 Go to the screen now. Hushfeed records its layout in %1$d seconds.	Şimdi ekrana git. Hushfeed %1$d saniye içinde düzenini kaydeder.

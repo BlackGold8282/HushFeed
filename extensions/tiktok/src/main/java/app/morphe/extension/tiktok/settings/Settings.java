@@ -604,6 +604,9 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting BLOCK_LOCATION = new BooleanSetting("block_location", TRUE);
     public static final BooleanSetting BLOCK_CLIPBOARD_READS = new BooleanSetting("block_clipboard_reads", TRUE);
     public static final BooleanSetting BLOCK_MOTION_SENSORS = new BooleanSetting("block_motion_sensors", TRUE);
+    // Off by default, unlike the blocks above: it rides on the sensor patch, so picking that
+    // patch is not a choice about the benchmark (#64). Put into effect by BenchmarkRuns.
+    public static final BooleanSetting STOP_BENCHMARK_RUNS = new BooleanSetting("stop_benchmark_runs", FALSE);
     // Off by default: TikTok's own hybrid pages, the shop checkout and the CAPTCHA page among
     // them, are built on that bridge and stop working without it.
     public static final BooleanSetting BLOCK_WEBVIEW_JS_INTERFACES = new BooleanSetting("block_webview_js_interfaces", FALSE);

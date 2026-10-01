@@ -1148,6 +1148,7 @@ Still saving the last one,Still saving the last one
 "Stop TikTok asking the screen to run at the frame rate of the video it's playing. On a 90 or 120 Hz phone that ask slows the whole app down to the video's rate, scrolling included.","Stop TikTok asking the screen to run at the frame rate of the video it's playing. On a 90 or 120 Hz phone that ask slows the whole app down to the video's rate, scrolling included."
 "Stop TikTok listening to the accelerometer, gyroscope, magnetometer and the other motion sensors it uses to fingerprint the phone.","Stop TikTok listening to the accelerometer, gyroscope, magnetometer and the other motion sensors it uses to fingerprint the phone."
 Stop TikTok reading what you copied. Copying a link from TikTok still works.,Stop TikTok reading what you copied. Copying a link from TikTok still works.
+Stop TikTok's benchmark runs,Stop TikTok's benchmark runs
 Stop a long press on Like from opening TikTok's repost action.,Stop a long press on Like from opening TikTok's repost action.
 Stop a long press on Share from opening TikTok's quick share action.,Stop a long press on Share from opening TikTok's quick share action.
 Stop analytics and tracking,Stop analytics and tracking
@@ -1316,6 +1317,7 @@ TikTok refused the follow with code %1$s. A hidden CAPTCHA may be the cause.,Tik
 TikTok refused the follow: %1$s,TikTok refused the follow: %1$s
 TikTok refused the follow: %1$s A hidden CAPTCHA may be the cause.,TikTok refused the follow: %1$s A hidden CAPTCHA may be the cause.
 TikTok runs as if it weren't patched. Your settings stay as they are.,TikTok runs as if it weren't patched. Your settings stay as they are.
+"TikTok sometimes tests how fast your phone is in a background process of its own, which can hold a lot of memory. This keeps that process from starting. One that's already running stops when TikTok restarts.","TikTok sometimes tests how fast your phone is in a background process of its own, which can hold a lot of memory. This keeps that process from starting. One that's already running stops when TikTok restarts."
 TikTok's messages didn't start in time. It tries again at %1$s.,TikTok's messages didn't start in time. It tries again at %1$s.
 "TikTok's own daily screen-time reminder sends the app to the background instead of waiting to be dismissed. Coming straight back leaves the reminder on screen, so the limit stays reachable. Needs a daily limit set under TikTok's Settings and privacy, under Time and well-being.","TikTok's own daily screen-time reminder sends the app to the background instead of waiting to be dismissed. Coming straight back leaves the reminder on screen, so the limit stays reachable. Needs a daily limit set under TikTok's Settings and privacy, under Time and well-being."
 TikTok's own value,TikTok's own value
