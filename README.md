@@ -1,7 +1,7 @@
 ![Hushfeed. Take back your feed with focused controls for filtering, gestures, playback, downloads and privacy.](assets/readme-hero.png)
 
 <p align="center">
-  <a href="CHANGELOG.md"><img alt="version" src="https://img.shields.io/badge/version-0.65.0-6f42c1.svg" /></a>
+  <a href="CHANGELOG.md"><img alt="version" src="https://img.shields.io/badge/version-0.66.0-6f42c1.svg" /></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-GPLv3-blue.svg" /></a>
   <a href="https://www.android.com/"><img alt="platform" src="https://img.shields.io/badge/platform-Android-3ddc84.svg" /></a>
   <a href="https://github.com/MorpheApp/morphe-manager"><img alt="Morphe" src="https://img.shields.io/badge/works%20with-Morphe-00b894.svg" /></a>
@@ -18,7 +18,7 @@ Hushfeed is a [Morphe](https://github.com/MorpheApp/morphe-manager) patch bundle
 > [!IMPORTANT]
 > Hushfeed changes often while TikTok moves underneath it. Hushfeed targets the global TikTok package, `com.zhiliaoapp.musically`, versions [47.0.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-0-3-release/tiktok-47-0-3-3-android-apk-download/) and [47.1.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-3-release/tiktok-47-1-3-android-apk-download/). Use one of those exact APKs when patching. See [Supported target](#supported-target) for the verified build details.
 
-Hushfeed v0.65.0 contains 98 patches for TikTok 47.0.3 and 47.1.3. Mute feed videos now works on 47.1.3 and on photo posts, holding the Home tab opens Hushfeed's settings, and every save says it's been taken the moment you ask. It needs Morphe Manager 1.32.0 or newer.
+Hushfeed v0.66.0 contains 102 patches for TikTok 47.0.3, 47.1.3 and 47.1.4. New in this one: settings in Italian and Russian, a daily message that keeps a streak going, a name of your own under the app icon, and Look like the store app for follows that undo themselves. It needs Morphe Manager 1.32.0 or newer.
 
 ## Pick what changes
 
@@ -495,7 +495,7 @@ The script writes two generated files, neither of them meant to be edited by han
 ## Supported target
 
 - App: TikTok, the global package `com.zhiliaoapp.musically`
-- Versions: [47.0.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-0-3-release/tiktok-47-0-3-3-android-apk-download/), released 19 September 2026, and [47.1.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-3-release/tiktok-47-1-3-android-apk-download/), on APKMirror since 25 September 2026. [47.1.4](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-4-release/tiktok-47-1-4-2-android-apk-download/), on APKMirror since 28 September 2026, is declared on main and arrives with the next release. v0.65.0 declares 47.0.3 and 47.1.3, so patch one of those two with it.
+- Versions: [47.0.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-0-3-release/tiktok-47-0-3-3-android-apk-download/), released 19 September 2026, [47.1.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-3-release/tiktok-47-1-3-android-apk-download/), on APKMirror since 25 September 2026, and [47.1.4](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-4-release/tiktok-47-1-4-2-android-apk-download/), on APKMirror since 28 September 2026.
 - Builds: version codes 2024700030, 2024701030 and 2024701040, all arm64-v8a and armeabi-v7a, nodpi, minSdk 23
 - SHA-256 of the APKs every patch was verified against: `f4d853f6ccaf145a9b5f106b8e63767e2345e17ae829b6cc6b272fdf0161389c` (47.0.3), `8b5569f592a5534652ae460ef1d9e7f7394b5b7fdde44ae64f106d76767e2622` (47.1.3) and `4226ed5d3031b68208c29f62d80ac421b281fc74201bc4163d98e442d0991a40` (47.1.4)
 
