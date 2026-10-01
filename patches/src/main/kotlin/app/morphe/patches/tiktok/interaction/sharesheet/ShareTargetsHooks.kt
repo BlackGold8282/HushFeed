@@ -5,6 +5,7 @@
 package app.morphe.patches.tiktok.interaction.sharesheet
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.fieldAccess
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.PatchException
@@ -151,12 +152,14 @@ internal fun Method.isShareModeLookup(field: String): Boolean =
 private object VideoShareModeFingerprint : Fingerprint(
     returnType = "I",
     parameters = listOf(STRING, LIST),
+    filters = listOf(fieldAccess(definingClass = SHARE_PLATFORM, name = VIDEO_SHARE_MODE)),
     custom = { method, _ -> method.isShareModeLookup(VIDEO_SHARE_MODE) },
 )
 
 private object PhotoShareModeFingerprint : Fingerprint(
     returnType = "I",
     parameters = listOf(STRING),
+    filters = listOf(fieldAccess(definingClass = SHARE_PLATFORM, name = PHOTO_SHARE_MODE)),
     custom = { method, _ -> method.isShareModeLookup(PHOTO_SHARE_MODE) },
 )
 
