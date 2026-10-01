@@ -59,16 +59,19 @@ import java.util.WeakHashMap;
  *                         called it ezp (on 47.0.3 ezp is a label in the paid series panel).
  *                         It is a shared root id: the profile's Favorites page is a
  *                         LinearLayout with the same id.
- *   id/view_rootview      the root of every feed cell (VideoViewCellRootView). Every id below
- *                         it here is feed furniture and lives inside one. id/long_press_layout
+ *   id/view_rootview      the root of every feed cell (VideoViewCellRootView). The ids below
+ *                         it here are feed furniture inside one, apart from uvy, qo4 and cn8,
+ *                         which sit outside the cells. id/long_press_layout
  *                         is a sibling layer under it, not an ancestor of the rail: scoping
  *                         to that from 0.35.0 hid nothing in the right column (S22, 2026-09-17,
  *                         read off the live tree with the probe's views action).
  *   id/uvy                the strip across the top holding For You, Following and the rest
- *   id/qo4 id/cn8         on a video opened from a profile, a hashtag or a sound, the Add
- *                         comment bar and the plain View under the pager that keeps its
+ *   id/qo4 id/cn8         on a video opened from a profile, a hashtag, a sound or search, the
+ *                         Add comment bar and the plain View under the pager that keeps its
  *                         138 px (S22). Clear display hides the bar's frame and keeps the
- *                         strip, so both go and the pager takes the room back (#50)
+ *                         strip, so both go and the pager takes the room back (#50). cn8 also
+ *                         names a Space in other layouts, so only the child of
+ *                         id/viewpager_container counts
  *   id/i98 id/g6r id/ep7  the avatar, like and comment controls
  *   id/i7r id/pnp id/w_2  the favourite, music and share controls
  *   id/g6t id/ej_         the rows under like, comment, favourite and share
@@ -104,6 +107,13 @@ public final class VideoOverlayHider {
      * whole window, and the hook status names the miss.
      */
     private static final String CELL_ROOT_ID = "view_rootview";
+    /**
+     * The column the detail pager shares with the comment strip under it. The strip's id isn't
+     * its own: on 47.0.3 and 47.1.4 it also names a Space in twenty other layouts, any of which
+     * may be inflated in the detail window, so only the column's own child counts as the strip.
+     * The column keeps this name on every build so far.
+     */
+    private static final String PAGER_COLUMN_ID = "viewpager_container";
     /** Whether the last pass left the rail buttons scaled, so the next one can put them back. */
     private static boolean scaledLastPass;
     /** The index of the music row in {@link #RAIL_BUTTON_IDS}; it spans the width and is not scaled. */
@@ -388,7 +398,13 @@ public final class VideoOverlayHider {
                 int cellId = identifier(activity, APP_PACKAGE, CELL_ROOT_ID);
                 try {
                     collect(root, ids, found, cellId, cellId == 0, needsCell);
+                    // Only a strip this class hid is ever put back, and that one was the
+                    // column's, so the column is looked up only while the strip is wanted.
+                    if (detailCommentBar) {
+                        keepColumnStrips(found, identifier(activity, APP_PACKAGE, PAGER_COLUMN_ID));
+                    }
                     selectCurrentTargets(found, TRAVERSAL.selected);
+                    pairDetailCommentBar(hidden, TRAVERSAL.selected);
                     applySelectedTargets(ids, hidden, found, TRAVERSAL.selected,
                             touchScale != 1f);
                     // The size goes on the icon inside each button, not the button. The slots
@@ -579,6 +595,41 @@ public final class VideoOverlayHider {
         int count = 0;
         for (String[] candidates : targets) count += candidates.length;
         return count;
+    }
+
+    /** Where a target's candidates start in the per-candidate arrays. */
+    private static int firstCandidate(int target) {
+        int at = 0;
+        for (int i = 0; i < target; i++) at += TRAVERSAL_TARGET_IDS[i].length;
+        return at;
+    }
+
+    /** Drops every strip that isn't the pager column's own child; see {@link #PAGER_COLUMN_ID}. */
+    private static void keepColumnStrips(List<List<View>> found, int columnId) {
+        int at = firstCandidate(DETAIL_COMMENT_STRIP_TARGET);
+        for (int i = 0; i < DETAIL_COMMENT_STRIP_IDS.length; i++) {
+            List<View> strips = found.get(at + i);
+            for (int j = strips.size() - 1; j >= 0; j--) {
+                android.view.ViewParent parent = strips.get(j).getParent();
+                if (columnId == 0 || !(parent instanceof View)
+                        || ((View) parent).getId() != columnId) {
+                    strips.remove(j);
+                }
+            }
+        }
+    }
+
+    /**
+     * The comment bar and its strip go together or not at all. The strip alone grows the pager
+     * under a bar that still shows, which then covers the caption and the music row; the bar
+     * alone leaves the black strip. When one of them can't be found, the one that was found
+     * stays (or comes back) and the other is reported missing.
+     */
+    private static void pairDetailCommentBar(boolean[] hidden, int[] selected) {
+        boolean bar = selected[DETAIL_COMMENT_BAR_TARGET] >= 0;
+        boolean strip = selected[DETAIL_COMMENT_STRIP_TARGET] >= 0;
+        if (bar && !strip) hidden[firstCandidate(DETAIL_COMMENT_BAR_TARGET)] = false;
+        if (strip && !bar) hidden[firstCandidate(DETAIL_COMMENT_STRIP_TARGET)] = false;
     }
 
     /** Chooses the newest candidate that actually occurs in the current hierarchy. */

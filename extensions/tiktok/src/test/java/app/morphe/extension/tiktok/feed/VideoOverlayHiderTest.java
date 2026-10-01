@@ -954,65 +954,158 @@ public class VideoOverlayHiderTest {
         }
     }
 
+    private static final int BAR_ID = 0x7f0a0210;
+    private static final int STRIP_ID = 0x7f0a0211;
+    private static final int COLUMN_ID = 0x7f0a0212;
+    private static final int CELL_ID = 0x7f0a0201;
+
+    private static void resolveCommentBarIds() {
+        VideoOverlayHider.resolveForTests("47.0.3:qo4", BAR_ID);
+        VideoOverlayHider.resolveForTests("47.0.3:cn8", STRIP_ID);
+        VideoOverlayHider.resolveForTests("viewpager_container", COLUMN_ID);
+        // With the cell root known, furniture is looked for inside cells only; the bar and its
+        // strip sit outside every cell, under the pager, as on the phone.
+        VideoOverlayHider.resolveForTests("view_rootview", CELL_ID);
+    }
+
+    /** The pager column as TikTok inflates it: a cell over the strip that keeps its height. */
+    private static LinearLayout pagerColumn(Context context, View strip) {
+        LinearLayout column = new LinearLayout(context);
+        column.setId(COLUMN_ID);
+        column.setOrientation(LinearLayout.VERTICAL);
+        FrameLayout cell = new FrameLayout(context);
+        cell.setId(CELL_ID);
+        column.addView(cell, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
+        strip.setId(STRIP_ID);
+        column.addView(strip, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 138));
+        return column;
+    }
+
+    private static void layOut(Activity activity) {
+        activity.findViewById(android.R.id.content).getViewTreeObserver().dispatchOnGlobalLayout();
+    }
+
     /**
      * A video opened from a profile has an Add comment bar laid over a strip that holds its
      * height under the pager (#50). The switch takes both away there and gives them back when
-     * it goes off. The main feed has the tabs in that place, so a view there with either id is
-     * left alone.
+     * it goes off. The main feed inflates the same column with the same ids and has the tabs
+     * in that place, so it's left alone. The strip's id also names a Space in twenty other
+     * layouts; one of those in the detail window stays put.
      */
     @Test
     public void theCommentBarLeavesAVideoOpenedFromAProfile() {
-        int barId = 0x7f0a0210;
-        int stripId = 0x7f0a0211;
-        int cellId = 0x7f0a0201;
-        VideoOverlayHider.resolveForTests("47.0.3:qo4", barId);
-        VideoOverlayHider.resolveForTests("47.0.3:cn8", stripId);
-        // With the cell root known, furniture is looked for inside cells only; the bar and its
-        // strip sit outside every cell, under the pager, as on the phone.
-        VideoOverlayHider.resolveForTests("view_rootview", cellId);
+        resolveCommentBarIds();
         Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
         try (var main = Robolectric.buildActivity(Activity.class).setup();
              var detailController = Robolectric.buildActivity(
                      com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
-            FrameLayout feed = new FrameLayout(main.get());
             View feedStrip = new View(main.get());
-            feedStrip.setId(stripId);
-            feed.addView(feedStrip);
-            main.get().setContentView(feed);
+            main.get().setContentView(pagerColumn(main.get(), feedStrip));
             VideoOverlayHider.install(main.get());
             org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
-            main.get().findViewById(android.R.id.content).getViewTreeObserver().dispatchOnGlobalLayout();
+            layOut(main.get());
             assertEquals(View.VISIBLE, feedStrip.getVisibility());
 
             Activity detail = detailController.get();
-            LinearLayout pagerColumn = new LinearLayout(detail);
-            pagerColumn.setOrientation(LinearLayout.VERTICAL);
-            FrameLayout cell = new FrameLayout(detail);
-            cell.setId(cellId);
-            pagerColumn.addView(cell, new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
             View strip = new View(detail);
-            strip.setId(stripId);
-            pagerColumn.addView(strip, new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, 138));
             FrameLayout root = new FrameLayout(detail);
-            root.addView(pagerColumn);
+            root.addView(pagerColumn(detail, strip));
             View bar = new View(detail);
-            bar.setId(barId);
+            bar.setId(BAR_ID);
             root.addView(bar);
+            FrameLayout otherPage = new FrameLayout(detail);
+            // A Space makes itself INVISIBLE as it's built; GONE would be this class's doing.
+            android.widget.Space spacer = new android.widget.Space(detail);
+            int spacerVisibility = spacer.getVisibility();
+            spacer.setId(STRIP_ID);
+            otherPage.addView(spacer);
+            root.addView(otherPage);
             detail.setContentView(root);
             detailController.resume();
 
-            detail.findViewById(android.R.id.content).getViewTreeObserver().dispatchOnGlobalLayout();
+            layOut(detail);
             assertEquals(View.GONE, bar.getVisibility());
             assertEquals(View.GONE, strip.getVisibility());
+            assertEquals("a Space sharing the strip's id was taken",
+                    spacerVisibility, spacer.getVisibility());
 
             Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
-            detail.findViewById(android.R.id.content).getViewTreeObserver().dispatchOnGlobalLayout();
+            layOut(detail);
             assertEquals(View.VISIBLE, bar.getVisibility());
             assertEquals(View.VISIBLE, strip.getVisibility());
         } finally {
             Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+        }
+    }
+
+    /**
+     * The bar and the strip go together. With the bar missing, a collapsed strip would grow the
+     * pager under nothing, or under a bar a build renamed, which then covers the caption. With
+     * the strip missing, hiding the bar alone leaves the black strip.
+     */
+    @Test
+    public void halfTheCommentBarIsNeverHidden() {
+        resolveCommentBarIds();
+        Settings.HIDE_DETAIL_COMMENT_BAR.save(true);
+        try (var noBar = Robolectric.buildActivity(
+                     com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start();
+             var noStrip = Robolectric.buildActivity(
+                     com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).create().start()) {
+            View strip = new View(noBar.get());
+            noBar.get().setContentView(pagerColumn(noBar.get(), strip));
+            noBar.resume();
+            VideoOverlayHider.applyTo(noBar.get());
+            assertEquals(View.VISIBLE, strip.getVisibility());
+
+            FrameLayout root = new FrameLayout(noStrip.get());
+            View bar = new View(noStrip.get());
+            bar.setId(BAR_ID);
+            root.addView(bar);
+            noStrip.get().setContentView(root);
+            noStrip.resume();
+            VideoOverlayHider.applyTo(noStrip.get());
+            assertEquals(View.VISIBLE, bar.getVisibility());
+
+            // The strip turns up later in the same window: now both go.
+            View lateStrip = new View(noStrip.get());
+            root.addView(pagerColumn(noStrip.get(), lateStrip));
+            VideoOverlayHider.applyTo(noStrip.get());
+            assertEquals(View.GONE, bar.getVisibility());
+            assertEquals(View.GONE, lateStrip.getVisibility());
+        } finally {
+            Settings.HIDE_DETAIL_COMMENT_BAR.save(false);
+        }
+    }
+
+    /**
+     * The phones take the Android 11 and later branch, which hides through each window's own
+     * insets controller. That branch keeps one record per window too (#50).
+     */
+    @Test
+    @Config(sdk = 34)
+    public void eachWindowKeepsItsOwnStatusBarOnAndroid11AndUp() {
+        try (var main = Robolectric.buildActivity(Activity.class).setup();
+             var detail = Robolectric.buildActivity(Activity.class).setup()) {
+            View mainDecor = main.get().getWindow().getDecorView();
+            View detailDecor = detail.get().getWindow().getDecorView();
+            int bySwipe = android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE;
+
+            VideoOverlayHider.setStatusBarHidden(detail.get(), true);
+            long now = android.os.SystemClock.uptimeMillis();
+            assertFalse(VideoOverlayHider.rehideAllowed(detailDecor, now));
+            assertTrue(VideoOverlayHider.rehideAllowed(mainDecor, now));
+            assertEquals(bySwipe, detailDecor.getWindowInsetsController().getSystemBarsBehavior());
+            assertNotEquals("the feed's window was asked to hide its bar",
+                    bySwipe, mainDecor.getWindowInsetsController().getSystemBarsBehavior());
+
+            // Nothing was hidden in the feed's window, so giving back there leaves this one.
+            VideoOverlayHider.setStatusBarHidden(main.get(), false);
+            assertFalse(VideoOverlayHider.rehideAllowed(detailDecor, now));
+
+            VideoOverlayHider.setStatusBarHidden(detail.get(), false);
+            assertTrue(VideoOverlayHider.rehideAllowed(detailDecor, now));
         }
     }
 }
