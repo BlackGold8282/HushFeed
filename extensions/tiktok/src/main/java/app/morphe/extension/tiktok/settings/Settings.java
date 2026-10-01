@@ -650,6 +650,8 @@ public class Settings extends BaseSettings {
     public static final StringSetting SHARE_HIDDEN_ITEMS_LIVE =
             new StringSetting("share_hidden_items_live", SHARE_HIDDEN_ITEMS_FOLLOW_VIDEO);
     public static final StringSetting SHARE_ACTION_CATALOG = new StringSetting("share_action_catalog", "");
+    // Package names of the apps added to the Share via row, comma separated, in the order picked.
+    public static final StringSetting SHARE_ADDED_APPS = new StringSetting("share_added_apps", "");
     public static final BooleanSetting DISABLE_LONG_PRESS_QUICK_SHARE =
             new BooleanSetting("disable_long_press_quick_share", FALSE);
     public static final BooleanSetting DISABLE_LONG_PRESS_REPOST =

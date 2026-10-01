@@ -14,6 +14,7 @@ import app.morphe.extension.tiktok.settings.Settings;
 import app.morphe.extension.tiktok.settings.SettingsStatus;
 import app.morphe.extension.tiktok.settings.preference.InputTextPreference;
 import app.morphe.extension.tiktok.settings.preference.ShareActionChecklistPreference;
+import app.morphe.extension.tiktok.settings.preference.ShareAppPickerPreference;
 import app.morphe.extension.tiktok.settings.preference.TogglePreference;
 import app.morphe.extension.tiktok.share.ShareSheetTools;
 import app.morphe.extension.tiktok.share.ShareSurface;
@@ -38,6 +39,7 @@ public final class SharePreferenceCategory extends ConditionalPreferenceCategory
     @Override
     public void addPreferences(Context context) {
         addPreference(new TogglePreference(context, "Hide sharing apps", "Hide the Share via row.", Settings.HIDE_SHARE_CHANNELS));
+        addPreference(new ShareAppPickerPreference(context));
         addPreference(new TogglePreference(context, "Hide video actions", "Hide the actions row of the share sheet.", Settings.HIDE_SHARE_ACTIONS));
         addPreference(new TogglePreference(
                 context,

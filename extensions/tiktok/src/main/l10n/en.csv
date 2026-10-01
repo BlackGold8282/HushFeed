@@ -125,6 +125,7 @@ Add a button that hides the current creator on this phone without blocking them.
 Add a creator,Add a creator
 Add a search box that filters comments already loaded on this video by text or username. It doesn't search all of TikTok or remove TikTok's suggested-search banner.,Add a search box that filters comments already loaded on this video by text or username. It doesn't search all of TikTok or remove TikTok's suggested-search banner.
 Add a separate button that skips videos using the current sound.,Add a separate button that skips videos using the current sound.
+Add apps to Share via,Add apps to Share via
 Add hidden creator,Add hidden creator
 Add older seen videos to this account,Add older seen videos to this account
 Added %1$s,Added %1$s
@@ -639,6 +640,7 @@ Included diagnostics,Included diagnostics
 Includes all diagnostic events.,Includes all diagnostic events.
 Includes these events: %1$s,Includes these events: %1$s
 Inserted cards,Inserted cards
+"Install one, then come back here.","Install one, then come back here."
 Keep For You on a Home tap,Keep For You on a Home tap
 Keep For You on a pull down,Keep For You on a pull down
 Keep a local record of what you have watched and hide those videos when the feed sends them again.,Keep a local record of what you have watched and hide those videos when the feed sends them again.
@@ -708,6 +710,7 @@ Log diagnostics,Log diagnostics
 Long press,Long press
 Long-press Home for Hushfeed settings,Long-press Home for Hushfeed settings
 Look like the store app to TikTok's checks,Look like the store app to TikTok's checks
+Looking for apps,Looking for apps
 Lowest,Lowest
 Make TikTok yours.,Make TikTok yours.
 Manager,Manager
@@ -743,6 +746,7 @@ Next message: today at %1$s.,Next message: today at %1$s.
 Next message: tomorrow at %1$s.,Next message: tomorrow at %1$s.
 No,No
 No app on this phone opens that file,No app on this phone opens that file
+No apps match this search,No apps match this search
 "No chat with @%1$s turned up on this account. Open your chat with them once, then try again.","No chat with @%1$s turned up on this account. Open your chat with them once, then try again."
 No creator to block on this video,No creator to block on this video
 No creator to hide on this video,No creator to hide on this video
@@ -760,6 +764,7 @@ No limit,No limit
 No matching countries. Try a country name or a two-letter code.,No matching countries. Try a country name or a two-letter code.
 No matching diagnostics found,No matching diagnostics found
 No matching settings,No matching settings
+No other app takes shared text,No other app takes shared text
 No preset selected. Choose a preset above.,No preset selected. Choose a preset above.
 "No recording yet. Start one, use a feature, then return here.","No recording yet. Start one, use a feature, then return here."
 No seen videos recorded yet.,No seen videos recorded yet.
@@ -857,6 +862,7 @@ Photo destination,Photo destination
 Photo filename,Photo filename
 Photos and stickers,Photos and stickers
 "Photos can't be saved to the folder in that file, so your photo folder was kept","Photos can't be saved to the folder in that file, so your photo folder was kept"
+"Pick apps to add to the Share via row, before More. Each gets the same link the other apps get.","Pick apps to add to the Share via row, before More. Each gets the same link the other apps get."
 Pick the actions to remove from the share sheet. Names you typed by hand that TikTok hasn't shown yet stay in the list above.,Pick the actions to remove from the share sheet. Names you typed by hand that TikTok hasn't shown yet stay in the list above.
 Pick the buttons to take off the column. The rest stay where they are.,Pick the buttons to take off the column. The rest stay where they are.
 "Play feed videos without sound and leave the phone's volume alone. Music from another app keeps playing while it's on. DMs, stories and LIVE keep their sound.","Play feed videos without sound and leave the phone's volume alone. Music from another app keeps playing while it's on. DMs, stories and LIVE keep their sound."
@@ -1008,6 +1014,7 @@ Screen layout recorded. Export the diagnostic report to send it.,Screen layout r
 Screen time,Screen time
 Search,Search
 Search and override gates,Search and override gates
+Search apps,Search apps
 Search by name or gate key,Search by name or gate key
 "Search by name, description or category.","Search by name, description or category."
 Search countries or operators,Search countries or operators

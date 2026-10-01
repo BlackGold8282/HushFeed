@@ -1432,3 +1432,10 @@ Found %1$s in your chats.	%1$s sohbetlerinde bulundu.
 App checks	Uygulama kontrolleri
 Look like the store app to TikTok's checks	TikTok'un kontrollerine mağaza uygulaması gibi görünün
 Answer TikTok's own checks of how it was signed and installed the way the Play Store app would. For follows or likes that undo themselves on a refresh. TikTok can also check from native code this doesn't reach, so it may not help.	TikTok'un nasıl imzalanıp yüklendiğine dair kendi kontrollerini, Play Store uygulaması gibi yanıtlar. Yenilemede kendiliğinden geri alınan takip veya beğeniler için. TikTok bunu, buraya erişemeyen yerel koddan da kontrol edebilir, bu yüzden yardımcı olmayabilir.
+Add apps to Share via	Şununla paylaş'a uygulama ekle
+Pick apps to add to the Share via row, before More. Each gets the same link the other apps get.	Şununla paylaş satırına, Daha fazla'dan önce eklenecek uygulamaları seç. Her biri diğer uygulamalarla aynı bağlantıyı alır.
+Search apps	Uygulama ara
+Looking for apps	Uygulamalar aranıyor
+No other app takes shared text	Paylaşılan metni alan başka uygulama yok
+Install one, then come back here.	Bir tane yükle, sonra buraya dön.
+No apps match this search	Bu aramayla eşleşen uygulama yok

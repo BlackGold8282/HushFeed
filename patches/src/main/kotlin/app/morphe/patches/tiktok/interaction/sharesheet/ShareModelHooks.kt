@@ -38,7 +38,7 @@ private const val FUNCTION0 = "Lkotlin/jvm/functions/Function0;"
 private const val SHARE_TOOLS = "Lapp/morphe/extension/tiktok/share/ShareSheetTools;"
 private const val BASE_SHARE_PACKAGE = "Lcom/ss/android/ugc/aweme/share/base/model/BaseSharePackage;"
 
-private object ShareSnapshotFingerprint : Fingerprint(
+internal object ShareSnapshotFingerprint : Fingerprint(
     strings = listOf("click_to_respond_duration", "config_duration"),
     custom = { method, _ -> method.name == "<init>" && method.parameterTypes.size == 1 },
 )

@@ -24,7 +24,8 @@ val shareSheetToolsPatch = bytecodePatch(
         "The check follows the account or conversation instead of the visible name and covers " +
         "accessibility actions and keyboard input. It can also hide chosen people, share options " +
         "or the whole Send to row, and a profile's or a LIVE's share sheet can hide a different " +
-        "set from a video's. Switch: Hushfeed settings > Share sheet.",
+        "set from a video's, and apps you pick can be added to the Share via row. " +
+        "Switch: Hushfeed settings > Share sheet.",
     default = false,
 ) {
     category("Interaction")
@@ -34,6 +35,9 @@ val shareSheetToolsPatch = bytecodePatch(
 
     execute {
         hookShareModel()
+        hookShareTargets()
+        hookFinishedChannelRow()
+        hookShareModes()
         hookShareRecipientConfirmation()
         SettingsStatusLoadFingerprint.method.addInstruction(
             0,
