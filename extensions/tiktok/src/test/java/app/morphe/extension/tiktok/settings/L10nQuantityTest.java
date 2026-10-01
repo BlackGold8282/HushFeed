@@ -107,6 +107,19 @@ public class L10nQuantityTest {
         assertEquals("%1$d результатов", L10n.pluralRow("one", 21, "1 result", "%1$d results", table));
     }
 
+    @Test @Config(sdk = 28, qualifiers = "ru")
+    public void theShippedRussianTableWordsEachCountItsOwnWay() {
+        Context context = RuntimeEnvironment.getApplication();
+        Utils.setContext(context);
+        assertEquals("1 результат", L10n.quantity(context, 1, "1 result", "%1$d results"));
+        assertEquals("21 результат", L10n.quantity(context, 21, "1 result", "%1$d results"));
+        assertEquals("2 результата", L10n.quantity(context, 2, "1 result", "%1$d results"));
+        assertEquals("22 результата", L10n.quantity(context, 22, "1 result", "%1$d results"));
+        assertEquals("5 результатов", L10n.quantity(context, 5, "1 result", "%1$d results"));
+        assertEquals("11 результатов", L10n.quantity(context, 11, "1 result", "%1$d results"));
+        assertEquals("0 результатов", L10n.quantity(context, 0, "1 result", "%1$d results"));
+    }
+
     @Test @Config(sdk = 28, qualifiers = "pt-rBR")
     public void brazilianPortugueseShowsNoneAsNoneNotOne() {
         Context context = RuntimeEnvironment.getApplication();
