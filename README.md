@@ -344,7 +344,7 @@ The clear-display caption is removed as soon as you turn its switch off. Turning
 
 Inbox category switches identify New followers, Activity, Archive, Tako and Shop from native row data. They work with translated labels. Turning a switch off restores an already loaded row on the next layout.
 
-The Streak section on the Inbox page keeps a message streak going. Enter who to message by their username, pick a time and the message (a 🔥 unless you change it), and Hushfeed sends it once a day through TikTok's own notification reply, even on a day TikTok stays closed. If the phone was off or TikTok's messages didn't start, it tries again a few times, and a message that still didn't go out is sent the next time you open TikTok. Send it now sends today's straight away. Turning it on or picking someone new after today's time has passed starts it tomorrow. It only sends from the account you set it up on, to someone you already have a chat with. It needs the Keep a streak going patch, which is off by default.
+The Streak section on the Inbox page keeps a message streak going. Enter who to message by their username, pick a time and the message (a 🔥 unless you change it), and Hushfeed sends it once a day through TikTok's own notification reply, even on a day TikTok stays closed. If the phone was off or TikTok's messages didn't start, it tries again a few times, and a message that still didn't go out is sent if you open TikTok later that day. Send it now sends today's straight away. Turning it on or picking someone new after today's time has passed starts it tomorrow. It only sends from the account you set it up on, to someone you already have a chat with. It needs the Keep a streak going patch, which is off by default.
 
 <br>
 
