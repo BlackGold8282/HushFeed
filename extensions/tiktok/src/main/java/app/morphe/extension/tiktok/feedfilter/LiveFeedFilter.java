@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -61,7 +62,8 @@ public final class LiveFeedFilter {
     private static final AtomicLong PAGES = new AtomicLong();
     private static final AtomicLong ROOMS = new AtomicLong();
     private static final AtomicLong HIDDEN = new AtomicLong();
-    private static final Map<String, AtomicLong> HIDDEN_BY = new ConcurrentHashMap<>();
+    /** A ConcurrentMap, not a Map: its putIfAbsent is there on API 23, Map's default isn't. */
+    private static final ConcurrentMap<String, AtomicLong> HIDDEN_BY = new ConcurrentHashMap<>();
     private static final AtomicInteger FAILURES = new AtomicInteger();
     /** Kept rooms whose fields go to the debug log in full, so a report shows what TikTok sends. */
     private static final AtomicInteger ROOMS_TO_DESCRIBE = new AtomicInteger(12);
@@ -131,7 +133,7 @@ public final class LiveFeedFilter {
                 }
                 if (kept == null) kept = new ArrayList<>(items.subList(0, index));
                 HIDDEN.incrementAndGet();
-                HIDDEN_BY.computeIfAbsent(reason, key -> new AtomicLong()).incrementAndGet();
+                countHidden(reason);
             }
             if (kept == null) return items;
             int hidden = items.size() - kept.size();
@@ -143,6 +145,16 @@ public final class LiveFeedFilter {
             }
             return items;
         }
+    }
+
+    private static void countHidden(String reason) {
+        AtomicLong count = HIDDEN_BY.get(reason);
+        if (count == null) {
+            AtomicLong fresh = new AtomicLong();
+            count = HIDDEN_BY.putIfAbsent(reason, fresh);
+            if (count == null) count = fresh;
+        }
+        count.incrementAndGet();
     }
 
     /** The room a feed item carries, or null for an item of another kind. */
