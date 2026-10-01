@@ -1561,3 +1561,20 @@ Looking for apps	Поиск приложений
 No other app takes shared text	Ни одно другое приложение не принимает отправленный текст
 Install one, then come back here.	Установите одно и возвращайтесь сюда.
 No apps match this search	Нет приложений, соответствующих этому запросу
+LIVE feed	Лента LIVE
+Filter the LIVE feed	Фильтровать ленту LIVE
+Hide rooms in the LIVE feed you swipe through, using the rules below. Blocked creators and Creators hidden on this phone apply here too, Blocked caption words are matched against each LIVE's title, and Creator exceptions works the way it does for videos. The LIVE button picks the first room itself, so the rules start with the next one. If they hide every room for a while, one gets through so the feed keeps loading.	Скрывать трансляции в ленте LIVE, которую вы листаете, по правилам ниже. «Заблокированные авторы» и «Авторы, скрытые на этом телефоне» действуют и здесь, «Заблокированные слова в подписях» сверяются с названием каждой трансляции, а «Исключения для авторов» работают так же, как для видео. Первую трансляцию кнопка LIVE выбирает сама, поэтому правила начинают действовать со следующей. Если правила долго скрывают всё подряд, одна трансляция всё же покажется, чтобы лента продолжала загружаться.
+Hide gaming LIVEs	Скрывать игровые трансляции
+Hide LIVEs that TikTok tags with a game or a gaming category.	Скрывать трансляции, которые TikTok помечает игрой или игровой категорией.
+Hide shopping LIVEs	Скрывать торговые трансляции
+Hide LIVEs that sell products or carry a TikTok Shop tag.	Скрывать трансляции, где продают товары или есть метка TikTok Shop.
+Hide sponsored LIVEs	Скрывать спонсорские трансляции
+Hide LIVEs that TikTok labels as a paid partnership or promotional content.	Скрывать трансляции, которые TikTok помечает как платное партнёрство или рекламный контент.
+Hide verified creators' LIVEs	Скрывать трансляции верифицированных авторов
+Hide LIVEs hosted by verified accounts.	Скрывать трансляции верифицированных аккаунтов.
+Hidden LIVE categories	Скрытые категории LIVE
+Comma separated words, like music, chat. A LIVE is hidden when its category, topic tags or game name contains one. Case doesn't matter.	Через запятую: слова, например музыка, чат. Трансляция скрывается, если её категория, теги темы или название игры содержат одно из них. Регистр не важен.
+LIVE viewers range	Диапазон зрителей LIVE
+Show only LIVEs with this many people watching.	Показывать только трансляции с таким количеством зрителей.
+LIVE followers range	Диапазон подписчиков авторов LIVE
+Show only LIVEs from creators with this many followers.	Показывать только трансляции авторов с таким количеством подписчиков.
