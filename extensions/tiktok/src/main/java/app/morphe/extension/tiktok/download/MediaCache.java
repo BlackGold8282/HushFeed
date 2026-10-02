@@ -61,11 +61,18 @@ public final class MediaCache {
         return file;
     }
 
+    /** Final cleanup: the job no longer owns this file, even if its deletion must be retried. */
     static boolean delete(File file) {
-        if (file == null) return true;
-        boolean deleted = !file.exists() || file.delete();
-        if (deleted) ACTIVE_FILES.remove(file.getAbsolutePath());
-        return deleted;
+        try {
+            return deletePartial(file);
+        } finally {
+            if (file != null) ACTIVE_FILES.remove(file.getAbsolutePath());
+        }
+    }
+
+    /** Removes a partial transfer while its caller still owns the file for a retry or cleanup. */
+    static boolean deletePartial(File file) {
+        return file == null || !file.exists() || file.delete();
     }
 
     static void markPending(Context context, Uri uri) throws IOException {
