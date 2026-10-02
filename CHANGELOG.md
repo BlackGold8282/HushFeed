@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Show author region puts the country on the video you're watching again after you swipe down (#75). TikTok keeps the videos above and below attached while you scroll, and the country was going on the one above, so it only showed after swiping back up.
+
 * **TikTok:** New patch, Stop saving search history, keeps new searches out of the search history TikTok saves on the phone. Its switch, Privacy > Don't save new searches, starts on once the patch is picked. Typed and suggested searches still work, searches you'd already saved stay until you delete them, and turning the switch off or pausing Hushfeed lets TikTok record again. It doesn't touch anything TikTok keeps on its servers.
 
 * **TikTok:** Streaks take several usernames separated by commas or new lines (#73). Each chat has its own attempts, so a recipient that couldn't be found can retry without repeating another chat's message. Duplicate names and names for the same chat are counted once. The sending account is checked again before each message. TikTok's reply receiver doesn't confirm delivery, so the status says delivery is unconfirmed and avoids retrying a chat that may already have received its message, even after the process stops.
