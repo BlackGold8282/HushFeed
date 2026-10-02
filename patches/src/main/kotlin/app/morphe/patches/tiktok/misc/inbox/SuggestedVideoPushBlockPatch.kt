@@ -14,6 +14,7 @@ import app.morphe.patches.tiktok.misc.extension.sharedExtensionPatch
 import app.morphe.patches.tiktok.misc.settings.SettingsStatusLoadFingerprint
 import app.morphe.patches.tiktok.misc.settings.settingsPatch
 import app.morphe.util.addInstruction
+import app.morphe.util.classesCalling
 import app.morphe.util.findMutableMethodOf
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.Opcode
@@ -95,8 +96,11 @@ val suggestedVideoPushBlockPatch = bytecodePatch(
     compatibleWith(*AppCompatibilities.tiktok())
 
     execute {
+        // Only the classes the patcher's type index says call NotificationManager are read. On
+        // 47.1.4 a full walk is about 40 million instructions for 22 calls in 66 classes (#54).
+        val callers = classesCalling(listOf(NOTIFICATION_MANAGER))
         val found = mutableListOf<ClassDef>()
-        classDefForEach { found += it }
+        classDefForEach { if (it.type in callers) found += it }
         val targets = notifyingMethods(found)
         if (targets.none { (classDef, _) -> classDef.type == PUSH_HANDLER }) {
             throw PatchException("Block suggested video notifications: TikTok's push handler no longer posts a notification.")
