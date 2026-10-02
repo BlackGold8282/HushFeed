@@ -1416,9 +1416,7 @@ When the budget runs out, the video on screen plays to its end before the hold c
 The feed stops when this video ends.	O feed para quando este vídeo terminar.
 Streak	Sequência
 Keep a streak going	Manter uma sequência
-Sends one message a day to the person below at the time below, so a streak with them keeps going on a day you don't open TikTok.	Envia uma mensagem por dia para a pessoa abaixo no horário abaixo, para que a sequência com ela continue mesmo num dia em que você não abre o TikTok.
 Who to message	Para quem mandar
-Their username, like @name. It has to be someone you already have a chat with.	O nome de usuário, como @nome. Precisa ser alguém com quem você já tem uma conversa.
 When to send	Quando enviar
 The time of day the message goes out.	O horário do dia em que a mensagem é enviada.
 Message	Mensagem
@@ -1428,9 +1426,7 @@ Sends today's message right away. The daily one then waits for tomorrow.	Envia a
 Turn on Keep a streak going first	Ative primeiro Manter uma sequência
 Sending the message	Enviando a mensagem
 A message is already on its way	Já tem uma mensagem a caminho
-Sent to @%1$s	Enviado para @%1$s
 Enter who to message below to start.	Informe abaixo para quem mandar para começar.
-Sent today at %1$s. The next one goes tomorrow at %2$s.	Enviada hoje às %1$s. A próxima sai amanhã às %2$s.
 Next message: today at %1$s.	Próxima mensagem: hoje às %1$s.
 Next message: tomorrow at %1$s.	Próxima mensagem: amanhã às %1$s.
 No chat with @%1$s turned up on this account. Open your chat with them once, then try again.	Nenhuma conversa com @%1$s apareceu nesta conta. Abra a conversa com essa pessoa uma vez e tente de novo.
@@ -1473,3 +1469,9 @@ Copy or save patch-time choices and build identity.	Copie ou salve as opções e
 Copy build details	Copiar detalhes da compilação
 Save build details	Salvar detalhes da compilação
 Build details copied to the clipboard	Detalhes da compilação copiados para a área de transferência
+Sends one message a day to each person below at the time below, so your streaks keep going on days you don't open TikTok.	Envia uma mensagem por dia para cada pessoa abaixo no horário indicado, mantendo suas sequências nos dias em que você não abre o TikTok.
+Their usernames, separated by commas or new lines. Each person must already have a chat with you.	Os nomes de usuário, separados por vírgulas ou novas linhas. Você já precisa ter uma conversa com cada pessoa.
+Delivery unconfirmed: %1$d/%2$d chats. Those chats won't be retried today.	Entrega não confirmada: %1$d/%2$d conversas. Não haverá outra tentativa nessas conversas hoje.
+Delivery unconfirmed: %1$d/%2$d chats. Remaining chats still need a message.	Entrega não confirmada: %1$d/%2$d conversas. As demais conversas ainda precisam de uma mensagem.
+TikTok may have taken this message. Delivery isn't confirmed, so it won't be retried today.	O TikTok pode ter aceitado esta mensagem. A entrega não está confirmada, então não haverá outra tentativa hoje.
+Nothing was sent. Check the streak settings and try again.	Nada foi enviado. Confira as configurações de sequências e tente novamente.

@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Streaks take several usernames separated by commas or new lines (#73). Each chat has its own attempts, so a recipient that couldn't be found can retry without repeating another chat's message. Duplicate names and names for the same chat are counted once. The sending account is checked again before each message. TikTok's reply receiver doesn't confirm delivery, so the status says delivery is unconfirmed and avoids retrying a chat that may already have received its message, even after the process stops.
+
 * **TikTok:** New patch, Feed text sizes, gives the video description and the creator's name their own sizes on Feed screen, from 8 to 48 (#66). Both start at 0, which keeps TikTok's size, and Android's font scaling still applies. Spoken captions keep their separate size.
 
 * **Diagnostics:** Build details under About copies or saves build identity and verified patch-time resource choices, even without Diagnostic tools or events. Automatic reports include the same facts. Older APKs show unknown, and runtime settings can't rewrite them. Patching an APK that Hushfeed already patched now stops with an error, so start from TikTok's original APK.

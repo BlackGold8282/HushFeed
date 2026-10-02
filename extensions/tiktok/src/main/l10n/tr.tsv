@@ -1416,9 +1416,7 @@ When the budget runs out, the video on screen plays to its end before the hold c
 The feed stops when this video ends.	Bu video bitince akış durur.
 Streak	Seri
 Keep a streak going	Bir seriyi sürdür
-Sends one message a day to the person below at the time below, so a streak with them keeps going on a day you don't open TikTok.	Aşağıdaki kişiye her gün aşağıdaki saatte bir mesaj gönderir, böylece TikTok'u açmadığın bir günde de onunla serin devam eder.
 Who to message	Kime yazılsın
-Their username, like @name. It has to be someone you already have a chat with.	Kullanıcı adı, örneğin @isim. Zaten sohbetin olan biri olmalı.
 When to send	Ne zaman gönderilsin
 The time of day the message goes out.	Mesajın gönderileceği saat.
 Message	Mesaj
@@ -1428,9 +1426,7 @@ Sends today's message right away. The daily one then waits for tomorrow.	Bugün�
 Turn on Keep a streak going first	Önce Bir seriyi sürdür seçeneğini aç
 Sending the message	Mesaj gönderiliyor
 A message is already on its way	Zaten bir mesaj yolda
-Sent to @%1$s	@%1$s kişisine gönderildi
 Enter who to message below to start.	Başlamak için aşağıya kime yazılacağını gir.
-Sent today at %1$s. The next one goes tomorrow at %2$s.	Bugün gönderildi, saat %1$s. Sonraki yarın, saat %2$s.
 Next message: today at %1$s.	Sonraki mesaj: bugün, saat %1$s.
 Next message: tomorrow at %1$s.	Sonraki mesaj: yarın, saat %1$s.
 No chat with @%1$s turned up on this account. Open your chat with them once, then try again.	Bu hesapta @%1$s ile bir sohbet bulunamadı. Onunla olan sohbetini bir kez aç, sonra tekrar dene.
@@ -1473,3 +1469,9 @@ Copy or save patch-time choices and build identity.	Yama uygulanırken seçilen 
 Copy build details	Derleme ayrıntılarını kopyala
 Save build details	Derleme ayrıntılarını kaydet
 Build details copied to the clipboard	Derleme ayrıntıları panoya kopyalandı
+Sends one message a day to each person below at the time below, so your streaks keep going on days you don't open TikTok.	Aşağıdaki herkese belirtilen saatte günde bir mesaj gönderir, böylece TikTok'u açmadığın günlerde de serilerin devam eder.
+Their usernames, separated by commas or new lines. Each person must already have a chat with you.	Kullanıcı adlarını virgülle veya yeni satırlarla ayır. Her kişiyle zaten bir sohbetin olmalı.
+Delivery unconfirmed: %1$d/%2$d chats. Those chats won't be retried today.	Teslimat doğrulanmadı: %1$d/%2$d sohbet. Bugün bu sohbetlerde tekrar denenmeyecek.
+Delivery unconfirmed: %1$d/%2$d chats. Remaining chats still need a message.	Teslimat doğrulanmadı: %1$d/%2$d sohbet. Kalan sohbetlere hâlâ mesaj gönderilmesi gerekiyor.
+TikTok may have taken this message. Delivery isn't confirmed, so it won't be retried today.	TikTok bu mesajı kabul etmiş olabilir. Teslimat doğrulanmadığı için bugün tekrar denenmeyecek.
+Nothing was sent. Check the streak settings and try again.	Hiçbir şey gönderilmedi. Seri ayarlarını kontrol edip tekrar dene.

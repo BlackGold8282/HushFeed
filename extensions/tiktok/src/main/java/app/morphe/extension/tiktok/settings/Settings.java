@@ -181,12 +181,12 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting HIDE_MESSAGE_STREAKS =
             new BooleanSetting("hide_message_streaks", FALSE);
     /**
-     * Sends one message a day to {@link #AUTO_STREAK_RECIPIENT} at {@link #AUTO_STREAK_MINUTE},
+     * Dispatches one message per selected chat a day at {@link #AUTO_STREAK_MINUTE},
      * so a streak with them keeps going on a day nobody opens the app. Off by default. See
      * AutoStreak.
      */
     public static final BooleanSetting AUTO_STREAK = new BooleanSetting("auto_streak", FALSE);
-    /** The handle to message, with or without its @. */
+    /** Handles or profile links, separated by commas or lines. */
     public static final StringSetting AUTO_STREAK_RECIPIENT =
             new StringSetting("auto_streak_recipient", "", false, Setting.parent(AUTO_STREAK));
     /** The time of day to send, in minutes after midnight. Noon leaves room for retries. */
@@ -195,7 +195,7 @@ public class Settings extends BaseSettings {
     public static final StringSetting AUTO_STREAK_MESSAGE = new StringSetting(
             "auto_streak_message", "🔥", false, Setting.parent(AUTO_STREAK));
     /**
-     * The day the last message went, the tries made today and how the last one ended. Kept out
+     * Per-account recipient dispatch reservations and retries. Kept out
      * of backups: it describes one phone's sends, and a restore that carried it could stop
      * today's message on another phone or send a second one.
      */
