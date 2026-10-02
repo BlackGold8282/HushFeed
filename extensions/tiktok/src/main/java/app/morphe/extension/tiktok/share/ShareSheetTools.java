@@ -9,6 +9,7 @@ package app.morphe.extension.tiktok.share;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import app.morphe.extension.shared.GlobalLayoutHook;
 import app.morphe.extension.shared.Logger;
@@ -46,8 +47,8 @@ import java.util.WeakHashMap;
  *   dwr   the share channels row (Repost, Copy link, SMS, Facebook, ...)
  *   a5t   the actions row (Report, Not interested, Download, Create group, ...)
  * </pre>
- * Every cell in the three rows carries its label as its content description, which is
- * what the hidden list matches against.
+ * Contacts put their label on the View. Native actions instead bind a child TextView and
+ * expose its title through their accessibility delegate, so both descriptions are read.
  *
  * There used to be a confirm step here, a second tap before a video went to a friend. On every
  * build Hushfeed supports, a tap on a person only marks them chosen and TikTok's own Send button
@@ -70,6 +71,7 @@ public final class ShareSheetTools {
 
     private static WeakReference<Activity> activityReference = new WeakReference<>(null);
     private static final GlobalLayoutHook LAYOUT_HOOK = new GlobalLayoutHook();
+    private static final GlobalLayoutHook SHEET_LAYOUT_HOOK = new GlobalLayoutHook();
 
     private static boolean applyPosted;
 
@@ -88,11 +90,13 @@ public final class ShareSheetTools {
         try {
             if (activity.isFinishing()) {
                 LAYOUT_HOOK.detach();
+                SHEET_LAYOUT_HOOK.detach();
                 return;
             }
             ViewGroup root = activity.findViewById(android.R.id.content);
             if (root == null) {
                 LAYOUT_HOOK.detach();
+                SHEET_LAYOUT_HOOK.detach();
                 Logger.printInfo(() -> "Share sheet tools found no content view to watch");
                 return;
             }
@@ -112,10 +116,12 @@ public final class ShareSheetTools {
             Activity activity = activityReference.get();
             if (activity == null) {
                 LAYOUT_HOOK.detach();
+                SHEET_LAYOUT_HOOK.detach();
                 return;
             }
             if (activity.isFinishing()) {
                 LAYOUT_HOOK.detach();
+                SHEET_LAYOUT_HOOK.detach();
                 return;
             }
 
@@ -127,6 +133,9 @@ public final class ShareSheetTools {
             addIds(activity, wanted, ACTIONS_LIST_IDS);
             List<Map<Integer, View>> found = indexRoots(roots, wanted);
             View contacts = find(activity, roots, found, CONTACTS_LIST_IDS);
+            View channels = find(activity, roots, found, CHANNELS_LIST_IDS);
+            View actions = find(activity, roots, found, ACTIONS_LIST_IDS);
+            watchSheetRoot(activity, actions != null ? actions : channels != null ? channels : contacts);
             List<String> hidden = entries(ShareModelFilter.hiddenItems());
 
             View contactsSection = find(activity, roots, found, CONTACTS_SECTION_IDS);
@@ -142,8 +151,8 @@ public final class ShareSheetTools {
                 }
             }
 
-            hideByLabel(find(activity, roots, found, CHANNELS_LIST_IDS), hidden);
-            hideByLabel(find(activity, roots, found, ACTIONS_LIST_IDS), hidden);
+            hideByLabel(channels, hidden);
+            hideByLabel(actions, hidden);
         } catch (Throwable ex) {
             HookStatus.threw(FAMILY, "layout pass", ex);
             Logger.printException(() -> "Share sheet tools failed", ex);
@@ -151,6 +160,17 @@ public final class ShareSheetTools {
     }
 
     // ---- hiding ------------------------------------------------------------------------
+
+    /** Contact binding discovers the window; its own layouts then catch late and recycled titles. */
+    private static void watchSheetRoot(Activity activity, View row) {
+        View root = row == null ? null : row.getRootView();
+        View activityRoot = activity.getWindow() == null ? null : activity.getWindow().getDecorView();
+        if (root instanceof ViewGroup && root != activityRoot) {
+            SHEET_LAYOUT_HOOK.install((ViewGroup) root, ShareSheetTools::requestApply);
+        } else {
+            SHEET_LAYOUT_HOOK.detach();
+        }
+    }
 
     private static void hideByLabel(View list, List<String> hidden) {
         if (!(list instanceof ViewGroup)) {
@@ -233,14 +253,25 @@ public final class ShareSheetTools {
         }
     }
 
+    @SuppressWarnings("deprecation")
     static String labelOf(View view) {
-        if (view == null) {
-            return null;
+        if (view == null) return null;
+        String label = trimmedLabel(view.getContentDescription());
+        if (label != null) return label;
+
+        // The native delegate reads the bound child title. Do not search arbitrary descendants:
+        // a vertical action row can also contain a whole channels group with several choices.
+        AccessibilityNodeInfo node = AccessibilityNodeInfo.obtain(view);
+        try {
+            view.onInitializeAccessibilityNodeInfo(node);
+            return trimmedLabel(node.getContentDescription());
+        } finally {
+            node.recycle();
         }
-        CharSequence description = view.getContentDescription();
-        if (description == null) {
-            return null;
-        }
+    }
+
+    private static String trimmedLabel(CharSequence description) {
+        if (description == null) return null;
         String label = description.toString().trim();
         return label.isEmpty() ? null : label;
     }
