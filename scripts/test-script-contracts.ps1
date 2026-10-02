@@ -1672,6 +1672,10 @@ try {
             "An unrelated input $unrelatedInput selected SDK signing fixtures."
     }
 
+    Invoke-Hook -Paths @('tools/verification-probe/tests/app/hushfeed/verification/StorageScanContract.java')
+    Assert-True (Test-Path -LiteralPath $contractsMarker) 'A storage scanner test change skipped its contracts.'
+    Assert-True (-not (Test-Path -LiteralPath $signingMarker)) 'A scanner JVM test selected SDK signing fixtures.'
+
     Invoke-Hook -Paths @('release-receipt-0.31.0.json')
     Assert-True (Test-Path -LiteralPath $factsMarker) `
         'A push that changed only the release receipt ran no release check.'
@@ -2878,6 +2882,8 @@ Assert-True ($machineNames.Count -eq 0) `
     ("Tracked files name the maintainer's machine or phone: " + ($machineNames -join '; '))
 
 Write-Host '[scripts] tracked-file machine name contracts passed'
+
+& (Join-Path $Root 'scripts/test-storage-probe.ps1') -Root $Root
 
 $global:LASTEXITCODE = 0
 Write-Host '[scripts] report, target, Java and guarded replacement contracts passed'
