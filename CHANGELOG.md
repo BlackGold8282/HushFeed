@@ -16,6 +16,8 @@ Every Hushfeed release, newest first.
 
 * **Build checks:** Changes to the Gradle launchers or wrapper JAR now run the catalog contracts and rebuild and apply the bundle before a push.
 
+* **TikTok:** Hide the music line now hides the track name and its "Contains:" song credit on feed and opened videos (#68). The music disc still has its own switch.
+
 * **Build checks:** Runtime code and the inputs that build it now rebuild the release bundle and apply it to every supported APK before a push. Source and published-index changes must go in separate pushes so the source can be checked without replacing a published artifact.
 * **Docs:** The install steps and TikTok badge list all three supported builds. The introduction separates the published bundle from the current source, and explains which patch-time removals need a new APK to undo. The settings tour uses the current Share page, without the removed friend-send confirmation.
 
