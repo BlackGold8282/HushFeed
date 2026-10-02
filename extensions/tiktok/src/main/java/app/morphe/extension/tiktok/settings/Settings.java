@@ -178,6 +178,9 @@ public class Settings extends BaseSettings {
             new BooleanSetting("allow_duet_and_stitch", FALSE);
     public static final BooleanSetting HIDE_FOLLOWER_NOTIFICATIONS =
             new BooleanSetting("hide_follower_notifications", FALSE);
+    /** TikTok's "Videos you might like" pushes. On by default: they're promotion, not people. */
+    public static final BooleanSetting BLOCK_SUGGESTED_VIDEO_NOTIFICATIONS =
+            new BooleanSetting("block_suggested_video_notifications", TRUE);
     public static final BooleanSetting HIDE_MESSAGE_STREAKS =
             new BooleanSetting("hide_message_streaks", FALSE);
     /**

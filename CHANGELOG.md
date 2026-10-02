@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** New patch, Block suggested video notifications, stops TikTok's "Videos you might like" pushes, the ones about popular videos it picked for you, like "25M+ people viewed". Its switch under Inbox starts on once the patch is in, so they're blocked from the first launch, and turning it off lets them through again. Messages, comments, likes, follows and videos from accounts you follow aren't touched.
+
 * **TikTok:** Hide search rewards (App) now keeps the floating coin off search as well as the points banner (#21). The switch only reached the banner's service before, so the coin stayed and the banner could come back. Now every search rewards piece takes the path TikTok already takes for accounts without rewards. TikTok decides this once per launch, so the switch now asks for a restart after you change it.
 
 * **TikTok:** Hushfeed's settings come in Azerbaijani (#77). Like the other languages they follow the language TikTok runs in, and it's a first pass, so corrections are welcome.

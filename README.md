@@ -13,14 +13,14 @@
 
 Hushfeed is a [Morphe](https://github.com/MorpheApp/morphe-manager) patch bundle for people who want TikTok to behave differently. It can cut feed clutter, guard risky taps, improve downloads and expose controls TikTok leaves buried or unavailable. Every selected patch is configured from one native settings screen inside the app.
 
-**[Add Hushfeed to Morphe](https://morphe.software/add-source?github=SysAdminDoc%2Fhushfeed)** | [Download the latest bundle](https://github.com/SysAdminDoc/hushfeed/releases/latest) | [Tour the settings](#settings-tour) | [Browse the 105 source patches](#patches)
+**[Add Hushfeed to Morphe](https://morphe.software/add-source?github=SysAdminDoc%2Fhushfeed)** | [Download the latest bundle](https://github.com/SysAdminDoc/hushfeed/releases/latest) | [Tour the settings](#settings-tour) | [Browse the 106 source patches](#patches)
 
 > [!IMPORTANT]
 > Hushfeed targets the global TikTok package, `com.zhiliaoapp.musically`, versions [47.0.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-0-3-release/tiktok-47-0-3-3-android-apk-download/), [47.1.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-3-release/tiktok-47-1-3-android-apk-download/) and [47.1.4](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-4-release/tiktok-47-1-4-2-android-apk-download/). Use one of those exact APKs when patching. See [Supported target](#supported-target) for the verified build details.
 
 Hushfeed v0.66.0 contains 102 patches for TikTok 47.0.3, 47.1.3 and 47.1.4. New in this one: settings in Italian and Russian, a daily message that keeps a streak going, a name of your own under the app icon, and Look like the store app for follows that undo themselves. It needs Morphe Manager 1.32.0 or newer.
 
-The main branch contains 105 patches, including unreleased profile-shortcut hiding, a safer native-language default, separate sizes for feed descriptions and creator names, and a switch that stops new searches being saved to history. Those additions need a bundle built from source. Adding the source in Manager still downloads the published v0.66.0 bundle.
+The main branch contains 106 patches, including unreleased profile-shortcut hiding, a safer native-language default, separate sizes for feed descriptions and creator names, a switch that stops new searches being saved to history, and a block on TikTok's "Videos you might like" notifications. Those additions need a bundle built from source. Adding the source in Manager still downloads the published v0.66.0 bundle.
 
 ## Pick what changes
 
@@ -181,6 +181,7 @@ The eleven optional patches in the Performance group were measured on a Galaxy S
 | `Block contact list access` | Answers TikTok's reads of your phone contacts with an empty list. Find Friends and People you may know lose access to your contact list. Switch: Hushfeed settings > Privacy. |
 | `Block installed app scanning` | Answers TikTok's scan of the apps installed on your phone with an empty list. Checks for one named app, which TikTok also uses to open an app you tap, are left alone. Switch: Hushfeed settings > Privacy. |
 | `Block P2P video relay` | Strips TikTok's peer-to-peer CDN libraries so your phone is not used as a relay node for other people's video traffic. The APK gets about 3.5 MB smaller. |
+| `Block suggested video notifications` | Stops TikTok's "Videos you might like" notifications, the pushes about popular videos it picked for you. They're blocked from the start, and the switch lets them through again. Messages, comments, likes, follows and posts from accounts you follow aren't touched. Switch: Hushfeed settings > Inbox. |
 | `Camera and microphone indicator` | Shows a small mark in the top corner while TikTok has the camera open or is recording sound. A green square for the camera, an orange diamond for the microphone, both when both. It goes when the access ends. Switch: Hushfeed settings > Privacy. |
 | `Change app name` | Shows a name you choose under the app's icon and in Android's app list, so the patched TikTok is easy to tell from another one. Type the name in this patch's options. Inside the app everything still says TikTok. |
 | `Comment publish diagnostics` | Says in the diagnostic report whether a comment send reached TikTok's publish code, what it had in hand, and whether it returned early or handed the comment to the request. A comment that never posts leaves no other trace. |
@@ -358,6 +359,8 @@ The clear-display caption is removed as soon as you turn its switch off. Turning
 <img src="assets/settings/interface.png" alt="Caption appearance settings" width="300" /> <img src="assets/settings/downloads.png" alt="Subtitle download settings" width="300" />
 
 Inbox category switches identify New followers, Activity, Archive, Tako and Shop from native row data. They work with translated labels. Turning a switch off restores an already loaded row on the next layout.
+
+TikTok sends pushes about popular videos it picked for you, like "25M+ people viewed" with a clip from someone you don't follow. With the Block suggested video notifications patch in, **Block suggested video notifications** under Inbox starts on and drops them before they reach your notification shade. Turn it off to get them back. It only matches TikTok's "Videos you might like" channel, so messages, comments, likes, new followers and videos from accounts you follow arrive as before.
 
 The Streak section on the Inbox page takes one or more usernames, separated by commas or new lines. Pick a time and the message (a 🔥 unless you change it). Each person must already have a chat with you. Hushfeed hands one message per chat to TikTok's own notification reply each day, even when TikTok stays closed. Repeated usernames and names that resolve to the same chat don't get a second message. A failed recipient retries independently, without repeating another chat's accepted message. Send it now attempts the remaining chats straight away. Turning it on or adding someone after the chosen time has passed starts that person's schedule the next day. It only uses the account you set it up on and checks that account again before each message.
 
@@ -546,7 +549,7 @@ APKMirror also offers some TikTok releases as bundles, using an `.apkm` file. Mo
 
 ### Why those versions and not a newer one
 
-Patches use named components where TikTok retains them and code patterns where names are stripped. Both can change between builds. On main, 47.0.3, 47.1.3 and 47.1.4 are the declared targets. 47.0.3 stays declared alongside the two 47.1 builds. All 105 patches apply to all three reviewed APKs, and the retained 46.2.3, 46.7.3, 46.8.3 and 46.9.3 builds remain regression fixtures rather than advertised targets. Another build can fail loudly when an anchor moves or, worse, accept the wrong shape.
+Patches use named components where TikTok retains them and code patterns where names are stripped. Both can change between builds. On main, 47.0.3, 47.1.3 and 47.1.4 are the declared targets. 47.0.3 stays declared alongside the two 47.1 builds. All 106 patches apply to all three reviewed APKs, and the retained 46.2.3, 46.7.3, 46.8.3 and 46.9.3 builds remain regression fixtures rather than advertised targets. Another build can fail loudly when an anchor moves or, worse, accept the wrong shape.
 
 Only the global package is declared in the compatibility metadata.
 
