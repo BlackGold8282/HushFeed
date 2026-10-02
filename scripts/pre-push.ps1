@@ -391,7 +391,8 @@ try {
         $_ -eq 'patches/build.gradle.kts' -or $_ -eq 'gradle.properties' -or
         $_ -eq 'gradle/libs.versions.toml' -or $_ -eq 'gradle/verification-metadata.xml' -or
         $_ -eq 'settings.gradle.kts' -or $_ -eq 'build.gradle.kts' -or
-        $_ -eq 'gradle/wrapper/gradle-wrapper.properties'
+        $_ -eq 'gradle/wrapper/gradle-wrapper.properties' -or
+        $_ -eq 'gradle/wrapper/gradle-wrapper.jar' -or $_ -eq 'gradlew' -or $_ -eq 'gradlew.bat'
     }).Count -gt 0
     # The extension DEX payload and its build inputs reach TikTok through the same bundle as the
     # patch definitions. Tests alone don't prove that payload can be built or injected.

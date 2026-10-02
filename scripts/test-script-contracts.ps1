@@ -1814,6 +1814,7 @@ try {
         # that changed only one of them ran the release facts check at most.
         foreach ($pin in @('patches/src/main/kotlin/app/morphe/patches/tiktok/Any.kt',
                 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties',
+                'gradle/wrapper/gradle-wrapper.jar', 'gradlew', 'gradlew.bat',
                 'gradle/libs.versions.toml', 'gradle/verification-metadata.xml',
                 'settings.gradle.kts', 'build.gradle.kts', 'patches/build.gradle.kts',
                 'README.md', 'NOTICE', 'patches-list.json', 'patches-bundle.png', 'assets/readme-hero.png',
@@ -2129,6 +2130,7 @@ exit 0
                     'extensions/shared/build.gradle.kts', 'extensions/shared/library/build.gradle.kts',
                     'extensions/tiktok/stub/build.gradle.kts', 'extensions/proguard-rules.pro',
                     'patches/build.gradle.kts', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties',
+                    'gradle/wrapper/gradle-wrapper.jar', 'gradlew', 'gradlew.bat',
                     'settings.gradle.kts', 'build.gradle.kts', 'gradle/verification-metadata.xml')) {
                 Reset-Apply
                 & $prePushScript -Root $hookRoot -ChangedPaths @($runtimeInput) 6> $null

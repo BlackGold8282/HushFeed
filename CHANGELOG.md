@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **Build checks:** Changes to the Gradle launchers or wrapper JAR now run the catalog contracts and rebuild and apply the bundle before a push.
+
 * **Build checks:** Runtime code and the inputs that build it now rebuild the release bundle and apply it to every supported APK before a push. Source and published-index changes must go in separate pushes so the source can be checked without replacing a published artifact.
 
 * **Build checks:** A patch or catalog change now runs the script contracts before the build, including its unnamed dependencies. Each pushed ref uses its own committed catalog, so an unrelated working copy cannot conceal a missing dependency.
