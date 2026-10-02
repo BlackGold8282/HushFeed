@@ -494,6 +494,11 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting FEED_MUTED = new BooleanSetting("feed_muted", FALSE, false, false);
     public static final BooleanSetting FEED_MUTE_BUTTON = new BooleanSetting("feed_mute_button", TRUE);
     public static final BooleanSetting HIDE_FEED_CAPTION = new BooleanSetting("hide_feed_caption", FALSE);
+    /** Native description and creator name, independently of spoken subtitles. Zero keeps TikTok's size. */
+    public static final IntegerSetting FEED_DESCRIPTION_TEXT_SIZE =
+            new IntegerSetting("feed_description_text_size", 0).withRange(0, 48);
+    public static final IntegerSetting FEED_AUTHOR_TEXT_SIZE =
+            new IntegerSetting("feed_author_text_size", 0).withRange(0, 48);
     public static final BooleanSetting HIDE_FEED_MUSIC = new BooleanSetting("hide_feed_music", FALSE);
     public static final BooleanSetting HIDE_FEED_ACTION_BAR = new BooleanSetting("hide_feed_action_bar", FALSE);
     public static final BooleanSetting HIDE_FEED_SURVEYS = new BooleanSetting("hide_feed_surveys", FALSE);

@@ -256,6 +256,10 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         if (!applySettingToPreference && setting == Settings.KEEP_CAPTIONS_CLEAR_DISPLAY) {
             CaptionTools.onSettingChanged();
         }
+        if (!applySettingToPreference && (setting == Settings.FEED_DESCRIPTION_TEXT_SIZE
+                || setting == Settings.FEED_AUTHOR_TEXT_SIZE || setting == BaseSettings.PAUSED)) {
+            app.morphe.extension.tiktok.feed.FeedTextSize.onSettingChanged();
+        }
         if (!applySettingToPreference && setting == BaseSettings.PAUSED) {
             refreshStatusCard();
         }
@@ -1277,6 +1281,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
 
     /** Reconciles a preset's batch write with the rows and the restart debt on this page. */
     static void onSettingsBatchChanged(java.util.Map<Setting<?>, Object> previousValues) {
+        app.morphe.extension.tiktok.feed.FeedTextSize.onSettingChanged();
         TikTokPreferenceFragment current = activeFragment;
         if (current == null || !current.isAdded()) return;
         for (java.util.Map.Entry<Setting<?>, Object> entry : previousValues.entrySet()) {

@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** New patch, Feed text sizes, gives the video description and the creator's name their own sizes on Feed screen, from 8 to 48 (#66). Both start at 0, which keeps TikTok's size, and Android's font scaling still applies. Spoken captions keep their separate size.
+
 * **Diagnostics:** Build details under About copies or saves build identity and verified patch-time resource choices, even without Diagnostic tools or events. Automatic reports include the same facts. Older APKs show unknown, and runtime settings can't rewrite them. Patching an APK that Hushfeed already patched now stops with an error, so start from TikTok's original APK.
 
 * **Patching:** A bundle saved under a filename or folder with a plus sign, a space, a percent sign or non-English letters now applies. The patcher used to read `+` as a space and stop with "no such file".

@@ -179,6 +179,7 @@ Arrange your feed and bottom tabs,Arrange your feed and bottom tabs
 "Ask TikTok for search results that aren't personalized to your account. This changes results, not search buttons or suggestions.","Ask TikTok for search results that aren't personalized to your account. This changes results, not search buttons or suggestions."
 Attention,Attention
 Audio,Audio
+Author text size,Author text size
 Auto translate comments,Auto translate comments
 Auto-advance,Auto-advance
 Auto-advance session limit,Auto-advance session limit
@@ -364,6 +365,7 @@ Days to remember a video. Zero removes the age limit. History keeps at most %1$s
 "Days. Zero keeps every age. Posts without a usable timestamp, including future posts, stay visible.","Days. Zero keeps every age. Posts without a usable timestamp, including future posts, stay visible."
 Default,Default
 Default playback speed,Default playback speed
+Description text size,Description text size
 Destination updated,Destination updated
 Device access,Device access
 "Device language, then original","Device language, then original"
@@ -1388,6 +1390,8 @@ Undoing the last change,Undoing the last change
 "Until you choose here, this sheet follows your choices under Hide share actions.","Until you choose here, this sheet follows your choices under Hide share actions."
 "Up to %1$d speeds from %2$s to %3$s, separated by commas. Example: 0.5, 1, 1.5, 2, 2.5, 3. Leave empty for TikTok's list. Restart TikTok to apply this.","Up to %1$d speeds from %2$s to %3$s, separated by commas. Example: 0.5, 1, 1.5, 2, 2.5, 3. Leave empty for TikTok's list. Restart TikTok to apply this."
 "Use 0 for TikTok's size, or %1$d to %2$d. Applies to the next caption.","Use 0 for TikTok's size, or %1$d to %2$d. Applies to the next caption."
+"Use 0 for TikTok's size, or %1$d to %2$d. Sizes the author's name and keeps Android's font scaling.","Use 0 for TikTok's size, or %1$d to %2$d. Sizes the author's name and keeps Android's font scaling."
+"Use 0 for TikTok's size, or %1$d to %2$d. Sizes the description below the author's name and keeps Android's font scaling.","Use 0 for TikTok's size, or %1$d to %2$d. Sizes the description below the author's name and keeps Android's font scaling."
 Use Calm feed,Use Calm feed
 Use Save report for this large report,Use Save report for this large report
 "Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another.","Use TikTok's own hold, pull down and release gesture to keep playing at the hold speed, 2x unless Playback sets another."
