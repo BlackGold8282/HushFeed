@@ -6,7 +6,7 @@ Every Hushfeed release, newest first.
 
 * **Downloads:** Finishing a download releases its temporary-file ownership even if deletion fails, so later cleanup can reclaim the abandoned file. Mirror retries keep their active ownership.
 
-* **Share:** Named exclusions read the titles TikTok exposes to accessibility. The panel's own attachment and layout events recheck late labels and recycled rows, including a reopened dialog (#74).
+* **Share:** Named exclusions read the titles TikTok exposes to accessibility. The panel's attachment, layout and draw events recheck late labels and recycled rows, including a reopened dialog (#74).
 
 * **Bundle checks:** The bundle description names all three supported TikTok versions. Verification rejects a description that omits one.
 

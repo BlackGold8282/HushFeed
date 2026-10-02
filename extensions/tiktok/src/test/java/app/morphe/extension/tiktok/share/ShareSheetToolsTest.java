@@ -1,6 +1,8 @@
 package app.morphe.extension.tiktok.share;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -488,6 +490,205 @@ public class ShareSheetToolsTest {
         }
     }
 
+    /** Native acceptance remains open. setText can redraw a measured title without a layout. */
+    @Test public void redrawOnlyLateTitleIsFilteredBeforeTheDrawWithoutPostedWork() {
+        try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
+            Activity activity = controller.get();
+            CountingActivityRoot activityRoot = new CountingActivityRoot(activity);
+            activityRoot.addView(new View(activity));
+            activity.setContentView(activityRoot);
+            ShareSheetTools.install(activity);
+            idle();
+            Settings.SHARE_HIDDEN_ITEMS.save("report");
+            Settings.HIDE_SHARE_CONTACTS.save(true);
+            ReflectionHelpers.setStaticField(ShareSheetTools.class, "windowViewsUnavailable", true);
+            NativeActionCell cell = new NativeActionCell(activity, 137, "");
+            NativeActionCell copy = new NativeActionCell(activity, 131, "Copy link");
+            int[] clicks = {0};
+            copy.setOnClickListener(view -> clicks[0]++);
+            Dialog dialog = showActions(activity, cell, copy);
+            try {
+                idle();
+                assertNull("no contact can bootstrap this panel", dialog.findViewById(0x7f000301));
+                assertEquals(View.VISIBLE, cell.getVisibility());
+                measureTitle(cell);
+                ViewTreeObserver observer = dialog.getWindow().getDecorView().getViewTreeObserver();
+                int[] layouts = {0}, queuedRuns = {0};
+                observer.addOnGlobalLayoutListener(() -> layouts[0]++);
+                Utils.runOnMainThread(() -> queuedRuns[0]++);
+                activityRoot.childrenRead = 0;
+
+                setRedrawOnlyTitle(cell, "Report");
+                observer.dispatchOnPreDraw();
+
+                assertEquals("the exclusion must apply before this draw", View.GONE, cell.getVisibility());
+                assertEquals(0, cell.getLayoutParams().width);
+                assertEquals("redraw does not imply global layout", 0, layouts[0]);
+                assertEquals("filtering cannot wait for posted work", 0, queuedRuns[0]);
+                assertEquals("a panel redraw must not traverse the activity", 0, activityRoot.childrenRead);
+                assertEquals(View.VISIBLE, copy.getVisibility());
+                assertEquals(131, copy.getLayoutParams().width);
+                assertEquals("reading the labels cannot activate an action", 0, clicks[0]);
+                copy.performClick();
+                assertEquals(1, clicks[0]);
+            } finally {
+                dialog.dismiss();
+                idle();
+            }
+        }
+    }
+
+    @Test public void redrawOnlyRecycledAllowedTitleRestoresItsNativeWidthAndListener() {
+        try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
+            Activity activity = controller.get();
+            activity.setContentView(new FrameLayout(activity));
+            ShareSheetTools.install(activity);
+            idle();
+            Settings.SHARE_HIDDEN_ITEMS.save("report");
+            NativeActionCell cell = new NativeActionCell(activity, 137, "Report");
+            int[] clicks = {0};
+            cell.setOnClickListener(view -> clicks[0]++);
+            Dialog dialog = showActions(activity, cell);
+            try {
+                idle();
+                assertEquals(View.GONE, cell.getVisibility());
+                assertEquals(0, cell.getLayoutParams().width);
+                ViewTreeObserver observer = dialog.getWindow().getDecorView().getViewTreeObserver();
+                for (String allowed : new String[] {"Repost", "Copy link"}) {
+                    measureTitle(cell);
+                    setRedrawOnlyTitle(cell, allowed);
+                    observer.dispatchOnPreDraw();
+                    assertEquals("a recycled allowed action must return before drawing", View.VISIBLE,
+                            cell.getVisibility());
+                    assertEquals(137, cell.getLayoutParams().width);
+                    assertEquals("reading the label cannot activate it", 0, clicks[0]);
+
+                    measureTitle(cell);
+                    setRedrawOnlyTitle(cell, "Report");
+                    observer.dispatchOnPreDraw();
+                    assertEquals(View.GONE, cell.getVisibility());
+                    assertEquals(0, cell.getLayoutParams().width);
+                }
+                measureTitle(cell);
+                setRedrawOnlyTitle(cell, "Copy link");
+                observer.dispatchOnPreDraw();
+                cell.performClick();
+                assertEquals("a restored action keeps its native listener", 1, clicks[0]);
+            } finally {
+                dialog.dismiss();
+                idle();
+            }
+        }
+    }
+
+    @Test public void redrawRestoresExcludedCellsWhenOffOrPausedAndResumesFiltering() {
+        try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
+            Activity activity = controller.get();
+            activity.setContentView(new FrameLayout(activity));
+            ShareSheetTools.install(activity);
+            idle();
+            for (boolean paused : new boolean[] {false, true}) {
+                Settings.SHARE_HIDDEN_ITEMS.save("report");
+                NativeActionCell cell = new NativeActionCell(activity, 137, "Report");
+                Dialog dialog = showActions(activity, cell);
+                try {
+                    idle();
+                    assertEquals(View.GONE, cell.getVisibility());
+                    ViewTreeObserver observer = dialog.getWindow().getDecorView().getViewTreeObserver();
+                    if (paused) ReflectionHelpers.setStaticField(Setting.class, "pausedForProcess", true);
+                    else Settings.SHARE_HIDDEN_ITEMS.save("");
+                    observer.dispatchOnPreDraw();
+                    assertEquals("off and Pause must restore the row before drawing", View.VISIBLE,
+                            cell.getVisibility());
+                    assertEquals(137, cell.getLayoutParams().width);
+                    assertEquals(paused ? "report" : "", Settings.SHARE_HIDDEN_ITEMS.savedValue());
+
+                    ReflectionHelpers.setStaticField(Setting.class, "pausedForProcess", false);
+                    Settings.SHARE_HIDDEN_ITEMS.save("report");
+                    observer.dispatchOnPreDraw();
+                    assertEquals(View.GONE, cell.getVisibility());
+                    assertEquals(0, cell.getLayoutParams().width);
+                } finally {
+                    ReflectionHelpers.setStaticField(Setting.class, "pausedForProcess", false);
+                    dialog.dismiss();
+                    idle();
+                }
+            }
+        }
+    }
+
+    @Test public void redrawObserverDetachesAndRebindsWhenTheSamePanelReopens() {
+        try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
+            Activity activity = controller.get();
+            activity.setContentView(new FrameLayout(activity));
+            ShareSheetTools.install(activity);
+            idle();
+            Settings.SHARE_HIDDEN_ITEMS.save("report");
+            NativeActionCell cell = new NativeActionCell(activity, 137, "");
+            Dialog dialog = showActions(activity, cell);
+            View decor = dialog.getWindow().getDecorView();
+            try {
+                idle();
+                ViewTreeObserver original = decor.getViewTreeObserver();
+                dialog.dismiss();
+                idle();
+                measureTitle(cell);
+                setRedrawOnlyTitle(cell, "Report");
+                cell.accessibilityReads = 0;
+                if (original.isAlive()) original.dispatchOnPreDraw();
+                decor.getViewTreeObserver().dispatchOnPreDraw();
+                assertEquals("a detached observer must stop reading native labels", 0, cell.accessibilityReads);
+                assertEquals("a detached panel must not be filtered", View.VISIBLE, cell.getVisibility());
+                assertEquals(137, cell.getLayoutParams().width);
+
+                setRedrawOnlyTitle(cell, "");
+                dialog.show();
+                idle();
+                assertSame(decor, dialog.getWindow().getDecorView());
+                assertEquals(View.VISIBLE, cell.getVisibility());
+                measureTitle(cell);
+                setRedrawOnlyTitle(cell, "Report");
+                decor.getViewTreeObserver().dispatchOnPreDraw();
+                assertEquals("the reused panel must observe redraw-only titles", View.GONE, cell.getVisibility());
+                assertEquals(0, cell.getLayoutParams().width);
+                measureTitle(cell);
+                setRedrawOnlyTitle(cell, "Copy link");
+                decor.getViewTreeObserver().dispatchOnPreDraw();
+                assertEquals(View.VISIBLE, cell.getVisibility());
+                assertEquals(137, cell.getLayoutParams().width);
+            } finally {
+                dialog.dismiss();
+                idle();
+            }
+        }
+    }
+
+    private static void measureTitle(NativeActionCell cell) {
+        cell.title.setLayoutParams(new FrameLayout.LayoutParams(cell.nativeWidth, 48));
+        cell.measure(View.MeasureSpec.makeMeasureSpec(cell.nativeWidth, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(48, View.MeasureSpec.EXACTLY));
+        cell.layout(0, 0, cell.nativeWidth, 48);
+        assertNotNull("the native title must already have a text layout", cell.title.getLayout());
+        assertEquals(cell.nativeWidth, cell.title.getWidth());
+        assertFalse(cell.title.isLayoutRequested());
+        assertFalse(cell.isLayoutRequested());
+    }
+
+    private static void setRedrawOnlyTitle(NativeActionCell cell, String text) {
+        cell.title.setText(text);
+        assertFalse("this text change must only invalidate, not request layout", cell.title.isLayoutRequested());
+        assertFalse("a title redraw must not request layout of its cell", cell.isLayoutRequested());
+    }
+
+    private static final class CountingActivityRoot extends FrameLayout {
+        int childrenRead;
+        CountingActivityRoot(Context context) { super(context); }
+        @Override public View getChildAt(int index) {
+            childrenRead++;
+            return super.getChildAt(index);
+        }
+    }
+
     private static FrameLayout actionRow(Context context) {
         FrameLayout actions = new FrameLayout(context);
         actions.setId(0x7f000401);
@@ -528,9 +729,12 @@ public class ShareSheetToolsTest {
     /** The holder/delegate shape shared by both native action adapters on every declared host. */
     private static final class NativeActionCell extends FrameLayout {
         final TextView title;
+        final int nativeWidth;
+        int accessibilityReads;
 
         NativeActionCell(Context context, int width, String label) {
             super(context);
+            nativeWidth = width;
             setLayoutParams(new FrameLayout.LayoutParams(width, 48));
             title = new TextView(context);
             title.setText(label);
@@ -538,6 +742,7 @@ public class ShareSheetToolsTest {
             setAccessibilityDelegate(new View.AccessibilityDelegate() {
                 @Override public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo node) {
                     super.onInitializeAccessibilityNodeInfo(host, node);
+                    accessibilityReads++;
                     node.setContentDescription(title.getText());
                     node.setClassName(android.widget.Button.class.getName());
                 }

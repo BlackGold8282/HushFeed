@@ -9,6 +9,7 @@ package app.morphe.extension.tiktok.share;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import app.morphe.extension.shared.GlobalLayoutHook;
@@ -73,6 +74,10 @@ public final class ShareSheetTools {
     private static final GlobalLayoutHook LAYOUT_HOOK = new GlobalLayoutHook();
     private static final GlobalLayoutHook SHEET_LAYOUT_HOOK = new GlobalLayoutHook();
     private static WeakReference<View> panelRowReference = new WeakReference<>(null);
+    private static WeakReference<ViewGroup> panelDrawRoot = new WeakReference<>(null);
+    private static ViewTreeObserver panelDrawObserver;
+    private static PanelRows panelRows;
+    private static final ViewTreeObserver.OnPreDrawListener PANEL_DRAW_LISTENER = ShareSheetTools::beforePanelDraw;
     private static final View.OnAttachStateChangeListener PANEL_ATTACH_LISTENER =
             new View.OnAttachStateChangeListener() {
                 @Override public void onViewAttachedToWindow(View row) {
@@ -80,7 +85,7 @@ public final class ShareSheetTools {
                 }
 
                 @Override public void onViewDetachedFromWindow(View row) {
-                    if (panelRowReference.get() == row) SHEET_LAYOUT_HOOK.detach();
+                    if (panelRowReference.get() == row) detachSheetHooks();
                 }
             };
 
@@ -148,23 +153,13 @@ public final class ShareSheetTools {
             View channels = find(activity, roots, found, CHANNELS_LIST_IDS);
             View actions = find(activity, roots, found, ACTIONS_LIST_IDS);
             watchSheetRoot(activity, actions != null ? actions : channels != null ? channels : contacts);
-            List<String> hidden = entries(ShareModelFilter.hiddenItems());
-
             View contactsSection = find(activity, roots, found, CONTACTS_SECTION_IDS);
-            boolean hideContacts = Settings.HIDE_SHARE_CONTACTS.get();
-            if (contactsSection != null) {
-                setVisible(contactsSection, !hideContacts);
+            ViewGroup panel = panelDrawRoot.get();
+            if (panel != null) {
+                panelRows = new PanelRows(panel, contactsSection, contacts, channels,
+                        actions != null ? actions : panelRowReference.get());
             }
-            if (!hideContacts && contacts instanceof ViewGroup) {
-                ViewGroup list = (ViewGroup) contacts;
-                for (int index = 0; index < list.getChildCount(); index++) {
-                    View cell = list.getChildAt(index);
-                    setCellHidden(cell, matches(hidden, labelOf(cell)));
-                }
-            }
-
-            hideByLabel(channels, hidden);
-            hideByLabel(actions, hidden);
+            applyRows(contactsSection, contacts, channels, actions);
         } catch (Throwable ex) {
             HookStatus.threw(FAMILY, "layout pass", ex);
             Logger.printException(() -> "Share sheet tools failed", ex);
@@ -173,16 +168,80 @@ public final class ShareSheetTools {
 
     // ---- hiding ------------------------------------------------------------------------
 
-    /** The native row's attach event discovers its window; layouts catch late and recycled titles. */
+    /** Layouts discover rows. Pre-draw catches title changes that only invalidate their text. */
     private static void watchSheetRoot(Activity activity, View row) {
         View root = row == null ? null : row.getRootView();
         View activityRoot = activity == null || activity.getWindow() == null
                 ? null : activity.getWindow().getDecorView();
         if (root instanceof ViewGroup && root != activityRoot) {
             SHEET_LAYOUT_HOOK.install((ViewGroup) root, ShareSheetTools::apply);
+            watchPanelDraw((ViewGroup) root);
         } else {
-            SHEET_LAYOUT_HOOK.detach();
+            detachSheetHooks();
         }
+    }
+
+    private static void watchPanelDraw(ViewGroup root) {
+        ViewTreeObserver current = root.getViewTreeObserver();
+        if (panelDrawRoot.get() == root && panelDrawObserver == current && current.isAlive()) return;
+        detachPanelDraw();
+        current.addOnPreDrawListener(PANEL_DRAW_LISTENER);
+        panelDrawRoot = new WeakReference<>(root);
+        panelDrawObserver = current;
+        // The native action row is known before the first layout or posted pass.
+        panelRows = new PanelRows(root, null, null, null, panelRowReference.get());
+    }
+
+    /** Only known panel rows are read on redraw, never the activity or the window-root index. */
+    private static boolean beforePanelDraw() {
+        try {
+            Activity activity = activityReference.get();
+            if (activity == null || activity.isFinishing()) {
+                LAYOUT_HOOK.detach();
+                detachPanel();
+                return true;
+            }
+            ViewGroup root = panelDrawRoot.get();
+            PanelRows rows = panelRows;
+            if (root != null && root.isAttachedToWindow() && rows != null) {
+                applyRows(rows.get(rows.section, root), rows.get(rows.contacts, root),
+                        rows.get(rows.channels, root), rows.get(rows.actions, root));
+            }
+        } catch (Throwable ex) {
+            HookStatus.threw(FAMILY, "draw pass", ex);
+            Logger.printException(() -> "Share sheet redraw filtering failed", ex);
+        }
+        return true;
+    }
+
+    /** Weak row snapshots are refreshed during layout, including replacement channel lists. */
+    private static final class PanelRows {
+        final WeakReference<View> section, contacts, channels, actions;
+
+        PanelRows(View root, View section, View contacts, View channels, View actions) {
+            this.section = inRoot(section, root);
+            this.contacts = inRoot(contacts, root);
+            this.channels = inRoot(channels, root);
+            this.actions = inRoot(actions, root);
+        }
+
+        private static WeakReference<View> inRoot(View view, View root) {
+            return new WeakReference<>(view != null && view.getRootView() == root ? view : null);
+        }
+
+        View get(WeakReference<View> reference, View root) {
+            View view = reference.get();
+            return view != null && view.isAttachedToWindow() && view.getRootView() == root ? view : null;
+        }
+    }
+
+    private static void applyRows(View section, View contacts, View channels, View actions) {
+        List<String> hidden = entries(ShareModelFilter.hiddenItems());
+        boolean hideContacts = Settings.HIDE_SHARE_CONTACTS.get();
+        if (section != null) setVisible(section, !hideContacts);
+        if (!hideContacts) hideByLabel(contacts, hidden);
+        hideByLabel(channels, hidden);
+        hideByLabel(actions, hidden);
     }
 
     /**
@@ -214,7 +273,30 @@ public final class ShareSheetTools {
         View previous = panelRowReference.get();
         if (previous != null) previous.removeOnAttachStateChangeListener(PANEL_ATTACH_LISTENER);
         panelRowReference = new WeakReference<>(null);
+        detachSheetHooks();
+    }
+
+    private static void detachSheetHooks() {
         SHEET_LAYOUT_HOOK.detach();
+        detachPanelDraw();
+    }
+
+    private static void detachPanelDraw() {
+        removePanelDrawListener(panelDrawObserver);
+        ViewGroup root = panelDrawRoot.get();
+        if (root != null) removePanelDrawListener(root.getViewTreeObserver());
+        panelDrawRoot = new WeakReference<>(null);
+        panelDrawObserver = null;
+        panelRows = null;
+    }
+
+    private static void removePanelDrawListener(ViewTreeObserver observer) {
+        if (observer == null) return;
+        try {
+            if (observer.isAlive()) observer.removeOnPreDrawListener(PANEL_DRAW_LISTENER);
+        } catch (Throwable ignored) {
+            // A destroyed window can invalidate its observer during removal.
+        }
     }
 
     private static void hideByLabel(View list, List<String> hidden) {
