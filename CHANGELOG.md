@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Hide search rewards (App) now keeps the floating coin off search as well as the points banner (#21). The switch only reached the banner's service before, so the coin stayed and the banner could come back. Now every search rewards piece takes the path TikTok already takes for accounts without rewards. TikTok decides this once per launch, so the switch now asks for a restart after you change it.
+
 * **TikTok:** Hushfeed's settings come in Azerbaijani (#77). Like the other languages they follow the language TikTok runs in, and it's a first pass, so corrections are welcome.
 
 * **TikTok:** The four resource optimizers accept a universal APK split down to one ABI, such as an arm64-v8a only copy (#43). They used to stop because the other ABI's libraries were missing. Every file the split kept still has to match its reviewed checksum, and a set missing only part of an ABI is still refused.
