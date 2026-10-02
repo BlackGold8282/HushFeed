@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Hushfeed's settings come in Azerbaijani (#77). Like the other languages they follow the language TikTok runs in, and it's a first pass, so corrections are welcome.
+
 * **TikTok:** The four resource optimizers accept a universal APK split down to one ABI, such as an arm64-v8a only copy (#43). They used to stop because the other ABI's libraries were missing. Every file the split kept still has to match its reviewed checksum, and a set missing only part of an ABI is still refused.
 
 * **TikTok:** Show author region puts the country on the video you're watching again after you swipe down (#75). TikTok keeps the videos above and below attached while you scroll, and the country was going on the one above, so it only showed after swiping back up.
