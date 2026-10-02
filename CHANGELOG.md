@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **Share:** Named exclusions read the titles TikTok exposes to accessibility. The panel's own attachment and layout events recheck late labels and recycled rows, including a reopened dialog (#74).
+
 * **Bundle checks:** The bundle description names all three supported TikTok versions. Verification rejects a description that omits one.
 
 * **Share:** The logged-in long-press panel was checked on 2026-10-02 with TikTok 47.0.3 and an installed Hushfeed 0.66.0 build. Opening it showed no "Tap again to send" toast (#58).
