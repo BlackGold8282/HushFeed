@@ -396,7 +396,10 @@ try {
     $touchesApkSigning = @($paths | Where-Object {
         $_ -in $apkSigningPaths -or $_ -like 'tools/verification-probe/src/*'
     }).Count -gt 0
-    $touchesProbeTests = @($paths | Where-Object { $_ -like 'tools/verification-probe/tests/*' }).Count -gt 0
+    # The probe's device scripts share a log-marker helper whose contracts live with the scripts'.
+    $touchesProbeTests = @($paths | Where-Object {
+        $_ -like 'tools/verification-probe/tests/*' -or $_ -like 'tools/verification-probe/*.ps1'
+    }).Count -gt 0
     # Declarations, catalog generation and its consumed build pins can change the unnamed
     # dependency closure without changing a script. Check that closure before starting a build.
     $touchesCatalog = @($paths | Where-Object {
