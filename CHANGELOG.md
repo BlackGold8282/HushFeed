@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **Device builds:** Exported BKS keys can use an empty store password and a separate entry password. Both builders verify their output certificate, and in-place installs reject a different installed signer before changing app data.
+
 * **Build checks:** Changes to the Gradle launchers or wrapper JAR now run the catalog contracts and rebuild and apply the bundle before a push.
 
 * **Build checks:** Runtime code and the inputs that build it now rebuild the release bundle and apply it to every supported APK before a push. Source and published-index changes must go in separate pushes so the source can be checked without replacing a published artifact.

@@ -10,9 +10,10 @@
     platform refuses to instrument a package that is not debuggable unless the instrumentation
     carries the same signature, and the patched TikTok is not debuggable.
 
-    The signing password comes from HUSHFEED_SIDELOAD_KEYSTORE_PASSWORD. When it is unset, the
-    local test keystore's documented password, sideload, is used. apksigner receives an env:
-    reference, so the password value is not in the child process command line.
+    Store and entry passwords can be supplied independently, including an empty store password
+    for an exported BKS key. Unset passwords retain the local test-key defaults. apksigner receives
+    temporary process environment references rather than password values. No key is converted or
+    copied. The output, installed probe and TikTok certificates are checked before installation.
 
 .EXAMPLE
     tools/verification-probe/build.ps1 -Serial $env:HUSHFEED_DEVICE_SERIAL -Install
@@ -38,13 +39,22 @@ param(
     [switch]$Install,
     [switch]$Uninstall,
     [string]$Sdk = "$env:LOCALAPPDATA\Android\Sdk",
+    [string]$Java,
     [string]$Keystore = "$HOME\.android\sideload-release.jks",
     [string]$KeyAlias = 'sideload',
+    [ValidateSet('BKS', 'JKS', 'PKCS12')][string]$KeystoreType,
+    [AllowEmptyString()][string]$KeystorePassword,
+    [AllowEmptyString()][string]$KeyPassword,
     [string]$OutDir = (Join-Path $env:TEMP 'hushfeed-probe')
 )
 
 $ErrorActionPreference = 'Stop'
 $here = $PSScriptRoot
+$root = Split-Path -Parent (Split-Path -Parent $here)
+. (Join-Path $root 'scripts/common.ps1')
+. (Join-Path $root 'scripts/Resolve-Java.ps1')
+. (Join-Path $root 'scripts/apk-signing.ps1')
+. (Join-Path $root 'scripts/device-install.ps1')
 
 function Resolve-Adb {
     $onPath = Get-Command adb -ErrorAction SilentlyContinue
@@ -70,10 +80,9 @@ if (-not $platform) { throw "No platforms under $Sdk." }
 $androidJar = Join-Path $platform.FullName 'android.jar'
 Write-Host "[probe] build-tools $($buildTools.Name), $($platform.Name)"
 
-$javac = if ($env:JAVA_HOME) { Join-Path $env:JAVA_HOME 'bin\javac.exe' } else { $null }
-if (-not $javac -or -not (Test-Path $javac)) {
-    $javac = (Get-ChildItem 'C:\Program Files\Android\Android Studio\jbr\bin\javac.exe' -ErrorAction SilentlyContinue).FullName
-}
+$Java = Resolve-Java -Explicit $Java
+$javaPath = (Get-Command $Java -ErrorAction Stop).Source
+$javac = Join-Path (Split-Path -Parent $javaPath) 'javac.exe'
 if (-not $javac -or -not (Test-Path $javac)) { throw 'No javac found. Set JAVA_HOME.' }
 
 # Not silenced: a directory that cannot be cleared keeps its old classes, and every .class
@@ -81,6 +90,10 @@ if (-not $javac -or -not (Test-Path $javac)) { throw 'No javac found. Set JAVA_H
 if (Test-Path -LiteralPath $OutDir) { Remove-Item -LiteralPath $OutDir -Recurse -Force }
 if (Test-Path -LiteralPath $OutDir) { throw "Could not clear $OutDir." }
 New-Item -ItemType Directory -Force -Path "$OutDir\classes", "$OutDir\dex" | Out-Null
+$signingSession = $null
+try {
+$signingSession = New-ApkSigningSession -BoundParameters $PSBoundParameters -Root $root -Sdk $Sdk `
+    -Java $Java -Keystore $Keystore -KeyAlias $KeyAlias -KeystoreType $KeystoreType
 
 # @() around both of these: with a single file the pipeline hands back a string rather than
 # an array, and splatting a string spreads its characters, so javac is handed the colon out
@@ -90,9 +103,16 @@ Write-Host "[probe] compiling $($sources.Count) source file(s)"
 # --release rather than -source/-target with a boot class path: a current JDK refuses that
 # pairing outright. android.jar stays on the ordinary class path, which is where the android.*
 # classes come from; java.* comes from the release the flag names.
-& $javac --release 11 -classpath $androidJar `
-    -d "$OutDir\classes" -encoding UTF-8 -nowarn @sources
-if ($LASTEXITCODE -ne 0) { throw 'javac failed.' }
+# javac writes ordinary deprecation notes to stderr. Windows PowerShell 5.1 must judge
+# compilation by its exit code, while still showing those notes and real compiler errors.
+$preference = $ErrorActionPreference
+try {
+    $ErrorActionPreference = 'Continue'
+    & $javac --release 11 -classpath $androidJar `
+        -d "$OutDir\classes" -encoding UTF-8 -nowarn @sources
+    $compileStatus = $LASTEXITCODE
+} finally { $ErrorActionPreference = $preference }
+if ($compileStatus -ne 0) { throw 'javac failed.' }
 
 $classes = @(Get-ChildItem "$OutDir\classes" -Recurse -Filter *.class | ForEach-Object { $_.FullName })
 & (Join-Path $buildTools.FullName 'd8.bat') --lib $androidJar --min-api 23 --output "$OutDir\dex" @classes
@@ -130,33 +150,15 @@ $aligned = Join-Path $OutDir 'probe-aligned.apk'
 if ($LASTEXITCODE -ne 0) { throw 'zipalign failed.' }
 
 $signed = Join-Path $OutDir 'hushfeed-verification-probe.apk'
-$passwordVariable = 'HUSHFEED_SIDELOAD_KEYSTORE_PASSWORD'
-$previousPassword = [Environment]::GetEnvironmentVariable(
-    $passwordVariable, [EnvironmentVariableTarget]::Process)
-$usingFallbackPassword = [string]::IsNullOrEmpty($previousPassword)
-if ($usingFallbackPassword) {
-    [Environment]::SetEnvironmentVariable(
-        $passwordVariable, 'sideload', [EnvironmentVariableTarget]::Process)
-    Write-Host "[probe] $passwordVariable is unset; using the documented local test-key fallback"
-}
-$signExitCode = 1
-try {
-    & (Join-Path $buildTools.FullName 'apksigner.bat') sign --ks $Keystore `
-        --ks-pass "env:$passwordVariable" --ks-key-alias $KeyAlias `
-        --key-pass "env:$passwordVariable" --min-sdk-version 23 --out $signed $aligned
-    $signExitCode = $LASTEXITCODE
-} finally {
-    if ($usingFallbackPassword) {
-        [Environment]::SetEnvironmentVariable(
-            $passwordVariable, $null, [EnvironmentVariableTarget]::Process)
-    }
-}
-if ($signExitCode -ne 0) { throw 'apksigner failed.' }
+Invoke-ApkSigning -Session $signingSession -InputApk $aligned -OutputApk $signed
 Write-Host "[probe] $signed"
 
 if ($Install) {
     if (-not $Serial) { throw '-Install needs -Serial.' }
     $adb = Resolve-Adb
+    Assert-InstalledApkSigner -Adb $adb -Serial $Serial -PackageName 'app.hushfeed.verification' -SigningSession $signingSession
+    Assert-InstalledApkSigner -Adb $adb -Serial $Serial -PackageName 'com.zhiliaoapp.musically' `
+        -SigningSession $signingSession -RequireInstalled
     & $adb -s $Serial install -r $signed | Out-Host
     if ($LASTEXITCODE -ne 0) { throw "adb install failed on $Serial. The output above says why." }
     Write-Host '[probe] installed. Load it into TikTok, then send it work:'
@@ -164,3 +166,4 @@ if ($Install) {
     Write-Host "  adb -s $Serial shell am broadcast -a app.hushfeed.verification.PROBE -p com.zhiliaoapp.musically -e action dump"
     Write-Host "  adb -s $Serial logcat -d | Select-String HushfeedProbe"
 }
+} finally { Close-ApkSigningSession -Session $signingSession }
