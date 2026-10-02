@@ -1049,6 +1049,7 @@ Show only videos with this many likes.	Nur Videos mit so vielen Likes zeigen.
 Show only videos with this many shares.	Nur Videos zeigen, die so oft geteilt wurden.
 Show only videos with this many views.	Nur Videos mit so vielen Aufrufen zeigen.
 The original photos aren't available, so TikTok's own save runs instead	Die Originalfotos sind nicht verfügbar, also speichert TikTok selbst
+The original photos aren't available. No video was saved.	Die Originalfotos sind nicht verfügbar. Es wurde kein Video gespeichert.
 The override changes no fields. Edit the field values, or reset the override.	Die Überschreibung ändert keine Felder. Bearbeite die Feldwerte oder setze die Überschreibung zurück.
 The override couldn't be applied: %1$s. Edit the field values, or reset the override.	Die Überschreibung konnte nicht angewendet werden: %1$s. Bearbeite die Feldwerte oder setze die Überschreibung zurück.
 The override doesn't say what list to return. Edit the field values, or reset the override.	Die Überschreibung gibt nicht an, welche Liste zurückgegeben werden soll. Bearbeite die Feldwerte oder setze die Überschreibung zurück.
@@ -1302,6 +1303,7 @@ TikTok default (open the creator's profile)	TikTok-Standard (Profil des Creators
 Saving %1$s of %2$s	Datei %1$s von %2$s wird gespeichert
 Stopping after this file	Wird nach dieser Datei beendet
 Waiting to save %1$s files	%1$s Dateien warten auf das Speichern
+Waiting to save one file	Eine Datei wartet auf das Speichern
 Save cancelled. Nothing was saved.	Speichern abgebrochen. Es wurde nichts gespeichert.
 One more save waiting	Eine weitere Speicherung wartet
 %1$s more saves waiting	%1$s weitere Speicherungen warten

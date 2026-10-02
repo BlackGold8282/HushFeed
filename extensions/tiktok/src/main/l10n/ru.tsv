@@ -1121,6 +1121,7 @@ Show only videos with this many likes.	Показывать только вид�
 Show only videos with this many shares.	Показывать только видео, которыми поделились столько раз.
 Show only videos with this many views.	Показывать только видео с таким количеством просмотров.
 The original photos aren't available, so TikTok's own save runs instead	Оригинальные фото недоступны, поэтому вместо этого используется сохранение средствами TikTok
+The original photos aren't available. No video was saved.	Оригинальные фото недоступны. Видео не было сохранено.
 The override changes no fields. Edit the field values, or reset the override.	Это переопределение не меняет ни одного поля. Измените значения полей или сбросьте переопределение.
 The override couldn't be applied: %1$s. Edit the field values, or reset the override.	Не удалось применить переопределение: %1$s. Измените значения полей или сбросьте переопределение.
 The override doesn't say what list to return. Edit the field values, or reset the override.	Переопределение не указывает, какой список возвращать. Измените значения полей или сбросьте переопределение.
@@ -1410,6 +1411,10 @@ TikTok default (open the creator's profile)	Стандарт TikTok (откры�
 Saving %1$s of %2$s	Сохраняется файл %1$s из %2$s
 Stopping after this file	Остановка после этого файла
 Waiting to save %1$s files	%1$s файлов ожидают сохранения
+Waiting to save %1$s files|one	%1$s файл ожидает сохранения
+Waiting to save %1$s files|few	%1$s файла ожидают сохранения
+Waiting to save %1$s files|many	%1$s файлов ожидают сохранения
+Waiting to save one file	Один файл ожидает сохранения
 Save cancelled. Nothing was saved.	Сохранение отменено. Ничего не сохранено.
 One more save waiting	Ещё одно сохранение в очереди
 %1$s more saves waiting	Ещё %1$s сохранений в очереди

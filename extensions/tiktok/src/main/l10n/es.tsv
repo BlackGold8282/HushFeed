@@ -1046,6 +1046,7 @@ Show only videos with this many likes.	Mostrar solo vídeos con este número de 
 Show only videos with this many shares.	Mostrar solo vídeos compartidos este número de veces.
 Show only videos with this many views.	Mostrar solo vídeos con este número de visualizaciones.
 The original photos aren't available, so TikTok's own save runs instead	Las fotos originales no están disponibles, así que se usa el guardado propio de TikTok
+The original photos aren't available. No video was saved.	Las fotos originales no están disponibles. No se guardó ningún video.
 The override changes no fields. Edit the field values, or reset the override.	La anulación no cambia ningún campo. Edita los valores de los campos o restablece la anulación.
 The override couldn't be applied: %1$s. Edit the field values, or reset the override.	No se pudo aplicar la anulación: %1$s. Edita los valores de los campos o restablece la anulación.
 The override doesn't say what list to return. Edit the field values, or reset the override.	La anulación no dice qué lista devolver. Edita los valores de los campos o restablece la anulación.
@@ -1299,6 +1300,7 @@ TikTok default (open the creator's profile)	Predeterminado de TikTok (abrir el p
 Saving %1$s of %2$s	Guardando %1$s de %2$s
 Stopping after this file	Se detendrá después de este archivo
 Waiting to save %1$s files	Esperando para guardar %1$s archivos
+Waiting to save one file	Esperando para guardar un archivo
 Save cancelled. Nothing was saved.	Guardado cancelado. No se guardó nada.
 One more save waiting	Un guardado más en espera
 %1$s more saves waiting	%1$s guardados más en espera

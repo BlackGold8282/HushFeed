@@ -1046,6 +1046,7 @@ Show only videos with this many likes.,Hanya tampilkan video dengan jumlah suka 
 Show only videos with this many shares.,Hanya tampilkan video dengan jumlah bagikan sebanyak ini.
 Show only videos with this many views.,Hanya tampilkan video dengan jumlah tayangan sebanyak ini.
 "The original photos aren't available, so TikTok's own save runs instead","Foto aslinya tidak tersedia, jadi TikTok yang menyimpannya"
+The original photos aren't available. No video was saved.,Foto aslinya tidak tersedia. Tidak ada video yang disimpan.
 "The override changes no fields. Edit the field values, or reset the override.","Penimpaan tidak mengubah field apa pun. Ubah nilai field, atau setel ulang penimpaan."
 "The override couldn't be applied: %1$s. Edit the field values, or reset the override.","Penimpaan tidak bisa diterapkan: %1$s. Ubah nilai field, atau setel ulang penimpaan."
 "The override doesn't say what list to return. Edit the field values, or reset the override.","Penimpaan tidak menyebutkan daftar mana yang harus dikembalikan. Ubah nilai field, atau setel ulang penimpaan."
@@ -1297,6 +1298,7 @@ TikTok default (open the creator's profile),Bawaan TikTok (buka profil kreator)
 Saving %1$s of %2$s,Menyimpan %1$s dari %2$s
 Stopping after this file,Berhenti setelah berkas ini
 Waiting to save %1$s files,Menunggu untuk menyimpan %1$s berkas
+Waiting to save one file,Menunggu untuk menyimpan satu berkas
 Save cancelled. Nothing was saved.,Penyimpanan dibatalkan. Tidak ada yang disimpan.
 One more save waiting,Satu penyimpanan lagi menunggu
 %1$s more saves waiting,%1$s penyimpanan lagi menunggu
