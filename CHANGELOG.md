@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **Bundle checks:** The bundle description names all three supported TikTok versions. Verification rejects a description that omits one.
+
 * **Share:** The logged-in long-press panel was checked on 2026-10-02 with TikTok 47.0.3 and an installed Hushfeed 0.66.0 build. Opening it showed no "Tap again to send" toast (#58).
 
 * **Device builds:** Signing keys, including copies and hard links, cannot occupy generated output paths. Both helpers check before cleaning outputs, resolve relative paths from the same working folder and keep the key locked through cleanup.
