@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **Device builds:** Signing keys, including copies and hard links, cannot occupy generated output paths. Both helpers check before cleaning outputs, resolve relative paths from the same working folder and keep the key locked through cleanup.
+
 * **CAPTCHA:** Unclassified and unreadable verification challenges stay visible, including on signed-in accounts. The hide switch is unavailable until a browsing scene is validated; shown decisions still appear in diagnostics.
 
 * **Device builds:** The verification probe checks output ownership before rebuilding and preserves unexpected files in marked folders. Roots, linked paths and unmarked nonempty folders are rejected.

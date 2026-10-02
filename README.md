@@ -443,6 +443,8 @@ A release tag can point to the tested commit already on the remote branch. The p
 
 The device-only patch and verification helpers accept separate store and entry passwords. `-KeystorePassword` overrides `HUSHFEED_SIDELOAD_KEYSTORE_PASSWORD`. If neither is set, the store password is `sideload`, the local test-key password. `-KeyPassword` overrides `HUSHFEED_SIDELOAD_KEY_PASSWORD`. When both are unset, it uses the store password. An explicitly empty password stays empty. Leave `-KeystoreType` unset for the SDK's default format, or pass `BKS`, `JKS` or `PKCS12`. A `.jks` filename can also contain PKCS12 data.
 
+Keep the signing key outside `-OutDir`. Both helpers resolve relative paths from PowerShell's working folder and reject key copies or aliases in generated outputs before rebuilding. The key stays locked against writes until the build and cleanup finish.
+
 For an exported Manager key with an empty store password, set the entry password in the process environment and pass its alias and format to both helpers:
 
 ```powershell
