@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **Device builds:** The verification probe checks output ownership before rebuilding and preserves unexpected files in marked folders. Roots, linked paths and unmarked nonempty folders are rejected.
+
 * **Device builds:** Exported BKS keys can use an empty store password and a separate entry password. Both builders verify their output certificate, and in-place installs reject a different installed signer before changing app data.
 
 * **Build checks:** Changes to the Gradle launchers or wrapper JAR now run the catalog contracts and rebuild and apply the bundle before a push.

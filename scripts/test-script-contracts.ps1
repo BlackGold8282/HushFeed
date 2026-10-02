@@ -1618,6 +1618,7 @@ try {
     New-Item -ItemType Directory -Path (Join-Path $hookRoot 'scripts') -Force | Out-Null
     $factsMarker = Join-Path $hookRoot 'facts-ran.txt'
     $contractsMarker = Join-Path $hookRoot 'contracts-ran.txt'
+    $signingMarker = Join-Path $hookRoot 'signing-ran.txt'
     Set-Content -LiteralPath (Join-Path $hookRoot 'scripts/validate-release-facts.ps1') -Encoding UTF8 -Value @(
         'param([string]$Root, [switch]$SkipDescriptionTestCount, [switch]$AllowPublishedIndexLag,',
         '    [switch]$VerifyPublishedAsset, [string]$ArtifactPath)',
@@ -1627,10 +1628,14 @@ try {
         'param([string]$Root)',
         "Set-Content -LiteralPath '$contractsMarker' -Value 'ran'",
         'exit 0')
+    Set-Content -LiteralPath (Join-Path $hookRoot 'scripts/test-apk-signing.ps1') -Encoding UTF8 -Value @(
+        'param([string]$Root)',
+        "Set-Content -LiteralPath '$signingMarker' -Value `"root=`$Root`"",
+        'exit 0')
 
     function Invoke-Hook {
         param([string[]]$Paths)
-        Remove-Item -LiteralPath $factsMarker, $contractsMarker -Force -ErrorAction SilentlyContinue
+        Remove-Item -LiteralPath $factsMarker, $contractsMarker, $signingMarker -Force -ErrorAction SilentlyContinue
         $global:LASTEXITCODE = 0
         & $prePushScript -Root $hookRoot -ChangedPaths $Paths 6> $null
         if ($LASTEXITCODE -ne 0) { throw "pre-push exited $LASTEXITCODE for $($Paths -join ', ')" }
@@ -1639,8 +1644,32 @@ try {
     # The control: a file no gate reads runs no gate, so a marker below is the routing talking.
     Invoke-Hook -Paths @('CONTRIBUTING.md')
     Assert-True (-not (Test-Path -LiteralPath $factsMarker) -and
-        -not (Test-Path -LiteralPath $contractsMarker)) `
+        -not (Test-Path -LiteralPath $contractsMarker) -and
+        -not (Test-Path -LiteralPath $signingMarker)) `
         'An unread documentation change selected release or catalog contracts.'
+
+    # The previous routing fixtures covered scripts and catalog consumers, but no probe
+    # source or signing input. Exercise the real selector without running SDK tools here.
+    foreach ($signingInput in @(
+        'scripts/apk-signing.ps1', 'scripts/SigningCertificateCheck.java',
+        'scripts/SigningKeyFixtures.java', 'scripts/test-apk-signing.ps1',
+        'scripts/patch-for-device.ps1', 'scripts/device-install.ps1',
+        'scripts/common.ps1', 'scripts/Resolve-Java.ps1',
+        'scripts/patch-target.ps1', 'scripts/patch-report.ps1',
+        'tools/verification-probe/build.ps1', 'tools/verification-probe/AndroidManifest.xml',
+        'tools/verification-probe/src/Probe.java'
+    )) {
+        Invoke-Hook -Paths @($signingInput)
+        Assert-True ((Get-Content -LiteralPath $signingMarker -Raw).Trim() -eq "root=$hookRoot") `
+            "A device builder input $signingInput skipped its SDK signing fixtures or used another root."
+        Assert-True (Test-Path -LiteralPath $contractsMarker) 'A probe input skipped the ordinary script contracts.'
+    }
+    foreach ($unrelatedInput in @('scripts/pre-push.ps1', 'scripts/time-patches.ps1',
+            'tools/verification-probe/README.md', 'CONTRIBUTING.md')) {
+        Invoke-Hook -Paths @($unrelatedInput)
+        Assert-True (-not (Test-Path -LiteralPath $signingMarker)) `
+            "An unrelated input $unrelatedInput selected SDK signing fixtures."
+    }
 
     Invoke-Hook -Paths @('release-receipt-0.31.0.json')
     Assert-True (Test-Path -LiteralPath $factsMarker) `
@@ -1940,6 +1969,11 @@ try {
             Reset-Apply
             & $prePushScript -Root $hookRoot -ChangedPaths @('gradle/libs.versions.toml') 6> $null
             Assert-True ((Get-ApplyCalls).Count -eq 2) 'A patcher pin change applied nothing to the fixtures.'
+            Assert-True (Test-Path -LiteralPath $signingMarker) 'A signing provider pin change skipped SDK signing fixtures.'
+            Remove-Item -LiteralPath $signingMarker -Force
+            Reset-Apply
+            & $prePushScript -Root $hookRoot -ChangedPaths @('gradle/verification-metadata.xml') 6> $null
+            Assert-True (Test-Path -LiteralPath $signingMarker) 'A signing provider checksum change skipped SDK signing fixtures.'
 
             # HUSHFEED_GATE_SERIAL=1 applies one build at a time: the second run starts only once the
             # first has ended.

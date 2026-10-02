@@ -25,6 +25,7 @@ $entrySentinel = 'fixture-entry-' + [Guid]::NewGuid().ToString('N')
 $wrongSentinel = 'fixture-wrong-' + [Guid]::NewGuid().ToString('N')
 $referencesBefore = @([Environment]::GetEnvironmentVariables('Process').Keys | Where-Object { $_ -like 'HUSHFEED_SIGNING_*' })
 $assertions = 0
+$fixtureLinks = @()
 
 function Assert-Signing {
     param([bool]$Condition, [string]$Message)
@@ -220,6 +221,140 @@ exit /b %errorlevel%
     Copy-Item -LiteralPath $signedProbe -Destination $trustedProbe
     $signedDevice = $trustedDevice
     $signedProbe = $trustedProbe
+    $defaults = @{ Keystore = Join-Path $fixture 'defaults.p12' }
+
+    # Previous signing fixtures only rebuilt their dedicated output folder. They never proved
+    # that an arbitrary -OutDir could not erase someone else's files or follow a junction.
+    $tokens = $null
+    $parseErrors = $null
+    $probeSyntax = [Management.Automation.Language.Parser]::ParseFile($probeBuilder, [ref]$tokens, [ref]$parseErrors)
+    $outputGuard = $probeSyntax.Find({ param($node)
+        $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq 'Initialize-ProbeOutputDirectory'
+    }, $false)
+    Assert-Signing ($null -ne $outputGuard -and $parseErrors.Count -eq 0) 'The probe output guard could not be isolated for safe root fixtures.'
+    . ([scriptblock]::Create($outputGuard.Extent.Text))
+    & {
+        # Even a regressed guard cannot mutate a real root in these cases. Both filesystem
+        # mutators are shadowed, and their invocation fails with a different error.
+        $script:guardMutations = 0
+        function Remove-Item { $script:guardMutations++; throw 'Root fixture attempted deletion.' }
+        function New-Item { $script:guardMutations++; throw 'Root fixture attempted creation.' }
+        Assert-Signing ((Get-Command Remove-Item).CommandType -eq 'Function' -and
+            (Get-Command New-Item).CommandType -eq 'Function') 'Root fixture mutators were not shadowed.'
+        foreach ($protectedPath in @([IO.Path]::GetPathRoot($Root),
+                [Environment]::GetFolderPath('UserProfile'), $Root,
+                (Join-Path $Root '.'), (Split-Path -Parent $Root))) {
+            Assert-SigningRejected { Initialize-ProbeOutputDirectory -Path $protectedPath -RepositoryRoot $Root } '*Refusing probe output*'
+        }
+        Assert-Signing ($script:guardMutations -eq 0) 'A protected root reached a filesystem mutation.'
+    }
+
+    $guardRoot = Join-Path $fixture 'output-guard'
+    New-Item -ItemType Directory -Path $guardRoot | Out-Null
+    $unowned = Join-Path $guardRoot 'unowned'
+    $wrongOwner = Join-Path $guardRoot 'wrong-owner'
+    $otherRepository = Join-Path $guardRoot 'repository'
+    $existingFile = Join-Path $guardRoot 'file-output'
+    New-Item -ItemType Directory -Path $unowned, $wrongOwner, (Join-Path $otherRepository '.git') -Force | Out-Null
+    $sentinelText = 'keep this fixture file'
+    foreach ($directory in @($unowned, $wrongOwner, $otherRepository)) {
+        [IO.File]::WriteAllText((Join-Path $directory 'keep.txt'), $sentinelText)
+    }
+    [IO.File]::WriteAllText($existingFile, $sentinelText)
+    Copy-Item -LiteralPath (Join-Path $probeOut '.hushfeed-probe-output') -Destination $wrongOwner
+    foreach ($case in @(
+        @{ Path = $unowned; Pattern = '*nonempty unowned*'; Sentinel = Join-Path $unowned 'keep.txt' }
+        @{ Path = $wrongOwner; Pattern = '*nonempty unowned*'; Sentinel = Join-Path $wrongOwner 'keep.txt' }
+        @{ Path = $otherRepository; Pattern = '*repository root*'; Sentinel = Join-Path $otherRepository 'keep.txt' }
+        @{ Path = $existingFile; Pattern = '*existing file*'; Sentinel = $existingFile }
+    )) {
+        $guardArguments = $probeArguments.Clone()
+        $guardArguments.OutDir = $case.Path
+        Assert-SigningRejected { & $probeBuilder @guardArguments @defaults } $case.Pattern
+        Assert-Signing ([IO.File]::ReadAllText($case.Sentinel) -eq $sentinelText) 'A rejected output path changed its sentinel file.'
+    }
+    Assert-Signing (-not (Test-Path -LiteralPath (Join-Path $unowned '.hushfeed-probe-output'))) 'An unowned directory was silently adopted.'
+
+    $emptyOutput = Join-Path $guardRoot 'empty'
+    New-Item -ItemType Directory -Path $emptyOutput | Out-Null
+    $guardArguments = $probeArguments.Clone()
+    $guardArguments.OutDir = $emptyOutput
+    $output = @(& $probeBuilder @guardArguments @defaults *>&1)
+    Assert-NoSecrets $output
+    $staleClass = Join-Path $emptyOutput 'classes/stale.class'
+    [IO.File]::WriteAllText($staleClass, 'stale fixture class')
+    $guardArguments.OutDir = Join-Path $emptyOutput '../empty'
+    $output = @(& $probeBuilder @guardArguments @defaults *>&1)
+    Assert-NoSecrets $output
+    Assert-Signing (-not (Test-Path -LiteralPath $staleClass)) 'A marked repeat build retained a stale class.'
+    Assert-Signing ([IO.File]::ReadAllText((Join-Path $emptyOutput '.hushfeed-probe-output')) -eq
+        "hushfeed-verification-probe-output-v1`n$([IO.Path]::GetFullPath($emptyOutput))") 'The output marker did not bind the resolved absolute path.'
+    foreach ($relative in @('keep.txt', 'classes/keep.txt', 'dex/keep.txt')) {
+        $markedSentinel = Join-Path $emptyOutput $relative
+        [IO.File]::WriteAllText($markedSentinel, $sentinelText)
+        Assert-SigningRejected { & $probeBuilder @guardArguments @defaults } '*unexpected files or directories*'
+        Assert-Signing ([IO.File]::ReadAllText($markedSentinel) -eq $sentinelText -and
+            (Test-Path -LiteralPath (Join-Path $emptyOutput 'hushfeed-verification-probe.apk'))) 'A marked output erased an unexpected addition or existing APK.'
+        Remove-Item -LiteralPath $markedSentinel -Force
+    }
+
+    # Keep the normal default path, but point TEMP at this fixture so nothing outside it is cleared.
+    $savedTemporaryDirectory = $env:TEMP
+    $defaultTemporaryDirectory = Join-Path $guardRoot 'default-temp'
+    New-Item -ItemType Directory -Path $defaultTemporaryDirectory | Out-Null
+    try {
+        Set-FixtureEnvironment TEMP $defaultTemporaryDirectory
+        $defaultArguments = $probeArguments.Clone()
+        $defaultArguments.Remove('OutDir')
+        foreach ($run in @(1, 2)) {
+            $output = @(& $probeBuilder @defaultArguments @defaults *>&1)
+            Assert-NoSecrets $output
+        }
+    } finally { Set-FixtureEnvironment TEMP $savedTemporaryDirectory }
+    $defaultOutput = Join-Path $defaultTemporaryDirectory 'hushfeed-probe'
+    $session = New-ApkSigningSession -BoundParameters @{} -Root $Root -Sdk $fixtureSdk -Java $Java -Keystore $defaults.Keystore -KeyAlias sideload
+    try {
+        foreach ($directory in @($emptyOutput, $defaultOutput)) {
+            Assert-Signing ((Get-ApkSigningCertificate -Session $session -Apk (Join-Path $directory 'hushfeed-verification-probe.apk')) -eq $certificate) 'A fresh or default repeat build lost the verified probe certificate.'
+        }
+    } finally { Close-ApkSigningSession $session }
+    Assert-NoSigningReferences
+
+    $linkTarget = Join-Path $guardRoot 'link-target'
+    New-Item -ItemType Directory -Path $linkTarget | Out-Null
+    $linkSentinel = Join-Path $linkTarget 'keep.txt'
+    [IO.File]::WriteAllText($linkSentinel, $sentinelText)
+    $outputLink = Join-Path $guardRoot 'output-link'
+    New-Item -ItemType Junction -Path $outputLink -Target $linkTarget | Out-Null
+    $fixtureLinks += @{ Path = $outputLink; Directory = $true }
+    $nestedLink = Join-Path $emptyOutput 'classes/escape'
+    New-Item -ItemType Junction -Path $nestedLink -Target $linkTarget | Out-Null
+    $fixtureLinks += @{ Path = $nestedLink; Directory = $true }
+    foreach ($path in @($outputLink, (Join-Path $outputLink 'new-output'), $emptyOutput)) {
+        $guardArguments.OutDir = $path
+        Assert-SigningRejected { & $probeBuilder @guardArguments @defaults } '*linked path*'
+        Assert-Signing ([IO.File]::ReadAllText($linkSentinel) -eq $sentinelText) 'A junction escape changed files outside the selected output.'
+    }
+    Assert-Signing (-not (Test-Path -LiteralPath (Join-Path $linkTarget 'new-output'))) 'A rejected linked ancestor created an output directory.'
+    Assert-Signing (Test-Path -LiteralPath (Join-Path $emptyOutput '.hushfeed-probe-output')) 'A nested junction rejection deleted a marked output.'
+    # Junctions above are real. Hosts without symbolic-link privilege still exercise the
+    # same reparse-point rejection through a narrow metadata shadow on an isolated path.
+    $symbolicLink = Join-Path $guardRoot 'symbolic-output'
+    New-Item -ItemType Directory -Path $symbolicLink | Out-Null
+    $symbolicSentinel = Join-Path $symbolicLink 'keep.txt'
+    [IO.File]::WriteAllText($symbolicSentinel, $sentinelText)
+    & {
+        function Get-Item {
+            param([string]$LiteralPath, [switch]$Force)
+            if ($LiteralPath -eq $symbolicLink) {
+                return [pscustomobject]@{ Attributes = [IO.FileAttributes]::Directory -bor [IO.FileAttributes]::ReparsePoint }
+            }
+            Microsoft.PowerShell.Management\Get-Item @PSBoundParameters
+        }
+        $guardArguments.OutDir = $symbolicLink
+        Assert-SigningRejected { & $probeBuilder @guardArguments @defaults } '*linked path*'
+    }
+    Assert-Signing ([IO.File]::ReadAllText($symbolicSentinel) -eq $sentinelText) 'A shadowed symbolic-link path changed its sentinel.'
 
     # Passwords from the legacy environment and the new entry environment stay independent.
     Set-FixtureEnvironment HUSHFEED_SIDELOAD_KEYSTORE_PASSWORD $storeSentinel
@@ -251,7 +386,6 @@ exit /b %errorlevel%
             }
         }
     }
-    $defaults = @{ Keystore = Join-Path $fixture 'defaults.p12' }
     $session = New-ApkSigningSession -BoundParameters @{} -Root $Root -Sdk $fixtureSdk -Java $Java -Keystore $defaults.Keystore -KeyAlias sideload
     try {
         $other = New-ApkSigningSession -BoundParameters @{ KeystorePassword = $storeSentinel; KeyPassword = $entrySentinel } `
@@ -339,6 +473,12 @@ exit /b %errorlevel%
     }
     if (Test-Path -LiteralPath $fixture) {
         [void](Resolve-WithinRoot -Root $temporaryRoot -Path $fixture)
+        foreach ($link in $fixtureLinks) {
+            [void](Resolve-WithinRoot -Root $fixture -Path $link.Path)
+            # Nonrecursive deletion removes only the fixture link, never its target.
+            if ($link.Directory) { [IO.Directory]::Delete($link.Path) }
+            else { [IO.File]::Delete($link.Path) }
+        }
         Remove-Item -LiteralPath $fixture -Recurse -Force
     }
 }

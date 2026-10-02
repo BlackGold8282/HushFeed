@@ -384,6 +384,18 @@ try {
         $_ -eq 'patches-bundle.png' -or $_ -like 'assets/readme-*' -or $_ -like 'concepts/marketing/*'
     }).Count -gt 0
     $touchesScripts = @($paths | Where-Object { $_ -like 'scripts/*' }).Count -gt 0
+    $apkSigningPaths = @(
+        'scripts/apk-signing.ps1', 'scripts/SigningCertificateCheck.java',
+        'scripts/SigningKeyFixtures.java', 'scripts/test-apk-signing.ps1',
+        'scripts/patch-for-device.ps1', 'scripts/device-install.ps1',
+        'scripts/common.ps1', 'scripts/Resolve-Java.ps1',
+        'scripts/patch-target.ps1', 'scripts/patch-report.ps1',
+        'tools/verification-probe/build.ps1', 'tools/verification-probe/AndroidManifest.xml',
+        'gradle/libs.versions.toml', 'gradle/verification-metadata.xml'
+    )
+    $touchesApkSigning = @($paths | Where-Object {
+        $_ -in $apkSigningPaths -or $_ -like 'tools/verification-probe/src/*'
+    }).Count -gt 0
     # Declarations, catalog generation and its consumed build pins can change the unnamed
     # dependency closure without changing a script. Check that closure before starting a build.
     $touchesCatalog = @($paths | Where-Object {
@@ -464,7 +476,7 @@ try {
         $head = $null
         $dirty = @()
         $gateCommits = @($null)
-    } elseif ($touchesCode -or $touchesRelease -or $touchesScripts) {
+    } elseif ($touchesCode -or $touchesRelease -or $touchesScripts -or $touchesApkSigning) {
         $head = ([string](Invoke-HookGit @('-C', $Root, 'rev-parse', 'HEAD') | Select-Object -Last 1)).Trim()
         $dirty = @(Invoke-HookGit @('-C', $Root, 'status', '--porcelain', '--untracked-files=all'))
         $gateCommits = @($script:pushedCommits)
@@ -494,12 +506,16 @@ try {
             'in a clean worktree of the commit instead.')
     }
 
-    if ($touchesScripts -or $touchesCatalog) {
+    if ($touchesScripts -or $touchesCatalog -or $touchesApkSigning) {
         # Script, notice, failure message. The two injected-register suites and the resource
         # table check's run only when their own files moved; each one is the pushed commit's
         # copy, run against that commit.
         $suites = @(, @('scripts/test-script-contracts.ps1', 'scripts or catalog inputs changed, running their contract tests',
             'The script contract tests did not pass.'))
+        if ($touchesApkSigning) {
+            $suites += , @('scripts/test-apk-signing.ps1', 'device builder inputs changed, running SDK signing and cleanup fixtures',
+                'The device builder signing and cleanup fixtures did not pass.')
+        }
         if ($touchesInjectedRegisterVerifier) {
             $suites += , @('scripts/test-injected-registers.ps1', 'injected-register verifier changed, running its fixture tests',
                 'The injected-register verifier fixture tests did not pass.')

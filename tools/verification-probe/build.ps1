@@ -56,6 +56,73 @@ $root = Split-Path -Parent (Split-Path -Parent $here)
 . (Join-Path $root 'scripts/apk-signing.ps1')
 . (Join-Path $root 'scripts/device-install.ps1')
 
+function Initialize-ProbeOutputDirectory {
+    param([string]$Path, [string]$RepositoryRoot)
+
+    $absolute = [IO.Path]::GetFullPath($Path)
+    if ($absolute.StartsWith('\\?\') -or $absolute.StartsWith('\\.\')) {
+        throw 'Refusing probe output through a device path.'
+    }
+    foreach ($protected in @([IO.Path]::GetPathRoot($absolute),
+            [Environment]::GetFolderPath('UserProfile'), $RepositoryRoot)) {
+        if (-not $protected) { continue }
+        $protected = [IO.Path]::GetFullPath($protected).TrimEnd('\')
+        if ($absolute.TrimEnd('\') -eq $protected -or $protected.StartsWith($absolute.TrimEnd('\') + '\', [StringComparison]::OrdinalIgnoreCase)) {
+            throw 'Refusing probe output at a filesystem, profile or repository root.'
+        }
+    }
+    $absolute = $absolute.TrimEnd('\')
+    if (Test-Path -LiteralPath (Join-Path $absolute '.git')) { throw 'Refusing probe output at a repository root.' }
+    # GetFullPath is lexical. Reject links in every existing ancestor before trusting it.
+    $cursor = $absolute
+    while ($cursor) {
+        if (Test-Path -LiteralPath $cursor) {
+            $item = Get-Item -LiteralPath $cursor -Force
+            if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Refusing probe output through a linked path.' }
+        }
+        $cursor = Split-Path -Parent $cursor
+    }
+    $marker = Resolve-WithinRoot -Root $absolute -Path (Join-Path $absolute '.hushfeed-probe-output')
+    $ownership = "hushfeed-verification-probe-output-v1`n$absolute"
+    if (Test-Path -LiteralPath $absolute) {
+        if (-not (Test-Path -LiteralPath $absolute -PathType Container)) { throw 'Refusing probe output over an existing file.' }
+        $children = @(Get-ChildItem -LiteralPath $absolute -Force)
+        if (@($children | Where-Object { $_.Attributes -band [IO.FileAttributes]::ReparsePoint }).Count -gt 0) {
+            throw 'Refusing probe output containing a linked path.'
+        }
+        if ($children.Count -gt 0 -and (-not (Test-Path -LiteralPath $marker -PathType Leaf) -or
+                -not [string]::Equals([IO.File]::ReadAllText($marker), $ownership, [StringComparison]::OrdinalIgnoreCase))) {
+            throw 'Refusing probe output in a nonempty unowned directory. Choose a fresh -OutDir.'
+        }
+        # Inspect one level at a time, so enumeration never follows a junction outside the output.
+        $pending = New-Object 'Collections.Generic.Stack[IO.DirectoryInfo]'
+        $pending.Push((Get-Item -LiteralPath $absolute -Force))
+        while ($pending.Count -gt 0) {
+            $directory = $pending.Pop()
+            foreach ($child in @(Get-ChildItem -LiteralPath $directory.FullName -Force)) {
+                if ($child.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Refusing probe output containing a linked path.' }
+                $relative = $child.FullName.Substring($absolute.Length + 1)
+                $inClasses = $relative.StartsWith('classes\', [StringComparison]::OrdinalIgnoreCase)
+                if ($child.PSIsContainer) {
+                    $generated = $relative -in @('classes', 'dex') -or $inClasses
+                } else {
+                    $generated = $relative -in @('.hushfeed-probe-output', 'probe-unsigned.apk', 'probe-aligned.apk',
+                        'hushfeed-verification-probe.apk', 'hushfeed-verification-probe.apk.idsig') -or
+                        ($inClasses -and $child.Extension -eq '.class') -or $relative -match '^dex\\classes\d*\.dex$'
+                }
+                if (-not $generated) { throw 'Refusing probe output containing unexpected files or directories.' }
+                if ($child.PSIsContainer) { $pending.Push($child) }
+            }
+        }
+        $absolute = Resolve-WithinRoot -Root (Split-Path -Parent $absolute) -Path $absolute
+        Remove-Item -LiteralPath $absolute -Recurse -Force
+        if (Test-Path -LiteralPath $absolute) { throw "Could not clear $absolute." }
+    }
+    New-Item -ItemType Directory -Path $absolute | Out-Null
+    [IO.File]::WriteAllText($marker, $ownership)
+    return $absolute
+}
+
 function Resolve-Adb {
     $onPath = Get-Command adb -ErrorAction SilentlyContinue
     if ($onPath) { return $onPath.Source }
@@ -87,8 +154,7 @@ if (-not $javac -or -not (Test-Path $javac)) { throw 'No javac found. Set JAVA_H
 
 # Not silenced: a directory that cannot be cleared keeps its old classes, and every .class
 # under it is dexed into the probe below, source file or not.
-if (Test-Path -LiteralPath $OutDir) { Remove-Item -LiteralPath $OutDir -Recurse -Force }
-if (Test-Path -LiteralPath $OutDir) { throw "Could not clear $OutDir." }
+$OutDir = Initialize-ProbeOutputDirectory -Path $OutDir -RepositoryRoot $root
 New-Item -ItemType Directory -Force -Path "$OutDir\classes", "$OutDir\dex" | Out-Null
 $signingSession = $null
 try {
