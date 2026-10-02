@@ -593,6 +593,16 @@ public class SettingsPagesTest {
                 String name = "pages/" + theme + "/" + SECTIONS[i].toLowerCase(java.util.Locale.ROOT);
                 UiCapture.save(page.getView(), name + ".png");
                 ListView list = page.getView().findViewById(android.R.id.list);
+                if ("SHARE".equals(SECTIONS[i])) {
+                    for (int row = 0; row < list.getCount(); row++) {
+                        Object item = list.getAdapter().getItem(row);
+                        if (item instanceof Preference) {
+                            assertNotEquals("The removed friend-send confirmation returned to the tour",
+                                    "Confirm before sending to a friend",
+                                    String.valueOf(((Preference) item).getTitle()));
+                        }
+                    }
+                }
                 if ("PLAYBACK".equals(SECTIONS[i])) {
                     int mute = positionOf(list, Settings.FEED_MUTED.key);
                     assertTrue("the Sound controls are missing", mute > 0);
