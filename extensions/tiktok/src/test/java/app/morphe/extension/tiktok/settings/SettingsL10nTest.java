@@ -2205,6 +2205,8 @@ public class SettingsL10nTest {
             new SimSpoofPreferenceCategory(activity, screen);
             new DebugPreferenceCategory(activity, screen);
             new ExtensionPreferenceCategory(activity, screen);
+            // This About action is unconditional and doesn't belong to a patch-gated category.
+            screen.addPreference(new app.morphe.extension.tiktok.settings.preference.BuildDetailsPreference(activity));
             collect(screen, strings);
             // The master menu's own words: the section titles and subtitles its rows carry,
             // the four group headings above them, and the header. None of these is built by a
@@ -2228,6 +2230,9 @@ public class SettingsL10nTest {
             // The wording the backup row actually uses. This list said "Undo last restore" long
             // after the row started saying "or reset" too, which kept a dead tsv row alive.
             strings.add(L10n.t(activity, "Undo last restore or reset"));
+            strings.add(L10n.t(activity, "Copy build details"));
+            strings.add(L10n.t(activity, "Save build details"));
+            strings.add(L10n.t(activity, "Build details copied to the clipboard"));
         }
         return strings;
     }

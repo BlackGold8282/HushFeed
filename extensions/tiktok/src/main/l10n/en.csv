@@ -217,6 +217,8 @@ Blocked sounds,Blocked sounds
 Blocking,Blocking
 Bottom tabs to keep,Bottom tabs to keep
 Browse,Browse
+Build details,Build details
+Build details copied to the clipboard,Build details copied to the clipboard
 Calm feed,Calm feed
 Calm feed couldn't be applied. Nothing was changed.,Calm feed couldn't be applied. Nothing was changed.
 Calm feed couldn't start. Try again in a moment.,Calm feed couldn't start. Try again in a moment.
@@ -294,8 +296,10 @@ Confirm before liking a story,Confirm before liking a story
 Continue supported videos from where you stopped when you scroll back to them.,Continue supported videos from where you stopped when you scroll back to them.
 Controls,Controls
 Copy a quick report or save the full report as a file.,Copy a quick report or save the full report as a file.
+Copy build details,Copy build details
 Copy comments without username,Copy comments without username
 Copy only the comment text when using TikTok's copy comment action.,Copy only the comment text when using TikTok's copy comment action.
+Copy or save patch-time choices and build identity.,Copy or save patch-time choices and build identity.
 Copy quick report,Copy quick report
 Copy report,Copy report
 Copy the sound link,Copy the sound link
@@ -986,6 +990,7 @@ Save Hushfeed settings and Feature Gate Lab rules to a JSON file.,Save Hushfeed 
 Save a profile picture on a long press,Save a profile picture on a long press
 Save a story on a long press,Save a story on a long press
 Save again,Save again
+Save build details,Save build details
 Save cancelled. Nothing was saved.,Save cancelled. Nothing was saved.
 Save details beside the video,Save details beside the video
 "Save every photo in the post as TikTok received it, not as the screen shows it.","Save every photo in the post as TikTok received it, not as the screen shows it."

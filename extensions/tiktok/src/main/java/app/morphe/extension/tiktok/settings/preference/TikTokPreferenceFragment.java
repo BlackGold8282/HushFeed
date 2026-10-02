@@ -1154,6 +1154,7 @@ public class TikTokPreferenceFragment extends AbstractPreferenceFragment {
         addMenu(screen, Section.BACKUP, SettingsMenuPreference.Icon.BACKUP);
 
         addHeading(screen, "About");
+        screen.addPreference(new BuildDetailsPreference(context));
         screen.addPreference(new MorpheTikTokAboutPreference(context));
         // Under About, because that is where somebody looks for who wrote this. Morphe's
         // Section 7b asks that its notice reach the person using the software, and a file in the

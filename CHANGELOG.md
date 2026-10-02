@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **Diagnostics:** Build details under About copies or saves build identity and verified patch-time resource choices, even without Diagnostic tools or events. Automatic reports include the same facts. Older APKs show unknown, and runtime settings can't rewrite them. Patching an APK that Hushfeed already patched now stops with an error, so start from TikTok's original APK.
+
 * **Patching:** A bundle saved under a filename or folder with a plus sign, a space, a percent sign or non-English letters now applies. The patcher used to read `+` as a space and stop with "no such file".
 
 * **Downloads:** Recovery records for unfinished saves survive Android cache clearing. Existing records move only after a verified commit, and unreadable records stay intact.

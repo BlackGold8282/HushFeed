@@ -9,7 +9,9 @@
       "description": "Replaces TikTok's dark background palette with black or a chosen color. The light theme keeps its colors. It rewrites TikTok's resources, so patching with it on is slower when the manager's memory limit is low. Give the manager 768 MB or more. At 640 MB it still finishes, just more slowly.",
       "category": "Performance",
       "use": false,
-      "dependencies": [],
+      "dependencies": [
+        "RawResourcePatch"
+      ],
       "compatiblePackages": {
         "com.zhiliaoapp.musically": [
           "47.0.3",
@@ -386,7 +388,9 @@
       "description": "Strips TikTok's peer-to-peer CDN libraries so your phone is not used as a relay node for other people's video traffic. The APK gets about 3.5 MB smaller.",
       "category": "Performance",
       "use": false,
-      "dependencies": [],
+      "dependencies": [
+        "RawResourcePatch"
+      ],
       "compatiblePackages": {
         "com.zhiliaoapp.musically": [
           "47.0.3",
@@ -2510,7 +2514,9 @@
       "description": "Gives the patched APK the highest Android version code so Play shows Open instead of Update. TikTok's visible version stays the same in Morphe Manager. Off by default. Android won't install a lower-code APK over it, and uninstalling to return to a lower code can remove local TikTok data.",
       "category": "Performance",
       "use": false,
-      "dependencies": [],
+      "dependencies": [
+        "RawResourcePatch"
+      ],
       "compatiblePackages": {
         "com.zhiliaoapp.musically": [
           "47.0.3",
@@ -4705,7 +4711,8 @@
       "category": "Performance",
       "use": false,
       "dependencies": [
-        "BytecodePatch"
+        "BytecodePatch",
+        "RawResourcePatch"
       ],
       "compatiblePackages": {
         "com.zhiliaoapp.musically": [
@@ -4764,7 +4771,9 @@
       "description": "Empties TikTok's bundled C2PA and Microblink card-scanning assets, the Pitaya AI model libraries, the live-cast dynamic feature, and the ART log monitor probe. Saves about 12.5 MB of storage.",
       "category": "Performance",
       "use": false,
-      "dependencies": [],
+      "dependencies": [
+        "RawResourcePatch"
+      ],
       "compatiblePackages": {
         "com.zhiliaoapp.musically": [
           "47.0.3",
@@ -4822,7 +4831,9 @@
       "description": "Empties TikTok's reviewed editor, camera-effect and face-model assets. The Create tab and all recording, editing and effects tools stop working. Saves about 40 MB of storage. Switch: Hushfeed settings > App behavior.",
       "category": "Performance",
       "use": false,
-      "dependencies": [],
+      "dependencies": [
+        "RawResourcePatch"
+      ],
       "compatiblePackages": {
         "com.zhiliaoapp.musically": [
           "47.0.3",
@@ -4880,7 +4891,9 @@
       "description": "Empties the TikTok language bundles you leave out of Languages to keep, always keeping English. It keeps every language until you list the ones you want, so picking every patch removes none. Listed codes are checked before any file changes. Keeping only English saves about 26 MB of storage.",
       "category": "Performance",
       "use": false,
-      "dependencies": [],
+      "dependencies": [
+        "RawResourcePatch"
+      ],
       "compatiblePackages": {
         "com.zhiliaoapp.musically": [
           "47.0.3",

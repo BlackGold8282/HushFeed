@@ -217,10 +217,11 @@ Assert-True ((Get-DeclaredReportVersion -Report ([pscustomobject]@{ packageVersi
 
 $allNames = @($catalog.patches | ForEach-Object { $_.name })
 $allDependencies = @(Get-PatchDependencyNames -PatchList $catalog -RequestedNames $allNames)
-# An unnamed patch is listed by its kind: every unnamed bytecode patch reads BytecodePatch, and
-# the one unnamed resource patch is the manifest half of Keep a streak going.
-Assert-True ((@($allDependencies | Sort-Object) -join ',') -eq 'BytecodePatch,ResourcePatch') `
-    "The real catalog dependency closure was not its two internal patches: $(@($allDependencies) -join ', ')."
+# An unnamed patch is listed by its kind: every unnamed bytecode patch reads BytecodePatch, the
+# one unnamed resource patch is the manifest half of Keep a streak going, and the unnamed raw
+# resource patches record each patch-time choice in Build details.
+Assert-True ((@($allDependencies | Sort-Object) -join ',') -eq 'BytecodePatch,RawResourcePatch,ResourcePatch') `
+    "The real catalog dependency closure was not its three internal patch kinds: $(@($allDependencies) -join ', ')."
 Assert-True (Test-ReportedPatchNames -Expected $allNames `
     -Actual @($allNames + $allDependencies) -AllowedDependencies $allDependencies) `
     'A result that included the real internal dependency was rejected.'
