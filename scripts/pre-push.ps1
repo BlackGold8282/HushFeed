@@ -11,7 +11,7 @@
     standard input the way git supplies them. Run scripts/install-hooks.ps1 once to wire it up.
 
     Only what changed is checked: runtime tests when extension or patch sources move, every patch
-    applied to each declared TikTok build when patch sources move, and the release facts when a
+    applied to each declared TikTok build when bundle inputs move, and the release facts when a
     published file moves. Set HUSHFEED_SKIP_PRE_PUSH=1 to push anyway.
 #>
 [CmdletBinding()]
@@ -393,14 +393,18 @@ try {
         $_ -eq 'settings.gradle.kts' -or $_ -eq 'build.gradle.kts' -or
         $_ -eq 'gradle/wrapper/gradle-wrapper.properties'
     }).Count -gt 0
-    # What decides whether a patch still applies to TikTok: the patches themselves, and the patcher
-    # pin, which decides how their fingerprints match.
-    # Not on an index push: its release check compares the bundle in patches/build/release byte for
-    # byte with the published one, a rebuild here would stamp it with this commit's time, and the
-    # release receipt already applied that bundle to every declared build.
-    $touchesPatches = @($paths | Where-Object {
-        $_ -like 'patches/src/main/*' -or $_ -eq 'gradle/libs.versions.toml'
-    }).Count -gt 0 -and -not $script:indexChanged
+    # The extension DEX payload and its build inputs reach TikTok through the same bundle as the
+    # patch definitions. Tests alone don't prove that payload can be built or injected.
+    $touchesBundle = $touchesCatalog -or @($paths | Where-Object {
+        $_ -like 'extensions/*/src/main/*' -or $_ -like 'extensions/*/build.gradle.kts' -or
+        $_ -eq 'extensions/proguard-rules.pro'
+    }).Count -gt 0
+    $touchesCode = $touchesCode -or $touchesBundle
+    # An index push compares the existing release bundle byte for byte with the published one.
+    # Refuse a mixed source/index push rather than skip source verification or restamp that asset.
+    if ($touchesBundle -and $script:indexChanged) {
+        throw 'Push bundle inputs before the published index. A mixed source/index push cannot rebuild and preserve the published artifact.'
+    }
     $injectedRegisterVerifierPaths = @(
         'scripts/DexDiff.java',
         'scripts/injected-register-contracts.ps1',
@@ -579,7 +583,7 @@ try {
         # The bundle the fixture gate applies. Last, because :patches:test reruns :patches:jar, and
         # buildAndroid's verifyBundle also fails a catalog that no longer matches the patches. It
         # writes patches/build/release only, never the tracked patches-list.json.
-        if ($touchesPatches) { $tasks += ':patches:buildAndroid' }
+        if ($touchesBundle) { $tasks += ':patches:buildAndroid' }
         # HUSHFEED_BUILD_WRAPPER names a PowerShell script that runs Gradle on this machine,
         # called as <wrapper> -ProjectDir <repository> -Tasks <task>...: a machine that shares its
         # CPU and memory between several builds points it at a governor. Unset, the Gradle
@@ -602,7 +606,7 @@ try {
                 try {
                 # Before the build, so a missing fixture stops the push in seconds, not after it.
                 $fixtures = @()
-                if ($touchesPatches) { $fixtures = @(Get-DeclaredFixtures -GateRoot $gateRoot) }
+                if ($touchesBundle) { $fixtures = @(Get-DeclaredFixtures -GateRoot $gateRoot) }
                 $global:LASTEXITCODE = 0
                 Invoke-WithoutGitEnvironment {
                     if ($wrapper) {

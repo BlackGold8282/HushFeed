@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **Build checks:** Runtime code and the inputs that build it now rebuild the release bundle and apply it to every supported APK before a push. Source and published-index changes must go in separate pushes so the source can be checked without replacing a published artifact.
+
 * **Build checks:** A patch or catalog change now runs the script contracts before the build, including its unnamed dependencies. Each pushed ref uses its own committed catalog, so an unrelated working copy cannot conceal a missing dependency.
 
 * **TikTok:** The LIVE feed you open with the LIVE button can be filtered now (#57). Feed filter has a LIVE feed section that hides gaming, Shop and sponsored LIVEs, verified creators, categories you name, and rooms outside a viewer or follower range. Blocked creators, Creators hidden on this phone and Blocked caption words carry over (words are matched against each LIVE's title), and Creator exceptions lets chosen creators past the gaming, verified, category and count rules, though never past a block, a blocked word, Shop or sponsored. The first room comes with the LIVE button itself, so the rules start with the one after it. When they hide every room on five pages in a row, one room gets through, because a page with nothing on it makes TikTok ask for the next one about once a second. TikTok's LIVE feed doesn't say when a stream started or when an account was made, so there's no rule for either. The diagnostic report's LIVE FEED section counts pages, rooms and what each rule hid.

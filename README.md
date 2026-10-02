@@ -453,6 +453,8 @@ Gradle dependency verification is checked in at `gradle/verification-metadata.xm
 
 The push hook runs script contracts before building when patch declarations, the catalog or its build pins change, even if no script changed. This checks unnamed bytecode and resource dependencies too. Each pushed ref is checked against its own committed catalog. Edits in another checkout cannot pass it. Documentation the checks don't consume keeps its existing narrow routing. Run `pwsh -File scripts/test-script-contracts.ps1` to exercise these gates locally.
 
+Changes to runtime sources, native stubs, extension build files or consumed build pins also rebuild the release bundle and apply it to every declared TikTok APK. Tests and unconsumed documentation keep their narrower checks. Push source changes before updating the published index, which verifies the existing release artifact without rebuilding it.
+
 To save offscreen screenshots, run `./gradlew :extensions:tiktok:test -PscreenshotDir=<absolute-directory>`. The suite opens every settings section in dark and light themes, saves a value through the native picker, and exercises Lab search and overrides. A German fixture checks larger text at 360 dp width, and a Spanish one checks the same page at twice the text size on a 320 dp screen.
 
 Worker-backed settings and Feature Gate Lab tests drain their owned executors before asserting, reset per-sandbox state before each case, and keep the region semantics check separate from the API ICU cross-check. These assertions do not depend on screenshot output or polling sleeps.
