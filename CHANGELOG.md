@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **CAPTCHA:** Unclassified and unreadable verification challenges stay visible, including on signed-in accounts. The hide switch is unavailable until a browsing scene is validated; shown decisions still appear in diagnostics.
+
 * **Device builds:** The verification probe checks output ownership before rebuilding and preserves unexpected files in marked folders. Roots, linked paths and unmarked nonempty folders are rejected.
 
 * **Device builds:** Exported BKS keys can use an empty store password and a separate entry password. Both builders verify their output certificate, and in-place installs reject a different installed signer before changing app data.
