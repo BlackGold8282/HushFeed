@@ -25,6 +25,7 @@ Every Hushfeed release, newest first.
 * **Build checks:** Runtime code and the inputs that build it now rebuild the release bundle and apply it to every supported APK before a push. Source and published-index changes must go in separate pushes so the source can be checked without replacing a published artifact.
 * **Docs:** The install steps and TikTok badge list all three supported builds. The introduction separates the published bundle from the current source, and explains which patch-time removals need a new APK to undo. The settings tour uses the current Share page, without the removed friend-send confirmation.
 * **Photo saves:** Video quality and Remove sound no longer intercept photo posts that also carry a video model (#71). Download original photos keeps control of still-image saves; selected live-photo motion clips keep TikTok's native route.
+* **Photo saves:** Download video on a photo post now queues original stills before TikTok starts video conversion. Missing originals produce an error, and even one or two images show a file count and Cancel. Live Photo video choices retain their native route (#71).
 
 * **Build checks:** A patch or catalog change now runs the script contracts before the build, including its unnamed dependencies. Each pushed ref uses its own committed catalog, so an unrelated working copy cannot conceal a missing dependency.
 
