@@ -2,7 +2,7 @@
 
 Every Hushfeed release, newest first.
 
-## Unreleased
+## 0.67.0 (2026-10-02)
 
 * **TikTok:** New patch, Block suggested video notifications, stops TikTok's "Videos you might like" pushes, the ones about popular videos it picked for you, like "25M+ people viewed". Its switch under Inbox starts on once the patch is in, so they're blocked from the first launch, and turning it off lets them through again. Messages, comments, likes, follows and videos from accounts you follow aren't touched.
 
