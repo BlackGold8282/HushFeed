@@ -72,6 +72,17 @@ public final class ShareSheetTools {
     private static WeakReference<Activity> activityReference = new WeakReference<>(null);
     private static final GlobalLayoutHook LAYOUT_HOOK = new GlobalLayoutHook();
     private static final GlobalLayoutHook SHEET_LAYOUT_HOOK = new GlobalLayoutHook();
+    private static WeakReference<View> panelRowReference = new WeakReference<>(null);
+    private static final View.OnAttachStateChangeListener PANEL_ATTACH_LISTENER =
+            new View.OnAttachStateChangeListener() {
+                @Override public void onViewAttachedToWindow(View row) {
+                    if (panelRowReference.get() == row) panelBound(row);
+                }
+
+                @Override public void onViewDetachedFromWindow(View row) {
+                    if (panelRowReference.get() == row) SHEET_LAYOUT_HOOK.detach();
+                }
+            };
 
     private static boolean applyPosted;
 
@@ -90,16 +101,17 @@ public final class ShareSheetTools {
         try {
             if (activity.isFinishing()) {
                 LAYOUT_HOOK.detach();
-                SHEET_LAYOUT_HOOK.detach();
+                detachPanel();
                 return;
             }
             ViewGroup root = activity.findViewById(android.R.id.content);
             if (root == null) {
                 LAYOUT_HOOK.detach();
-                SHEET_LAYOUT_HOOK.detach();
+                detachPanel();
                 Logger.printInfo(() -> "Share sheet tools found no content view to watch");
                 return;
             }
+            if (activityReference.get() != activity) detachPanel();
             boolean installed = LAYOUT_HOOK.install(root, ShareSheetTools::apply);
             activityReference = new WeakReference<>(activity);
             if (installed) {
@@ -116,12 +128,12 @@ public final class ShareSheetTools {
             Activity activity = activityReference.get();
             if (activity == null) {
                 LAYOUT_HOOK.detach();
-                SHEET_LAYOUT_HOOK.detach();
+                detachPanel();
                 return;
             }
             if (activity.isFinishing()) {
                 LAYOUT_HOOK.detach();
-                SHEET_LAYOUT_HOOK.detach();
+                detachPanel();
                 return;
             }
 
@@ -161,15 +173,48 @@ public final class ShareSheetTools {
 
     // ---- hiding ------------------------------------------------------------------------
 
-    /** Contact binding discovers the window; its own layouts then catch late and recycled titles. */
+    /** The native row's attach event discovers its window; layouts catch late and recycled titles. */
     private static void watchSheetRoot(Activity activity, View row) {
         View root = row == null ? null : row.getRootView();
-        View activityRoot = activity.getWindow() == null ? null : activity.getWindow().getDecorView();
+        View activityRoot = activity == null || activity.getWindow() == null
+                ? null : activity.getWindow().getDecorView();
         if (root instanceof ViewGroup && root != activityRoot) {
-            SHEET_LAYOUT_HOOK.install((ViewGroup) root, ShareSheetTools::requestApply);
+            SHEET_LAYOUT_HOOK.install((ViewGroup) root, ShareSheetTools::apply);
         } else {
             SHEET_LAYOUT_HOOK.detach();
         }
+    }
+
+    /**
+     * Called after the native panel finds and casts its action row in either layout. This runs
+     * even with no contacts, Pause or an empty exclusion list. The panel's onAttachedToWindow
+     * can run before its row attaches, so keep an attach listener for that first layout and for
+     * a reused, nonfocusable Dialog. No listener keeps a detached row or its Activity alive.
+     */
+    public static void panelBound(View row) {
+        if (row == null) return;
+        Utils.runOnMainThreadNowOrLater(() -> {
+            try {
+                View previous = panelRowReference.get();
+                if (previous != row) {
+                    detachPanel();
+                    panelRowReference = new WeakReference<>(row);
+                    row.addOnAttachStateChangeListener(PANEL_ATTACH_LISTENER);
+                }
+                watchSheetRoot(activityReference.get(), row);
+                requestApply();
+            } catch (Throwable ex) {
+                HookStatus.threw(FAMILY, "panel bind", ex);
+                Logger.printException(() -> "Could not watch the native share panel", ex);
+            }
+        });
+    }
+
+    private static void detachPanel() {
+        View previous = panelRowReference.get();
+        if (previous != null) previous.removeOnAttachStateChangeListener(PANEL_ATTACH_LISTENER);
+        panelRowReference = new WeakReference<>(null);
+        SHEET_LAYOUT_HOOK.detach();
     }
 
     private static void hideByLabel(View list, List<String> hidden) {
@@ -369,6 +414,11 @@ public final class ShareSheetTools {
     private static List<View> windowRoots(Activity activity) {
         List<View> roots = new ArrayList<>();
         Set<View> seen = Collections.newSetFromMap(new IdentityHashMap<>());
+        View row = panelRowReference.get();
+        if (row != null && row.isAttachedToWindow()) {
+            View panel = row.getRootView();
+            if (seen.add(panel)) roots.add(panel);
+        }
         View decor = activity == null || activity.getWindow() == null
                 ? null : activity.getWindow().getDecorView();
         if (decor != null && seen.add(decor)) roots.add(decor);
@@ -383,8 +433,8 @@ public final class ShareSheetTools {
                 }
             }
         } catch (Throwable ex) {
-            // The activity root still covers retained 46.x builds and every share action filtered
-            // at the model layer. A non-SDK lookup failure must not break the share sheet, and it
+            // The bound native row still supplies its own panel root. A non-SDK lookup failure
+            // must not break the share sheet, and it
             // is not retried: this runs on every layout pass, and a refusal stays a refusal. Once
             // the lookup has worked, a failure is the read itself, a window list changing under
             // the walk say, and the next pass reads it again.

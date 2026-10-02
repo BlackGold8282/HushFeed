@@ -11,6 +11,8 @@ import android.content.Context;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -46,6 +48,8 @@ public class ShareSheetToolsTest {
         ReflectionHelpers.setStaticField(Setting.class, "pausedForProcess", false);
         ShareModelFilter.surface(null);
         Settings.HIDE_SHARE_CONTACTS.save(false);
+        Settings.HIDE_SHARE_ACTIONS.save(false);
+        Settings.HIDE_SHARE_CHANNELS.save(false);
         ReflectionHelpers.setStaticField(ShareSheetTools.class, "windowGlobal", null);
         ReflectionHelpers.setStaticField(ShareSheetTools.class, "windowViewsReader", null);
         ReflectionHelpers.setStaticField(ShareSheetTools.class, "windowViewsUnavailable", false);
@@ -62,7 +66,12 @@ public class ShareSheetToolsTest {
     @After public void tearDown() {
         ReflectionHelpers.setStaticField(Setting.class, "pausedForProcess", false);
         Settings.HIDE_SHARE_CONTACTS.resetToDefault();
+        Settings.HIDE_SHARE_ACTIONS.resetToDefault();
+        Settings.HIDE_SHARE_CHANNELS.resetToDefault();
         Settings.SHARE_HIDDEN_ITEMS.resetToDefault();
+        Settings.SHARE_HIDDEN_ITEMS_PROFILE.resetToDefault();
+        Settings.SHARE_HIDDEN_ITEMS_LIVE.resetToDefault();
+        ReflectionHelpers.callStaticMethod(ShareSheetTools.class, "detachPanel");
         ((GlobalLayoutHook) ReflectionHelpers.getStaticField(ShareSheetTools.class, "LAYOUT_HOOK")).detach();
         ((GlobalLayoutHook) ReflectionHelpers.getStaticField(ShareSheetTools.class, "SHEET_LAYOUT_HOOK")).detach();
         ReflectionHelpers.setStaticField(ShareSheetTools.class, "activityReference", new WeakReference<>(null));
@@ -235,6 +244,30 @@ public class ShareSheetToolsTest {
         assertNull("the native vertical row can contain several choices", ShareSheetTools.labelOf(group));
     }
 
+    @Test public void aLateNativeLabelIsHiddenDuringLayoutBeforeAPostedPassCanDrawIt() {
+        try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
+            Activity activity = controller.get();
+            activity.setContentView(new FrameLayout(activity));
+            ShareSheetTools.install(activity);
+            idle();
+            Settings.SHARE_HIDDEN_ITEMS.save("report");
+            NativeActionCell cell = new NativeActionCell(activity, 137, "");
+            Dialog dialog = showActions(activity, cell);
+            try {
+                idle();
+                assertEquals(View.VISIBLE, cell.getVisibility());
+                cell.title.setText("Report");
+                dialog.getWindow().getDecorView().getViewTreeObserver().dispatchOnGlobalLayout();
+                // Global layout happens before drawing; a queued hiding pass runs after that draw.
+                assertEquals("the native title cannot remain visible until the queue runs", View.GONE, cell.getVisibility());
+                assertEquals(0, cell.getLayoutParams().width);
+            } finally {
+                dialog.dismiss();
+                idle();
+            }
+        }
+    }
+
     /** The activity observer cannot deliver a later layout in TikTok's separate panel window. */
     @Test public void latePanelLabelsAndRecycledCellsUseThePanelsOwnLayouts() {
         try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
@@ -242,13 +275,14 @@ public class ShareSheetToolsTest {
             activity.setContentView(new FrameLayout(activity));
             ShareSheetTools.install(activity);
             idle();
+            Settings.SHARE_HIDDEN_ITEMS.save("report");
+            Settings.HIDE_SHARE_CONTACTS.save(true);
             NativeActionCell cell = new NativeActionCell(activity, 137, "");
             NativeActionCell copy = new NativeActionCell(activity, 131, "Copy link");
             Dialog dialog = showActions(activity, cell, copy);
             try {
-                Settings.SHARE_HIDDEN_ITEMS.save("report");
-                ShareSheetTools.contactBound();
                 idle();
+                assertNull("no contact exists to bootstrap this panel", dialog.findViewById(0x7f000301));
                 assertNull(ShareSheetTools.labelOf(cell));
                 assertEquals(View.VISIBLE, cell.getVisibility());
 
@@ -288,6 +322,87 @@ public class ShareSheetToolsTest {
         }
     }
 
+    @Test public void theSameNonfocusablePanelObservesLateCellsAfterDismissAndReopen() {
+        try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
+            Activity activity = controller.get();
+            activity.setContentView(new FrameLayout(activity));
+            ShareSheetTools.install(activity);
+            idle();
+            Settings.SHARE_HIDDEN_ITEMS.save("report");
+            NativeActionCell cell = new NativeActionCell(activity, 137, "Report");
+            Dialog dialog = showActions(activity, cell);
+            View decor = dialog.getWindow().getDecorView();
+            try {
+                idle();
+                assertEquals(View.GONE, cell.getVisibility());
+                assertTrue((dialog.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE) != 0);
+                dialog.dismiss();
+                idle();
+                GlobalLayoutHook sheet = ReflectionHelpers.getStaticField(ShareSheetTools.class, "SHEET_LAYOUT_HOOK");
+                assertNull("dismiss releases the panel's layout listener", ReflectionHelpers.getField(sheet, "listener"));
+
+                // No activity layout, contact bind or new Dialog between these phases.
+                cell.title.setText("");
+                dialog.show();
+                idle();
+                assertSame(decor, dialog.getWindow().getDecorView());
+                ViewTreeObserver reopenedObserver = decor.getViewTreeObserver();
+                assertSame(reopenedObserver, ReflectionHelpers.getField(sheet, "observer"));
+                assertEquals(View.VISIBLE, cell.getVisibility());
+                assertEquals(137, cell.getLayoutParams().width);
+                cell.title.setText("Report");
+                panelLayout(dialog);
+                assertEquals(View.GONE, cell.getVisibility());
+                assertEquals(0, cell.getLayoutParams().width);
+                cell.title.setText("Copy link");
+                panelLayout(dialog);
+                assertEquals(View.VISIBLE, cell.getVisibility());
+                assertEquals("the reused cell keeps its original width", 137, cell.getLayoutParams().width);
+            } finally {
+                dialog.dismiss();
+            }
+        }
+    }
+
+    @Test public void aContactFreePanelIsObservedWhenItAttachesPausedOrWithEmptyExclusions() {
+        try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
+            Activity activity = controller.get();
+            activity.setContentView(new FrameLayout(activity));
+            ShareSheetTools.install(activity);
+            idle();
+            Settings.HIDE_SHARE_CONTACTS.save(true);
+            // The native row is sufficient even when the hidden WindowManager API is unavailable.
+            ReflectionHelpers.setStaticField(ShareSheetTools.class, "windowViewsUnavailable", true);
+            for (boolean paused : new boolean[] {true, false}) {
+                ReflectionHelpers.setStaticField(Setting.class, "pausedForProcess", paused);
+                Settings.SHARE_HIDDEN_ITEMS.save(paused ? "report" : "");
+                NativeActionCell cell = new NativeActionCell(activity, 137, "");
+                NativeActionCell copy = new NativeActionCell(activity, 131, "Copy link");
+                Dialog dialog = showActions(activity, cell, copy);
+                try {
+                    idle();
+                    assertNull(dialog.findViewById(0x7f000301));
+                    GlobalLayoutHook sheet = ReflectionHelpers.getStaticField(ShareSheetTools.class, "SHEET_LAYOUT_HOOK");
+                    assertSame("inactive settings must still attach to the panel observer",
+                            dialog.getWindow().getDecorView().getViewTreeObserver(), ReflectionHelpers.getField(sheet, "observer"));
+                    assertEquals(View.VISIBLE, cell.getVisibility());
+
+                    ReflectionHelpers.setStaticField(Setting.class, "pausedForProcess", false);
+                    Settings.SHARE_HIDDEN_ITEMS.save("report");
+                    cell.title.setText("Report");
+                    panelLayout(dialog);
+                    assertEquals(View.GONE, cell.getVisibility());
+                    assertEquals(0, cell.getLayoutParams().width);
+                    assertEquals(View.VISIBLE, copy.getVisibility());
+                    assertEquals(131, copy.getLayoutParams().width);
+                } finally {
+                    dialog.dismiss();
+                    idle();
+                }
+            }
+        }
+    }
+
     @Test public void aReopenedPanelObservesItsNewLateBoundActionCells() {
         try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
             Activity activity = controller.get();
@@ -298,20 +413,16 @@ public class ShareSheetToolsTest {
             NativeActionCell first = new NativeActionCell(activity, 137, "Report");
             Dialog original = showActions(activity, first);
             try {
-                ShareSheetTools.contactBound();
                 idle();
                 assertEquals(View.GONE, first.getVisibility());
             } finally {
                 original.dismiss();
+                idle();
             }
-            idle();
-            activity.findViewById(android.R.id.content).getViewTreeObserver().dispatchOnGlobalLayout();
-            idle();
-
+            // A new panel must bind itself. Do not bootstrap it from the activity or contacts.
             NativeActionCell reopened = new NativeActionCell(activity, 149, "");
             Dialog next = showActions(activity, reopened);
             try {
-                ShareSheetTools.contactBound();
                 idle();
                 assertEquals(View.VISIBLE, reopened.getVisibility());
                 reopened.title.setText("Report");
@@ -321,10 +432,58 @@ public class ShareSheetToolsTest {
                 reopened.title.setText("Copy link");
                 panelLayout(next);
                 assertEquals(View.VISIBLE, reopened.getVisibility());
-                assertEquals("a new cell owns its own original width", 149,
-                        reopened.getLayoutParams().width);
+                assertEquals("a new cell owns its own original width", 149, reopened.getLayoutParams().width);
             } finally {
                 next.dismiss();
+                idle();
+            }
+        }
+    }
+
+    @Test public void theReportedExclusionsHideLateNativeLabelsAndPersistAcrossActivityRestart() {
+        String reported = "whatsapp, status, telegram, messenger, facebook, instagram direct, sms, discord, "
+                + "email kakaotalk, x, instagram, stories, more, stitch, why this video, gif, im create group, "
+                + "duet, report, casting, live photo, create sticker, promote for others fyp, share to story";
+        Settings.SHARE_HIDDEN_ITEMS.save(reported);
+        Settings.SHARE_HIDDEN_ITEMS_PROFILE.save("@video");
+        Settings.SHARE_HIDDEN_ITEMS_LIVE.save("@video");
+        for (int restart = 0; restart < 2; restart++) {
+            try (var controller = Robolectric.buildActivity(TestActivity.class).setup()) {
+                Activity activity = controller.get();
+                activity.setContentView(new FrameLayout(activity));
+                ShareSheetTools.install(activity);
+                idle();
+                NativeActionCell report = new NativeActionCell(activity, 137, "");
+                NativeActionCell duet = new NativeActionCell(activity, 139, "");
+                NativeActionCell repost = new NativeActionCell(activity, 129, "Repost");
+                NativeActionCell copy = new NativeActionCell(activity, 131, "Copy link");
+                NativeActionCell email = new NativeActionCell(activity, 133, "Email");
+                NativeActionCell kakao = new NativeActionCell(activity, 135, "KakaoTalk");
+                int[] clicks = {0};
+                copy.setOnClickListener(view -> clicks[0]++);
+                Dialog dialog = showActions(activity, report, duet, repost, copy, email, kakao);
+                try {
+                    idle();
+                    assertNull(dialog.findViewById(0x7f000301));
+                    assertEquals(View.VISIBLE, report.getVisibility());
+                    report.title.setText("Report");
+                    duet.title.setText("Duet");
+                    panelLayout(dialog);
+                    assertEquals(View.GONE, report.getVisibility());
+                    assertEquals(View.GONE, duet.getVisibility());
+                    assertEquals(View.VISIBLE, repost.getVisibility());
+                    assertEquals(View.VISIBLE, copy.getVisibility());
+                    assertEquals("the literal missing comma cannot mean two exclusions", View.VISIBLE, email.getVisibility());
+                    assertEquals(View.VISIBLE, kakao.getVisibility());
+                    copy.performClick();
+                    assertEquals(1, clicks[0]);
+                    assertEquals(reported, Settings.SHARE_HIDDEN_ITEMS.savedValue());
+                    assertEquals("@video", Settings.SHARE_HIDDEN_ITEMS_PROFILE.savedValue());
+                    assertEquals("@video", Settings.SHARE_HIDDEN_ITEMS_LIVE.savedValue());
+                } finally {
+                    dialog.dismiss();
+                    idle();
+                }
             }
         }
     }
@@ -338,10 +497,23 @@ public class ShareSheetToolsTest {
     private static Dialog showActions(Activity activity, NativeActionCell... cells) {
         FrameLayout actions = actionRow(activity);
         for (NativeActionCell cell : cells) actions.addView(cell);
+        NativePanel panel = new NativePanel(activity);
+        panel.addView(actions);
         Dialog dialog = new Dialog(activity);
-        dialog.setContentView(actions);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.setContentView(panel);
         dialog.show();
         return dialog;
+    }
+
+    /** The inspected native panel calls the bridge before Android attaches its row children. */
+    private static final class NativePanel extends FrameLayout {
+        NativePanel(Context context) { super(context); }
+
+        @Override protected void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            ShareSheetTools.panelBound(findViewById(0x7f000401));
+        }
     }
 
     private static void panelLayout(Dialog dialog) {
