@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** What's new keeps its full release history as the text grows. Large notes and international text no longer exceed Java's single-string build limit.
+
 * **Verification:** APK fixture tests reuse read-only DEX decoding without sharing mutable patch contexts. Content checks detect same-path replacements, and heap pressure can reclaim cached entries. Nested and concatenated DEX fixtures retain their complete class inventories.
 
 * **Verification:** The build wrapper preserves test filters containing spaces and returns the actual result under both Windows shells. Build defaults now limit worker and heap use, check available memory, and report CPU load so focused checks can run without overwhelming the desktop.
