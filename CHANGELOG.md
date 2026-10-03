@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** The Feed filter page's Show the hide button and Show the block sound button switches now draw their own feed controls even when Show the block button is off. New installs start those two helper switches off, so choosing Block author button doesn't add extra chips until you ask for them (#95).
+
 * **TikTok:** Pause keeps the saved Home long-press shortcut available, so guests can reopen settings and resume Hushfeed after closing the screen. A disabled shortcut stays disabled, ordinary Home taps still work, and TikTok's own long-press action is preserved (#89).
 
 * **TikTok:** Settings on Android 6 use the shipped languages' plural forms, including Russian one, few and many. Missing quantity translations fall back to English with the right singular form. Newer Android versions keep their own ICU rules.

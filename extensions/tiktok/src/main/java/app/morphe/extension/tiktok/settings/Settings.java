@@ -525,9 +525,9 @@ public class Settings extends BaseSettings {
     public static final BooleanSetting BLOCK_AUTHOR_BUTTON =
             new BooleanSetting("block_author_button", FALSE, true);
     public static final BooleanSetting LOCAL_HIDE_BUTTON =
-            new BooleanSetting("local_hide_button", TRUE);
+            new BooleanSetting("local_hide_button", FALSE);
     public static final BooleanSetting BLOCK_SOUND_BUTTON =
-            new BooleanSetting("block_sound_button", TRUE);
+            new BooleanSetting("block_sound_button", FALSE);
     public static final StringSetting BLOCK_AUTHOR_BUTTON_POSITION =
             new StringSetting("block_author_button_position", "");
     public static final StringSetting LOCAL_HIDE_BUTTON_POSITION =
