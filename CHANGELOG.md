@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **Verification:** Morphe Manager 1.33.0 displays all 106 patches in their ten categories, with no uncategorized remainder. Every category expands and collapses. This Manager version groups declared categories automatically.
+
 * **Verification:** Full ABI checks exercise both single-ABI inputs and reject altered native libraries on every declared TikTok version. Isolated package qualification rejects empty patch results. Published-asset checks can require GitHub release attestations or a bundle signature verified against a pinned public key, with transparency verification enabled. Their focused contracts run before a push.
 
 * **TikTok:** Restoring settings now reports keys the current build can't restore, separately from settings missing from an older backup. Portable settings still migrate across TikTok versions, local device state stays intact, and Feature Gate Lab compatibility and Undo keep their existing behavior.
