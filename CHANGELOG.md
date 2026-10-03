@@ -6,6 +6,8 @@ Every Hushfeed release, newest first.
 
 ## 0.67.1 (2026-10-03)
 
+* **TikTok:** Every button Hushfeed draws on videos now starts off: block, hide, block sound, Not interested and mute. A fresh install shows none of them until you turn one on under Feed filter or Playback. If you used the mute button, turn on Show the mute button on videos again.
+
 * **TikTok:** Remove unused language packs no longer stops the whole patch run when Languages to keep is left at all and the APK carries a language set that hasn't been checked, like a split bundle merged with a single language. Nothing is removed then, and the patch log says why (#96).
 
 * **TikTok:** The streak line under Keep a streak going says "Sent to 15/15 chats" once TikTok has taken every message. It calls delivery unconfirmed only for a chat whose hand-off hit an error or never finished (#92).

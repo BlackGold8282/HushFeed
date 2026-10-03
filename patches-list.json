@@ -445,7 +445,7 @@
     },
     {
       "name": "Block author button",
-      "description": "Adds one-tap controls for blocking the creator, hiding them locally and blocking the current sound. A confirmed account block skips to the next video and shows a small Unblock button at the top left for two seconds. The local-hide and sound controls start off and have separate switches, and either one can show without the block control. Long press any visible control to move it. Hushfeed keeps it clear of system bars, cutouts and TikTok's bottom tabs when the window changes. A local action shows Undo only after its setting was saved. All controls hide while comments are open. Switch: Hushfeed settings > Feed filter.",
+      "description": "Adds one-tap controls for blocking the creator, hiding them locally and blocking the current sound. A confirmed account block skips to the next video and shows a small Unblock button at the top left for two seconds. Every control starts off and has its own switch, so nothing shows on videos until you turn one on, and any one can show without the others. Long press any visible control to move it. Hushfeed keeps it clear of system bars, cutouts and TikTok's bottom tabs when the window changes. A local action shows Undo only after its setting was saved. All controls hide while comments are open. Switch: Hushfeed settings > Feed filter.",
       "category": "Interaction",
       "use": false,
       "dependencies": [
@@ -4289,7 +4289,7 @@
     },
     {
       "name": "Mute feed videos",
-      "description": "Adds a movable button that mutes feed videos without touching the phone's volume, and a switch that does the same. The button also shows on a video opened from a profile, a hashtag or a sound, and mutes that one too. While muted, music from another app keeps playing, and DMs, stories and LIVE keep their sound. Switch: Hushfeed settings > Playback.",
+      "description": "Adds a movable button that mutes feed videos without touching the phone's volume, and a switch that does the same. The button starts off until you turn on Show the mute button on videos. It also shows on a video opened from a profile, a hashtag or a sound, and mutes that one too. While muted, music from another app keeps playing, and DMs, stories and LIVE keep their sound. Switch: Hushfeed settings > Playback.",
       "category": "Playback",
       "use": false,
       "dependencies": [
