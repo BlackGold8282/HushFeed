@@ -41,6 +41,14 @@ internal fun isNotifyCall(instruction: Instruction): Boolean {
         reference.returnType == "V" && reference.parameterTypes.map(CharSequence::toString) in NOTIFY_PARAMETERS
 }
 
+/**
+ * A call that posts a notification, as TikTok wrote it or once this patch has routed it through its
+ * filter. A patch that finds a method by its notify call uses this, so it still finds the method
+ * whichever of the two patches runs first.
+ */
+internal fun MethodReference.postsNotification(): Boolean =
+    name == "notify" && (definingClass == NOTIFICATION_MANAGER || definingClass == EXTENSION)
+
 /** The same call made through the filter: the manager becomes its first argument and every register stays put. */
 internal fun notifyThroughFilter(instruction: Instruction): String {
     val reference = instruction.getReference<MethodReference>()!!

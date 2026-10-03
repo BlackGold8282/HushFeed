@@ -26,18 +26,16 @@ private const val EXTENSION = "Lapp/morphe/extension/tiktok/inbox/NotificationCo
  * The one method on the push handler that hands a built notification to Android. The class
  * kept its name; the method did not, so it is found by the call it makes. Nothing else on
  * MessageShowHandler calls notify, and its parameters are checked below before the message
- * is read out of p1.
+ * is read out of p1. Block suggested video notifications reroutes that call through its filter,
+ * and either patch can run first, so the rerouted call counts too.
  */
-private object PushNotifyFingerprint : Fingerprint(
+internal object PushNotifyFingerprint : Fingerprint(
     definingClass = "Lcom/ss/android/ugc/awemepushlib/manager/MessageShowHandler;",
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
     returnType = "V",
     custom = { method, _ ->
         method.implementation?.instructions?.any { instruction ->
-            instruction.getReference<MethodReference>()?.let { reference ->
-                reference.definingClass == "Landroid/app/NotificationManager;" &&
-                    reference.name == "notify"
-            } == true
+            instruction.getReference<MethodReference>()?.postsNotification() == true
         } == true
     },
 )

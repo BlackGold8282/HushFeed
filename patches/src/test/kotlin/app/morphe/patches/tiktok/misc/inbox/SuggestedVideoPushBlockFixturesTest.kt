@@ -1,6 +1,7 @@
 package app.morphe.patches.tiktok.misc.inbox
 
 import app.morphe.Fixtures
+import app.morphe.takes
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.util.getReference
@@ -44,6 +45,14 @@ class SuggestedVideoPushBlockFixturesTest {
             assertTrue("$version: the push handler posts one",
                 targets.any { (classDef, _) -> classDef.type == PUSH_HANDLER })
             assertEquals("$version calls routed", calls, targets.sumOf { (_, method) -> assertRouted(method) })
+
+            // Notification controls finds the push handler by its notify call, and the two patches run in
+            // either order, so it has to find the handler once this patch has rerouted that call too.
+            val (handlerClass, handler) = targets.single { (classDef, _) -> classDef.type == PUSH_HANDLER }
+            assertTrue("$version: Notification controls takes the push handler", PushNotifyFingerprint.takes(handler, handlerClass))
+            val rerouted = MutableMethod(handler).apply { postThroughSuggestedVideoFilter() }
+            assertTrue("$version: Notification controls takes it once its notify call is rerouted",
+                PushNotifyFingerprint.takes(rerouted, handlerClass))
 
             // The filter compares against the channel's base id, so PushService has to still list it.
             val pushChannels = classes.single { it.type == PUSH_SERVICE }.methods.single { it.name == "<init>" }
