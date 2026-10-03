@@ -18,15 +18,9 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** What's new keeps its full release history as the text grows. Large notes and international text no longer exceed Java's single-string build limit.
 
-* **Verification:** APK fixture tests reuse read-only DEX decoding without sharing mutable patch contexts. Content checks detect same-path replacements, and heap pressure can reclaim cached entries. Nested and concatenated DEX fixtures retain their complete class inventories.
-
-* **Verification:** The build wrapper preserves test filters containing spaces and returns the actual result under both Windows shells. Build defaults now limit worker and heap use, check available memory, and report CPU load so focused checks can run without overwhelming the desktop.
+* **TikTok:** Morphe Manager 1.33.0 shows all 106 patches in their ten categories, with nothing left uncategorized. The checks run before each build now cover single-ABI inputs on every supported TikTok version and reject altered native libraries or an empty patch result. Published bundles can be checked against GitHub release attestations or a pinned signing key.
 
 * **TikTok:** Limit background traffic keeps push setup intact by default, including when All is selected. Its optional Skip push setup choice starts off and can stop message and other notifications when enabled. Existing APKs need repatching from TikTok's original APK to restore push setup. Pause can't reverse this patch-time change (#86).
-
-* **Verification:** Morphe Manager 1.33.0 displays all 106 patches in their ten categories, with no uncategorized remainder. Every category expands and collapses. This Manager version groups declared categories automatically.
-
-* **Verification:** Full ABI checks exercise both single-ABI inputs and reject altered native libraries on every declared TikTok version. Isolated package qualification rejects empty patch results. Published-asset checks can require GitHub release attestations or a bundle signature verified against a pinned public key, with transparency verification enabled. Their focused contracts run before a push.
 
 * **TikTok:** Restoring settings now reports keys the current build can't restore, separately from settings missing from an older backup. Portable settings still migrate across TikTok versions, local device state stays intact, and Feature Gate Lab compatibility and Undo keep their existing behavior.
 
