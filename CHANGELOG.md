@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Pause keeps the saved Home long-press shortcut available, so guests can reopen settings and resume Hushfeed after closing the screen. A disabled shortcut stays disabled, ordinary Home taps still work, and TikTok's own long-press action is preserved (#89).
+
 * **TikTok:** Settings on Android 6 use the shipped languages' plural forms, including Russian one, few and many. Missing quantity translations fall back to English with the right singular form. Newer Android versions keep their own ICU rules.
 
 * **TikTok:** What's new keeps its full release history as the text grows. Large notes and international text no longer exceed Java's single-string build limit.

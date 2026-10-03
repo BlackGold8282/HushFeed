@@ -728,6 +728,9 @@ public class Settings extends BaseSettings {
                 // The budget's day is worked out from this hour. Paused, the budget counts
                 // nothing and holds nothing, but its record still has to name the right day.
                 SESSION_BUDGET_RESET_HOUR);
+        // Guests cannot use Profile to reach settings. Keep their chosen Home shortcut so
+        // they can reopen settings and resume Hushfeed after leaving the Pause screen.
+        Setting.keepWhenPaused(HOME_TAB_OPENS_SETTINGS);
         // Downloads rewrite TikTok's own save folder and file name with no switch in front, so
         // pausing cannot give TikTok its own back. They keep the reader's choice instead of
         // falling back to Hushfeed's defaults. The README lists them as not paused.
