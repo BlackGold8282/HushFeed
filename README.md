@@ -18,7 +18,7 @@ Hushfeed is a [Morphe](https://github.com/MorpheApp/morphe-manager) patch bundle
 > [!IMPORTANT]
 > Hushfeed targets the global TikTok package, `com.zhiliaoapp.musically`, versions [47.0.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-0-3-release/tiktok-47-0-3-3-android-apk-download/), [47.1.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-3-release/tiktok-47-1-3-android-apk-download/) and [47.1.4](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-4-release/tiktok-47-1-4-2-android-apk-download/). Use one of those exact APKs when patching. See [Supported target](#supported-target) for the verified build details.
 
-Hushfeed v0.67.1 contains 106 patches for TikTok 47.0.3, 47.1.3 and 47.1.4. New in this one: local hide and sound block controls can show without the block chip, guests can long-press Home to reopen Hushfeed settings while paused, and Android 6 settings use the shipped plural forms. It needs Morphe Manager 1.33.0 or newer.
+Hushfeed v0.67.0 contains 106 patches for TikTok 47.0.3, 47.1.3 and 47.1.4. It needs Morphe Manager 1.33.0 or newer. Source v0.67.1 keeps the same patch count and adds fixes for the local hide and sound block controls, the paused Home long-press settings shortcut and Android 6 plural forms.
 
 The main branch contains 106 patches, the same set as v0.67.1.
 
