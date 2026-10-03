@@ -563,6 +563,8 @@ That last one needs the Morphe desktop CLI. Set `HUSHFEED_DESKTOP_JAR` to the ja
 
 ### Adding a language to the settings screen
 
+Quantity labels follow the language actually displayed. Android 6 uses compact integer rules from CLDR 48 for the shipped languages, so add that language's rule and API 23 coverage when adding a table. Android 7 and later keep their platform ICU rules. Extra forms use the other key followed by its category, such as `%1$d results|few`. If a row hasn't been translated, its English fallback still keeps the actual count.
+
 The English text in the code is the key. Each language is one table under `extensions/tiktok/src/main/l10n/`, with the English on the left and the translation on the right. A language is kept in one of two forms, and the generator reads both. `de.tsv` is tab separated, one entry per line, `#` starting a comment. `in.csv` is the comma form Weblate hosts: a `source,target` header and a row per entry, quoting whatever needs it. Copy either one to `<language code>.tsv` or `<language code>.csv`, translate the right hand column, then run:
 
 ```bash

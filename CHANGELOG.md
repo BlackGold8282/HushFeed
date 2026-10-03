@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Settings on Android 6 use the shipped languages' plural forms, including Russian one, few and many. Missing quantity translations fall back to English with the right singular form. Newer Android versions keep their own ICU rules.
+
 * **TikTok:** What's new keeps its full release history as the text grows. Large notes and international text no longer exceed Java's single-string build limit.
 
 * **Verification:** APK fixture tests reuse read-only DEX decoding without sharing mutable patch contexts. Content checks detect same-path replacements, and heap pressure can reclaim cached entries. Nested and concatenated DEX fixtures retain their complete class inventories.
