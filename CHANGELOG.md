@@ -8,6 +8,8 @@ Every Hushfeed release, newest first.
 
 * **TikTok:** Remove unused language packs no longer stops the whole patch run when Languages to keep is left at all and the APK carries a language set that hasn't been checked, like a split bundle merged with a single language. Nothing is removed then, and the patch log says why (#96).
 
+* **TikTok:** The streak line under Keep a streak going says "Sent to 15/15 chats" once TikTok has taken every message. It calls delivery unconfirmed only for a chat whose hand-off hit an error or never finished (#92).
+
 * **TikTok:** The Feed filter page's Show the hide button and Show the block sound button switches now draw their own feed controls even when Show the block button is off. New installs start those two helper switches off, so choosing Block author button doesn't add extra chips until you ask for them (#95).
 
 * **TikTok:** Pause keeps the saved Home long-press shortcut available, so guests can reopen settings and resume Hushfeed after closing the screen. A disabled shortcut stays disabled, ordinary Home taps still work, and TikTok's own long-press action is preserved (#89).
