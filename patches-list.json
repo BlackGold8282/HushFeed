@@ -4037,7 +4037,7 @@
     },
     {
       "name": "Limit background traffic",
-      "description": "Turns off TikTok's buffer-preload gate and skips its push initialization task. Videos may start buffering later, and TikTok push notifications may stop.",
+      "description": "Turns off TikTok's buffer-preload gate. Videos may start buffering later. Push setup stays on unless Skip push setup is enabled in the patch options.",
       "category": "Performance",
       "use": false,
       "dependencies": [],
@@ -4091,7 +4091,17 @@
           ]
         }
       ],
-      "options": []
+      "options": [
+        {
+          "key": "skipPushSetup",
+          "title": "Skip push setup",
+          "description": "Can stop TikTok notifications, including messages. Pause won't reverse this change. Repatch with this option off to restore push setup.",
+          "required": false,
+          "type": "kotlin.Boolean",
+          "default": false,
+          "values": null
+        }
+      ]
     },
     {
       "name": "Location access governor",

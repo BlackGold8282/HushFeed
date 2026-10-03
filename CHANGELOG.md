@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Limit background traffic keeps push setup intact by default, including when All is selected. Its optional Skip push setup choice starts off and can stop message and other notifications when enabled. Existing APKs need repatching from TikTok's original APK to restore push setup. Pause can't reverse this patch-time change (#86).
+
 * **Verification:** Morphe Manager 1.33.0 displays all 106 patches in their ten categories, with no uncategorized remainder. Every category expands and collapses. This Manager version groups declared categories automatically.
 
 * **Verification:** Full ABI checks exercise both single-ABI inputs and reject altered native libraries on every declared TikTok version. Isolated package qualification rejects empty patch results. Published-asset checks can require GitHub release attestations or a bundle signature verified against a pinned public key, with transparency verification enabled. Their focused contracts run before a push.

@@ -138,6 +138,8 @@ A few patches change TikTok with no switch in front of them, and Pause can't rea
 
 While paused, TikTok's own bottom bar comes back, + button included. If Remove creation tools was patched in, the camera and editor behind that button still won't work, because their files were taken out when the app was patched.
 
+On the main branch, Limit background traffic keeps push setup intact unless you enable Skip push setup in that patch's options. The option starts off even when you select All. The published v0.67.0 bundle still skips push setup when this patch is selected. To restore it, repatch TikTok's original APK without Limit background traffic, or build the current source with Skip push setup off. Pause can't reverse that change in an installed APK.
+
 ### TikTok closes right after it opens
 
 If TikTok crashes within a minute of starting three times in a row, Hushfeed pauses itself on the next start. The top of Hushfeed settings then says why and offers Turn Hushfeed back on. Being swiped away or force-stopped doesn't count toward the three.
@@ -237,7 +239,7 @@ The eleven optional patches in the Performance group were measured on a Galaxy S
 | `Keep playing in the background` | Keeps TikTok's own background play on, whatever its server says, so the video you're watching keeps playing after you leave the app or turn the screen off, and TikTok's media notification pauses and resumes it. It also covers photo posts and the videos on your own profile, private ones included, which TikTok leaves out. A feed video plays to its end, because TikTok doesn't loop or move on in the feed while it's in the background, and another app's sound still pauses it. TikTok's own background play switch in the long-press menu stays on while this is on. Off by default. Restart TikTok after changing it. Switch: Hushfeed settings > Playback. |
 | `Keep the Favorites tab` | Keeps the Favorites tab on your profile when TikTok's server puts the account into an experiment that empties it. Two people saw that after patching: the tab was there and the saved videos were not. Switch: Hushfeed settings > App. |
 | `Keep the screen's refresh rate` | Stops TikTok asking the screen to run slower than it can, which it does by asking for the frame rate of the video it is playing. On a 90 or 120 Hz phone that ask takes the whole app down to that rate, scrolling included. A request that is not slower than the screen is left alone. Switch: Hushfeed settings > App. |
-| `Limit background traffic` | Turns off TikTok's buffer-preload gate and skips its push initialization task. Videos may start buffering later, and TikTok push notifications may stop. |
+| `Limit background traffic` | Turns off TikTok's buffer-preload gate. Videos may start buffering later. Push setup stays on unless Skip push setup is enabled in the patch options. |
 | `Location access governor` | Answers TikTok's location requests with nothing: the last known location comes back empty and update requests never fire. The SIM and region spoof change the locale and timezone, not the coordinates. This patch stops the coordinates. Switch: Hushfeed settings > Privacy. |
 | `Long-press controls` | Lets a long press on a video keep TikTok's own action, do nothing, open the video's comments, save the original sound, copy the link to the video or its sound, or look the sound up on YouTube Music. It can also turn a press on the left or right third of the screen into a jump back or forward, and make a long press on Comment, Share or Favorites play at the hold speed instead of opening TikTok's menu. Brings Double-tap controls with it, which supplies the comment control. Switch: Hushfeed settings > Feed screen. |
 | `Look like the store app` | Answers TikTok's own checks of how it was signed and installed the way the Play Store app would. Its signature hash reads as TikTok's certificate and its installer reads as the Play Store. For a follow or a like that undoes itself on a refresh on a patched build. TikTok can also read the APK from native code, which no patch reaches, so it may not be enough on its own. Off by default. Switch: Hushfeed settings > Privacy. |
@@ -452,6 +454,8 @@ The Lab uses a compact toolbar so more gates fit on small screens. Tap the warni
 ## Building from source
 
 Use JDK 21 or newer and an Android SDK configured through `local.properties`. GitHub Packages needs `GITHUB_ACTOR` and a `GITHUB_TOKEN` with `read:packages` access for the Morphe dependencies.
+
+For runtime tests on Windows, use JDK 25. The tested JDK 21 build couldn't replace an existing file through `File.renameTo`, which broke Android's atomic file writes in the tests. JDK 25 passes that replacement check.
 
 Run the runtime and patch tests, then build the Morphe patch bundle and metadata. The patch tests read the vendor TikTok APKs from the folder `HUSHFEED_FIXTURE_DIR` names (see CONTRIBUTING.md), and the release check refuses a run in which any of them skipped:
 
