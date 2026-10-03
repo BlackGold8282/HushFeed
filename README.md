@@ -294,6 +294,22 @@ The eleven optional patches in the Performance group were measured on a Galaxy S
 
 Each switch controls its own surface. Turning one off doesn't change the others. The search field in Hushfeed settings only finds settings.
 
+### Restore older backups
+
+Watch-history import and the additional restore feedback below are available in source builds and await release.
+
+Backup and restore > **Restore settings** accepts portable settings from an older Hushfeed or another TikTok version. A setting missing from the file keeps its current value. Keys this build can't restore are skipped, and the outcome reports their count separately from missing settings. TikTok's own preferences and local device records stay intact.
+
+Feature Gate Lab rules are checked against the supported TikTok catalogs. Rules whose gates changed return turned off. A backup from a version without a catalog restores its portable settings and leaves the current Lab rules alone. **Undo last change** restores the settings and compatible Lab state from before the import.
+
+### Import watch history
+
+Request [your TikTok data](https://support.tiktok.com/en/account-and-privacy/personalized-ads-and-data/requesting-your-data) in JSON format. Extract the downloaded archive, sign in to the account the export belongs to, then open Hushfeed settings > Feed filter > Seen videos > **Import watch history** and choose the JSON file. The file must be at most 2 MB with at most 10,000 watch-history entries. TXT exports aren't supported yet.
+
+The importer reads the reviewed **Your Activity > Watch History** export layout. It keeps the watch dates, using the phone's time zone at file choice for dates that don't name a zone. **Forget seen videos after** applies to imported history too. Set it to zero before importing if you want to keep older watches. Invalid links and dates, repeated entries, videos already recorded at the same or a newer date, and entries beyond the newest 10,000 videos are skipped. A banner gives the added and skipped counts. Choosing the same file again adds nothing. Links are read locally and never opened or downloaded.
+
+The chosen account stays attached to the import, including when settings recreates while the picker is open. If you switch accounts before the write finishes, the import stops. An unsupported or damaged file leaves saved history unchanged and shows an error. An import that adds history ends Undo for an earlier clear and tells you in the banner. Failed imports and imports that add nothing keep that Undo available. Turn on **Hide videos you have already seen** to filter the imported videos from later feed batches.
+
 ### Pages and navigation
 
 The settings home starts with a live Hushfeed status card and the installed Hushfeed and TikTok versions. Diagnostics is available from that card. Search follows it, then direct buttons for Feed filter, Privacy and Screen time. The full menu remains in four groups. Your feed holds Feed filter, Feed tabs and Feed screen. Watching and sharing holds Playback, Screen time, Comments, Downloads, Share sheet and Inbox. Privacy and system holds Privacy, Region, App, the Feature Gate Lab, Diagnostics and Backup and restore. About sits at the end. A group only appears when the patches you chose give it a page. Search finds any row by its translated title or description, jumps to it and keeps your search when you return.
