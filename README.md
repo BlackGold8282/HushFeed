@@ -1,7 +1,7 @@
 ![Hushfeed. Take back your feed with focused controls for filtering, gestures, playback, downloads and privacy.](assets/readme-hero.png)
 
 <p align="center">
-  <a href="CHANGELOG.md"><img alt="version" src="https://img.shields.io/badge/version-0.67.0-6f42c1.svg" /></a>
+  <a href="CHANGELOG.md"><img alt="version" src="https://img.shields.io/badge/version-0.67.1-6f42c1.svg" /></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-GPLv3-blue.svg" /></a>
   <a href="https://www.android.com/"><img alt="platform" src="https://img.shields.io/badge/platform-Android-3ddc84.svg" /></a>
   <a href="https://github.com/MorpheApp/morphe-manager"><img alt="Morphe" src="https://img.shields.io/badge/works%20with-Morphe-00b894.svg" /></a>
@@ -18,9 +18,9 @@ Hushfeed is a [Morphe](https://github.com/MorpheApp/morphe-manager) patch bundle
 > [!IMPORTANT]
 > Hushfeed targets the global TikTok package, `com.zhiliaoapp.musically`, versions [47.0.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-0-3-release/tiktok-47-0-3-3-android-apk-download/), [47.1.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-3-release/tiktok-47-1-3-android-apk-download/) and [47.1.4](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-4-release/tiktok-47-1-4-2-android-apk-download/). Use one of those exact APKs when patching. See [Supported target](#supported-target) for the verified build details.
 
-Hushfeed v0.67.0 contains 106 patches for TikTok 47.0.3, 47.1.3 and 47.1.4. New in this one: a block on TikTok's "Videos you might like" notifications, a switch that keeps new searches out of your history, separate sizes for feed descriptions and creator names, filters for the LIVE feed, and settings in Azerbaijani. It needs Morphe Manager 1.33.0 or newer.
+Hushfeed v0.67.1 contains 106 patches for TikTok 47.0.3, 47.1.3 and 47.1.4. New in this one: local hide and sound block controls can show without the block chip, guests can long-press Home to reopen Hushfeed settings while paused, and Android 6 settings use the shipped plural forms. It needs Morphe Manager 1.33.0 or newer.
 
-The main branch contains 106 patches, the same set as v0.67.0.
+The main branch contains 106 patches, the same set as v0.67.1.
 
 ## Pick what changes
 
