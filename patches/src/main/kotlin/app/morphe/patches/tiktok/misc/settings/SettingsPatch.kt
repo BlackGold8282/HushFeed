@@ -128,7 +128,7 @@ internal fun swapOpenDebugIcon(
  * constructor the patch calls, or the patch says so rather than assembling a call to nothing.
  */
 private fun BytecodePatchContext.vectorResourceClass(): String {
-    val carriers = getAllClassesWithString(VECTOR_RESOURCE_TO_STRING)
+    val carriers = classDefByStrings(VECTOR_RESOURCE_TO_STRING)
     val carrier = carriers.singleOrNull() ?: throw PatchException(
         "Settings: expected one class carrying \"$VECTOR_RESOURCE_TO_STRING\", found ${carriers.size}.",
     )
@@ -242,7 +242,7 @@ private fun BytecodePatchContext.settingsIconResourceId(): Int {
     )
     return resolveSettingsIconResourceId(
         renderer,
-        getAllClassesWithString(AD_BROWSER_SETTINGS_KEY),
+        classDefByStrings(AD_BROWSER_SETTINGS_KEY),
     )
 }
 

@@ -49,6 +49,8 @@ Every Hushfeed release, newest first.
 * **TikTok:** Remove unused language packs keeps every language now unless you list the ones you want in Languages to keep (#67). It used to keep only English out of the box, so picking every patch in Manager left TikTok in English for everyone else. To keep removing them, set Languages to keep to your codes, such as en or en, tr. If your TikTok lost its language this way, patch it again with this patch off (or with your language listed) and install it over the one you have. You stay signed in.
 * **TikTok:** In Feed tabs, the Explore option is called Explore or Community now (#62). Some accounts see that tab as Community, and unticking Explore hid it with nothing in the list saying so.
 
+* **TikTok:** Hushfeed now needs Morphe Manager 1.33.0 or newer, because it's built against Morphe patcher 1.15.0. Older Managers say the bundle needs a Manager update. In a test with memory held near what Manager gets on a phone (768 MB), patcher 1.14.1 ran out of memory while saving patched TikTok 47.1.4, and 1.15.0 finished.
+
 ## 0.66.0 (2026-10-01)
 
 * **TikTok:** Hushfeed's settings now come in Italian (#61) and Russian (#60). Both are first passes, and corrections from Italian and Russian speakers are very welcome. Russian counts use all three of the language's forms, so 2, 5 and 21 results each read the way Russian says them.

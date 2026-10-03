@@ -95,13 +95,13 @@ val notificationControlsPatch = bytecodePatch(
         for (fingerprint in listOf(ShowStreakButtonFingerprint, StreakReminderFingerprint)) {
             val matches = fingerprint.matchAll().filter { it.method.implementation != null }
             check(matches.isNotEmpty()) {
-                "Notification controls: no ${fingerprint.name} to take over."
+                "Notification controls: no match for ${fingerprint.javaClass.simpleName} to take over."
             }
             matches.forEach { match ->
                 // A Kotlin getter this small can be compiled with only its own receiver, and
                 // then v0 is that receiver rather than a spare.
                 check(match.method.implementation!!.registerCount > 1) {
-                    "Notification controls: ${fingerprint.name} has no free local register."
+                    "Notification controls: ${match.method.definingClass}->${match.method.name} has no free local register."
                 }
                 match.method.guardAtEntry(
                     "getShowStreakButton",

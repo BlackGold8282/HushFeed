@@ -83,7 +83,7 @@ internal fun searchRewardsGetter(method: Method): SearchRewardsGetter? {
  */
 internal fun BytecodePatchContext.searchRewardsGetters(): List<Pair<MutableMethod, SearchRewardsGetter>> {
     val found = SEARCH_REWARDS_FEATURES
-        .flatMap { feature -> getAllClassesWithString(feature) }
+        .flatMap { feature -> classDefByStrings(feature) }
         .distinctBy { it.type }
         .flatMap { classDef ->
             classDef.methods.mapNotNull { method ->
