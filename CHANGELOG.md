@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **Verification:** APK fixture tests reuse read-only DEX decoding without sharing mutable patch contexts. Content checks detect same-path replacements, and heap pressure can reclaim cached entries. Nested and concatenated DEX fixtures retain their complete class inventories.
+
 * **Verification:** The build wrapper preserves test filters containing spaces and returns the actual result under both Windows shells. Build defaults now limit worker and heap use, check available memory, and report CPU load so focused checks can run without overwhelming the desktop.
 
 * **TikTok:** Limit background traffic keeps push setup intact by default, including when All is selected. Its optional Skip push setup choice starts off and can stop message and other notifications when enabled. Existing APKs need repatching from TikTok's original APK to restore push setup. Pause can't reverse this patch-time change (#86).

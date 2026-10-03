@@ -8,7 +8,6 @@ import app.morphe.Fixtures
 import app.morphe.patcher.Patcher
 import app.morphe.patcher.PatcherConfig
 import app.morphe.patcher.patch.bytecodePatch
-import com.android.tools.smali.dexlib2.DexFileFactory
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.Opcodes
 import com.android.tools.smali.dexlib2.iface.ClassDef
@@ -48,7 +47,7 @@ class BackgroundPushSetupTest {
                 if (value == "false") networkTrafficGovernorPatch.options.set("skipPushSetup", false)
                 if (value == "null") networkTrafficGovernorPatch.options.set<Boolean>("skipPushSetup", null)
                 Fixtures.forEachDeclared { apk ->
-                    val container = DexFileFactory.loadDexContainer(apk, Opcodes.getDefault())
+                    val container = Fixtures.dexContainer(apk, Opcodes.getDefault())
                     val original = container.dexEntryNames.asSequence()
                         .flatMap { container.getEntry(it)!!.dexFile.classes.asSequence() }
                         .single { it.type == PUSH_OWNER }
