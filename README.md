@@ -453,6 +453,8 @@ The Lab uses a compact toolbar so more gates fit on small screens. Tap the warni
 
 ## Building from source
 
+Use focused checks while editing and reserve the full suites and bundle build for a milestone. The configured `HUSHFEED_BUILD_WRAPPER` preserves spaced test filters, reports CPU and free memory, and runs with two workers at low priority. It defers a build when less than 6 GB is free instead of starting another heavy process.
+
 Use JDK 21 or newer and an Android SDK configured through `local.properties`. GitHub Packages needs `GITHUB_ACTOR` and a `GITHUB_TOKEN` with `read:packages` access for the Morphe dependencies.
 
 For runtime tests on Windows, use JDK 25. The tested JDK 21 build couldn't replace an existing file through `File.renameTo`, which broke Android's atomic file writes in the tests. JDK 25 passes that replacement check.
