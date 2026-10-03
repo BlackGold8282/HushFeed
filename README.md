@@ -18,7 +18,9 @@ Hushfeed is a [Morphe](https://github.com/MorpheApp/morphe-manager) patch bundle
 > [!IMPORTANT]
 > Hushfeed targets the global TikTok package, `com.zhiliaoapp.musically`, versions [47.0.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-0-3-release/tiktok-47-0-3-3-android-apk-download/), [47.1.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-3-release/tiktok-47-1-3-android-apk-download/) and [47.1.4](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-4-release/tiktok-47-1-4-2-android-apk-download/). Use one of those exact APKs when patching. See [Supported target](#supported-target) for the verified build details.
 
-Hushfeed v0.67.0 contains 106 patches for TikTok 47.0.3, 47.1.3 and 47.1.4. New in this one: a block on TikTok's "Videos you might like" notifications, a switch that keeps new searches out of your history, separate sizes for feed descriptions and creator names, filters for the LIVE feed, and settings in Azerbaijani. It needs Morphe Manager 1.32.0 or newer.
+Hushfeed v0.66.0 contains 102 patches for TikTok 47.0.3, 47.1.3 and 47.1.4. New in this one: settings in Italian and Russian, a daily message that keeps a streak going, a name of your own under the app icon, and Look like the store app for follows that undo themselves. It needs Morphe Manager 1.32.0 or newer.
+
+The main branch contains 106 patches, including a block on TikTok's "Videos you might like" notifications, a switch that keeps new searches out of your history, separate sizes for feed descriptions and creator names, filters for the LIVE feed, and settings in Azerbaijani. They need a bundle built from source, which loads in Morphe Manager 1.33.0 or newer. Adding the source in Manager still downloads the published v0.66.0 bundle.
 
 ## Pick what changes
 
