@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **Verification:** Full ABI checks exercise both single-ABI inputs and reject altered native libraries on every declared TikTok version. Isolated package qualification rejects empty patch results. Published-asset checks can require GitHub release attestations or a bundle signature verified against a pinned public key, with transparency verification enabled. Their focused contracts run before a push.
+
 * **TikTok:** Restoring settings now reports keys the current build can't restore, separately from settings missing from an older backup. Portable settings still migrate across TikTok versions, local device state stays intact, and Feature Gate Lab compatibility and Undo keep their existing behavior.
 
 * **TikTok:** Feed filter's Seen videos section can import the reviewed TikTok JSON watch-history export. Watch dates and the chosen account stay attached to the import, the existing age limit applies, and a banner reports added and skipped entries. Repeating an import adds nothing. Invalid or unsupported files and failed writes leave saved history unchanged. Files are limited to 2 MB and 10,000 entries, and links never leave the phone. An import that adds history ends Undo for an earlier clear and explains that change.

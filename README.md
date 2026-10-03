@@ -531,6 +531,24 @@ pwsh -File scripts/validate-release-facts.ps1 -VerifyPublishedAsset -ArtifactPat
 
 The check follows the indexed URL, compares its SHA-256 with the local artifact, checks the matching entry in `SHA256SUMS.txt`, and counts the patches inside the published bundle against the number the index advertises.
 
+For an immutable release it also runs GitHub's release and asset attestation checks. Those checks bind the repository, tag, source commit and uploaded file hash. Rebuilding the bundle from that source remains a separate check. Add `-RequireImmutableRelease` when verifying a publication that must be immutable. Existing mutable releases keep the other checks and report that attestation verification was skipped.
+
+An advertised signature must be `patches-<version>.sigstore.json` beside the release bundle and verify with the repository's `cosign.pub`. Verification requires stable Cosign 3.1.3 or newer, checks the public key and transparency proof, and stops on missing inputs or a bad signature. Add `-RequireBundleSignature` when a publication must be signed, or `-Cosign <path>` to name the executable. Both requirement switches need `-VerifyPublishedAsset`. The current release doesn't advertise a signature. Prepare the signing key and final release assets before enabling that requirement.
+
+To verify a downloaded signed bundle directly, use:
+
+```bash
+cosign verify-blob --key cosign.pub --bundle patches-<version>.sigstore.json patches-<version>.mpp
+```
+
+For reviewed universal inputs, `scripts/verify-abi-apks.py` creates an ARM64-only APK, an ARMv7-only APK and an ARM64 copy with one altered P2P-library byte. It runs the complete patch and resource gate on both valid copies and requires the altered copy to be rejected. It preserves the original APK and writes hashes, reports and logs into a new output directory:
+
+```bash
+python scripts/verify-abi-apks.py --apk <universal.apk> --out <new-directory> --desktop-jar <desktop.jar> --bundle patches/build/release/patches-<version>.mpp
+```
+
+`verify-all-patches.ps1 -Force -ProbePackage <package>` qualifies an isolated candidate bundle without changing the production catalog. The candidate bundle must declare the package before the desktop CLI can select its patches. Force alone affects versions and doesn't select patches for an undeclared package. The gate rejects a zero-patch result and still checks every requested patch, actual output identity, resource and native language file. Supported targets need separate compatibility metadata and native acceptance.
+
 That last one needs the Morphe desktop CLI. Set `HUSHFEED_DESKTOP_JAR` to the jar, or put `morphe-desktop-<version>-all.jar` under `HUSHFEED_WORKDIR` or `build/morphe-tools`, and it is found on its own. Without it the check stops rather than passing, because the count is the only part that reads what people actually download. The CLI wants a JDK 21 or newer, which is often not the `java` first on PATH: `HUSHFEED_JAVA` or `JAVA_HOME` says which one to use. When `-Java` names a directory, that directory must contain `bin/java.exe` or `bin/java`. An invalid explicit directory is reported instead of falling back to PATH.
 
 ### Adding a language to the settings screen
