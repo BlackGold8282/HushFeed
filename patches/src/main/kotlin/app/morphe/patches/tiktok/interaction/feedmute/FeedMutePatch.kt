@@ -147,7 +147,7 @@ val feedMutePatch = bytecodePatch(
         "volume, and a switch that does the same. The button starts off until you turn on Show " +
         "the mute button on videos. It also shows on a video opened from " +
         "a profile, a hashtag or a sound, and mutes that one too. While muted, music from another app keeps " +
-        "playing, and DMs, stories and LIVE keep their sound. Switch: Hushfeed settings > Playback.",
+        "playing, and DMs, stories and LIVE keep their sound. Switches: Hushfeed settings > Playback, and Feed screen for the button.",
     default = false,
 ) {
     category("Playback")
