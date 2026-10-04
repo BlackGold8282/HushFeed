@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Documentation edits no longer rerun unchanged APK fixture tests. Full test commands and release checks still cover every test, and source-reading checks now track their external inputs. Replacing an APK invalidates test results even when its size and timestamp match.
+
 * **TikTok:** Undo now commits watches recorded during restoration before counting them. Older queued writes also preserve newer watch times that Undo has already saved.
 
 * **TikTok:** Local storage scanner checks now keep Java diagnostics visible without treating successful runs as failures in Windows PowerShell.
