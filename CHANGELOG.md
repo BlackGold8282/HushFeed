@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Media saves now honor the server's full retry delay, including HTTP dates, before following a redirect or trying another mirror or subtitle track. A delay beyond the save's time limit stops the job with a clear message and keeps files already saved. Cancel also interrupts a retry wait.
+
 * **TikTok:** Documentation edits no longer rerun unchanged APK fixture tests. Full test commands and release checks still cover every test, and source-reading checks now track their external inputs. Replacing an APK invalidates test results even when its size and timestamp match.
 
 * **TikTok:** Undo now commits watches recorded during restoration before counting them. Older queued writes also preserve newer watch times that Undo has already saved.
