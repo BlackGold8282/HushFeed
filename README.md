@@ -18,7 +18,7 @@ Hushfeed is a [Morphe](https://github.com/MorpheApp/morphe-manager) patch bundle
 > [!IMPORTANT]
 > Hushfeed targets the global TikTok package, `com.zhiliaoapp.musically`, versions [47.0.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-0-3-release/tiktok-47-0-3-3-android-apk-download/), [47.1.3](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-3-release/tiktok-47-1-3-android-apk-download/) and [47.1.4](https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/tiktok-47-1-4-release/tiktok-47-1-4-2-android-apk-download/). Use one of those exact APKs when patching. See [Supported target](#supported-target) for the verified build details.
 
-Hushfeed v0.67.0 contains 106 patches for TikTok 47.0.3, 47.1.3 and 47.1.4. It needs Morphe Manager 1.33.0 or newer. Source v0.67.1 keeps the same patch count and adds fixes for the local hide and sound block controls, the paused Home long-press settings shortcut and Android 6 plural forms.
+Hushfeed v0.67.1 contains 106 patches for TikTok 47.0.3, 47.1.3 and 47.1.4. New in this one: the buttons Hushfeed draws on videos start off and sit together under Feed screen > Buttons on videos, the settings pages are regrouped, and a TikTok with a single language patches with everything selected. It needs Morphe Manager 1.33.0 or newer.
 
 The main branch contains 106 patches, the same set as v0.67.1.
 
@@ -140,7 +140,7 @@ A few patches change TikTok with no switch in front of them, and Pause can't rea
 
 While paused, TikTok's own bottom bar comes back, + button included. If Remove creation tools was patched in, the camera and editor behind that button still won't work, because their files were taken out when the app was patched.
 
-On the main branch, Limit background traffic keeps push setup intact unless you enable Skip push setup in that patch's options. The option starts off even when you select All. The published v0.67.0 bundle still skips push setup when this patch is selected. To restore it, repatch TikTok's original APK without Limit background traffic, or build the current source with Skip push setup off. Pause can't reverse that change in an installed APK.
+Since v0.67.1, Limit background traffic keeps push setup intact unless you enable Skip push setup in that patch's options. The option starts off even when you select All. If you patched with v0.67.0 and selected this patch, repatch TikTok's original APK with v0.67.1 to get push setup back. Pausing Hushfeed leaves that change in place, so a fresh patch is the way back.
 
 ### TikTok closes right after it opens
 
