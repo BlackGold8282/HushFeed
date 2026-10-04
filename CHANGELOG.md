@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Local APK signing now accepts harmless Java startup diagnostics from heap and CPU limits. Invalid certificates and failed signing checks still stop installation.
+
 * **TikTok:** Undo clearing seen videos now restores history in the background and reports how many cleared records still fit the history limits. It no longer says videos were restored when newer watches leave no room for them. A failed save keeps Undo available.
 
 ## 0.67.1 (2026-10-03)
