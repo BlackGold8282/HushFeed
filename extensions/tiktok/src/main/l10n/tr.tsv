@@ -1503,3 +1503,7 @@ Keep what you search for out of the search history TikTok saves on this phone. S
 Block suggested video notifications	Önerilen video bildirimlerini engelle
 Stop the notifications TikTok sends about popular videos it picked for you. Messages, comments, likes, follows and videos from accounts you follow still come through.	TikTok'un senin için seçtiği popüler videolar hakkında gönderdiği bildirimleri durdur. Mesajlar, yorumlar, beğeniler, yeni takipçiler ve takip ettiğin hesapların videoları gelmeye devam eder.
 Buttons on videos	Videolardaki düğmeler
+
+Seen videos put back: %1$s of %2$s	Geri yüklenen izlenen videolar: %1$s / %2$s
+No cleared videos fit the current history limits.	Silinen videoların hiçbiri geçerli geçmiş sınırlarına uymuyor.
+Putting seen videos back	İzlenen videolar geri yükleniyor

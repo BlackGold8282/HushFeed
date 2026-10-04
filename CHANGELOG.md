@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Undo clearing seen videos now restores history in the background and reports how many cleared records still fit the history limits. It no longer says videos were restored when newer watches leave no room for them. A failed save keeps Undo available.
+
 ## 0.67.1 (2026-10-03)
 
 * **TikTok:** Settings are easier to find. All five buttons Hushfeed draws on videos sit together under Feed screen > Buttons on videos. Playback now holds every player switch, including the progress bar and its thumbnail, stop looping and resume after scrolling, which were on App. Screenshots and the status bar moved to App > System along with Look like the store app. Allow Duet and Stitch is on Share sheet now. Your saved choices stay as they were.

@@ -308,6 +308,8 @@ Feature Gate Lab rules are checked against the supported TikTok catalogs. Rules 
 
 ### Import watch history
 
+In source builds, **Undo clearing seen videos** restores only records that still fit the current retention period and 10,000-video limit. The result reports a partial restoration or explains when none can be kept. The merge runs in the background, and a storage error keeps Undo available.
+
 Request [your TikTok data](https://support.tiktok.com/en/account-and-privacy/personalized-ads-and-data/requesting-your-data) in JSON format. Extract the downloaded archive, sign in to the account the export belongs to, then open Hushfeed settings > Feed filter > Seen videos > **Import watch history** and choose the JSON file. The file must be at most 2 MB with at most 10,000 watch-history entries. TXT exports aren't supported yet.
 
 The importer reads the reviewed **Your Activity > Watch History** export layout. It keeps the watch dates, using the phone's time zone at file choice for dates that don't name a zone. **Forget seen videos after** applies to imported history too. Set it to zero before importing if you want to keep older watches. Invalid links and dates, repeated entries, videos already recorded at the same or a newer date, and entries beyond the newest 10,000 videos are skipped. A banner gives the added and skipped counts. Choosing the same file again adds nothing. Links are read locally and never opened or downloaded.

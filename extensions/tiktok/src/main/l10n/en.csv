@@ -786,6 +786,7 @@ No,No
 No app on this phone opens that file,No app on this phone opens that file
 No apps match this search,No apps match this search
 "No chat with @%1$s turned up on this account. Open your chat with them once, then try again.","No chat with @%1$s turned up on this account. Open your chat with them once, then try again."
+No cleared videos fit the current history limits.,No cleared videos fit the current history limits.
 No creator to block on this video,No creator to block on this video
 No creator to hide on this video,No creator to hide on this video
 "No creators are hidden yet. Hide one from a video, or add a handle above.","No creators are hidden yet. Hide one from a video, or add a handle above."
@@ -938,6 +939,7 @@ Pulling down at the top of For You no longer reloads it.,Pulling down at the top
 Put %1$s in %2$s first.,Put %1$s in %2$s first.
 Put back the settings saved before the last restore or reset.,Put back the settings saved before the last restore or reset.
 Put every setting back to its default straight away. Your current settings are kept for Undo.,Put every setting back to its default straight away. Your current settings are kept for Undo.
+Putting seen videos back,Putting seen videos back
 Putting the saved videos back,Putting the saved videos back
 Putting the settings back to their defaults,Putting the settings back to their defaults
 Quality,Quality
@@ -1076,6 +1078,7 @@ Seen this session,Seen this session
 Seen videos,Seen videos
 Seen videos cleared. You can undo until TikTok closes.,Seen videos cleared. You can undo until TikTok closes.
 Seen videos put back,Seen videos put back
+Seen videos put back: %1$s of %2$s,Seen videos put back: %1$s of %2$s
 Select,Select
 Select at least one field.,Select at least one field.
 Select every tab,Select every tab
