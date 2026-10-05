@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Clear Display now hides the stories button above Following when TikTok leaves it up, and puts it back as soon as you leave Clear Display. Pause leaves both the stories button and the top tabs to TikTok. Automatic Clear Display also waits until TikTok has really cleared the screen before it counts a try, so a first video TikTok wasn't ready for still gets cleared.
+
 * **TikTok:** Automatic Clear Display retries on the current video after focus returns, including the first video after startup. A canceled or failed attempt no longer prevents another try. Manual exit remains respected, and callbacks from an earlier video cannot cancel the next video's timer.
 
 * **TikTok:** Media saves now honor the server's full retry delay, including HTTP dates, before following a redirect or trying another mirror or subtitle track. A delay beyond the save's time limit stops the job with a clear message and keeps files already saved. Cancel also interrupts a retry wait.

@@ -851,6 +851,153 @@ public class VideoOverlayHiderTest {
         }
     }
 
+    @Test
+    public void clearDisplayHidesFollowingStoriesOutsideTheCellsAndRestoresNativeVisibility() {
+        int storyId = 0x7f0a0b10;
+        int cellId = 0x7f0a0b11;
+        VideoOverlayHider.resolveForTests("47.0.3:wq0", storyId);
+        VideoOverlayHider.resolveForTests("view_rootview", cellId);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            FrameLayout root = new FrameLayout(activity);
+            FrameLayout cell = new FrameLayout(activity);
+            cell.setId(cellId);
+            root.addView(cell);
+            FrameLayout stories = new FrameLayout(activity);
+            stories.setId(storyId);
+            stories.setAlpha(0.6f);
+            stories.setClickable(true);
+            root.addView(stories);
+            activity.setContentView(root);
+
+            for (int visibility : new int[]{View.VISIBLE, View.INVISIBLE, View.GONE}) {
+                stories.setVisibility(visibility);
+                app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch
+                        .rememberClearDisplayEvent(new ClearEvent(true, 1));
+                Settings.CLEAR_DISPLAY.save(false);
+                VideoOverlayHider.applyTo(activity);
+                assertEquals(View.GONE, stories.getVisibility());
+                if (visibility == View.VISIBLE) {
+                    stories.setVisibility(View.VISIBLE);
+                    VideoOverlayHider.applyTo(activity);
+                    assertEquals(View.GONE, stories.getVisibility());
+                }
+                app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch
+                        .rememberClearDisplayEvent(new ClearEvent(false, 1));
+                VideoOverlayHider.applyTo(activity);
+                assertEquals(visibility, stories.getVisibility());
+                assertEquals(0.6f, stories.getAlpha(), 0f);
+                assertTrue(stories.isClickable());
+            }
+        } finally {
+            VideoOverlayHider.resolveForTests("view_rootview", 0);
+        }
+    }
+
+    @Test
+    public void nativeClearExitRestoresFollowingStoriesWithoutAnotherLayout() {
+        int storyId = 0x7f0a0b10;
+        VideoOverlayHider.resolveForTests("47.0.3:wq0", storyId);
+        try (var controller = Robolectric.buildActivity(Activity.class).setup()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            FrameLayout root = new FrameLayout(activity);
+            View stories = new View(activity);
+            stories.setId(storyId);
+            root.addView(stories);
+            activity.setContentView(root);
+            VideoOverlayHider.install(activity);
+            org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+
+            app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch
+                    .rememberClearDisplayEvent(new ClearEvent(true, 0));
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.GONE, stories.getVisibility());
+            org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+
+            app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch
+                    .rememberClearDisplayEvent(new ClearEvent(false, 2));
+            org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle();
+            assertEquals(View.VISIBLE, stories.getVisibility());
+        }
+    }
+
+    @Test
+    public void aStoryViewerCoveringTheMainActivityRestoresTheStoryCount() {
+        try (var controller = Robolectric.buildActivity(Activity.class).setup().visible()) {
+            Activity activity = controller.get();
+            Utils.setContext(activity);
+            FrameLayout root = new FrameLayout(activity);
+            View stories = new View(activity);
+            stories.setId(0x7f0a0b10);
+            root.addView(stories);
+            View viewer = new View(activity);
+            viewer.setId(0x7f0a0b13);
+            viewer.setVisibility(View.GONE);
+            root.addView(viewer, new FrameLayout.LayoutParams(400, 600));
+            activity.setContentView(root);
+            VideoOverlayHider.resolveForTests("47.0.3:wq0", stories.getId());
+            app.morphe.extension.tiktok.blockauthor.FeedVisibility.resolveForTests(
+                    activity.getPackageName(), "vp_story_collection", viewer.getId());
+            app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch
+                    .rememberClearDisplayEvent(new ClearEvent(true, 1));
+
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.GONE, stories.getVisibility());
+            viewer.setVisibility(View.VISIBLE);
+            assertTrue(app.morphe.extension.tiktok.blockauthor.FeedVisibility.isStoryVisible(activity));
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.VISIBLE, stories.getVisibility());
+            assertEquals(View.VISIBLE, viewer.getVisibility());
+
+            viewer.setVisibility(View.GONE);
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.GONE, stories.getVisibility());
+            app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch
+                    .rememberClearDisplayEvent(new ClearEvent(false, 1));
+            VideoOverlayHider.applyTo(activity);
+            assertEquals(View.VISIBLE, stories.getVisibility());
+        }
+    }
+
+    @Test
+    public void pauseRestoresTheClearDisplayChromeAndDetailPagesKeepTheirStoryControls() {
+        int storyId = 0x7f0a0b10;
+        int tabStripId = 0x7f0a0b12;
+        VideoOverlayHider.resolveForTests("47.0.3:wq0", storyId);
+        VideoOverlayHider.resolveForTests("47.0.3:uvy", tabStripId);
+        try (var main = Robolectric.buildActivity(Activity.class).setup();
+             var detail = Robolectric.buildActivity(
+                     com.ss.android.ugc.aweme.detail.ui.DetailActivity.class).setup()) {
+            Utils.setContext(main.get());
+            FrameLayout root = new FrameLayout(main.get());
+            View stories = new View(main.get());
+            stories.setId(storyId);
+            root.addView(stories);
+            View tabs = new View(main.get());
+            tabs.setId(tabStripId);
+            root.addView(tabs);
+            main.get().setContentView(root);
+            View detailStories = new View(detail.get());
+            detailStories.setId(storyId);
+            detail.get().setContentView(detailStories);
+            app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch
+                    .rememberClearDisplayEvent(new ClearEvent(true, 1));
+
+            VideoOverlayHider.applyTo(main.get());
+            app.morphe.extension.shared.settings.PausedProcess.set(true);
+            VideoOverlayHider.applyTo(main.get());
+            assertEquals(View.VISIBLE, stories.getVisibility());
+            assertEquals(View.VISIBLE, tabs.getVisibility());
+            app.morphe.extension.shared.settings.PausedProcess.set(false);
+            VideoOverlayHider.applyTo(detail.get());
+            assertEquals(View.VISIBLE, detailStories.getVisibility());
+        } finally {
+            app.morphe.extension.shared.settings.PausedProcess.set(false);
+        }
+    }
+
     /**
      * A video opened from a creator's grid plays in TikTok's detail pager, a second activity with
      * the same cell and the same right column ids (#47). The hides follow it there as it comes to

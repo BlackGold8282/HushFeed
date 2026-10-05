@@ -22,6 +22,7 @@ import app.morphe.extension.shared.GlobalLayoutHook;
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.ResourceIdCache;
 import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.settings.HushfeedPause;
 import app.morphe.extension.tiktok.blockauthor.FeedVisibility;
 import app.morphe.extension.tiktok.cleardisplay.RememberClearDisplayPatch;
 import app.morphe.extension.tiktok.navigation.NavigationTabsFilter;
@@ -98,14 +99,16 @@ public final class VideoOverlayHider {
     private static final String[] ACTION_BAR_IDS = {"47.0.3:liy", "47.1.3:llj", "47.1.4:llj"};
     private static final String[] SURVEY_IDS = {"47.0.3:f7u", "47.1.3:f98", "47.1.4:f98"};
     private static final String[] TAB_STRIP_IDS = {"47.0.3:uvy", "47.1.3:uzf", "47.1.4:uzf"};
+    /** The story-count button is a sibling of the main feed, outside its tab strip and cells. */
+    private static final String[] FOLLOWING_STORY_IDS = {"47.0.3:wq0", "47.1.3:wtr", "47.1.4:wtr"};
     private static final String[] DETAIL_COMMENT_BAR_IDS = {"47.0.3:qo4", "47.1.3:qqw", "47.1.4:qqw"};
     private static final String[] DETAIL_COMMENT_STRIP_IDS = {"47.0.3:cn8", "47.1.3:cnk", "47.1.4:cnk"};
     /**
      * The feed cell root. Furniture is only hidden underneath one: Hide feed surveys used to
      * take every survey card id in the window, and on the profile that is the Favorites tab's whole
      * page, which showed as an empty tab (a Galaxy S25, 2026-09-16, found by restoring the
-     * settings one group at a time). The tab strip sits above the cells and is the one
-     * target that stays window-wide. A build that renames the cell root falls back to the
+     * settings one group at a time). The tab strip and Following story button sit outside
+     * the cells and stay window-wide. A build that renames the cell root falls back to the
      * whole window, and the hook status names the miss.
      */
     private static final String CELL_ROOT_ID = "view_rootview";
@@ -190,7 +193,8 @@ public final class VideoOverlayHider {
     private static final int TAB_STRIP_TARGET = 4;
     private static final int DETAIL_COMMENT_BAR_TARGET = 5;
     private static final int DETAIL_COMMENT_STRIP_TARGET = 6;
-    private static final int RAIL_TARGET_START = 7;
+    private static final int FOLLOWING_STORY_TARGET = 7;
+    private static final int RAIL_TARGET_START = 8;
     private static final int COUNT_ROW_TARGET_START = RAIL_TARGET_START + RAIL_BUTTON_IDS.length;
     private static final int COUNT_TEXT_TARGET_START = COUNT_ROW_TARGET_START
             + RAIL_COUNT_ROW_IDS.length;
@@ -255,7 +259,7 @@ public final class VideoOverlayHider {
                 Logger.printInfo(() -> "Video overlay hider found no content view to watch");
                 return;
             }
-            boolean installed = LAYOUT_HOOK.install(root, VideoOverlayHider::apply);
+            boolean installed = LAYOUT_HOOK.install(root, VideoOverlayHider::refresh);
             activityReference = new WeakReference<>(activity);
             LiveStatusBar.follow(activity);
             follow(activity.getApplication());
@@ -289,7 +293,8 @@ public final class VideoOverlayHider {
         });
     }
 
-    private static void apply() {
+    /** Refreshes the current window on the main thread, including state changes without a layout. */
+    public static void refresh() {
         Activity activity = activityReference.get();
         if (activity == null) {
             LAYOUT_HOOK.detach();
@@ -338,7 +343,8 @@ public final class VideoOverlayHider {
             // the first swipe. Following the live state keeps it away until the tap that ends
             // the mode. The persisted setting cannot be used here: the automatic path never
             // writes it, so it would answer false for exactly the case this is meant to fix.
-            boolean tabStrip = !detailPager && RememberClearDisplayPatch.isClearDisplayNow();
+            boolean tabStrip = !detailPager && !HushfeedPause.isPaused()
+                    && RememberClearDisplayPatch.isClearDisplayNow();
             // The comment bar is the detail pager's own; the main feed has the tabs there.
             boolean detailCommentBar = detailPager && Settings.HIDE_DETAIL_COMMENT_BAR.get();
             boolean counts = Settings.HIDE_RAIL_COUNTS.get();
@@ -369,6 +375,7 @@ public final class VideoOverlayHider {
                 wanted[ACTION_BAR_TARGET] = actionBar;
                 wanted[SURVEY_TARGET] = surveys;
                 wanted[TAB_STRIP_TARGET] = tabStrip;
+                wanted[FOLLOWING_STORY_TARGET] = tabStrip && !FeedVisibility.isStoryVisible(activity);
                 wanted[DETAIL_COMMENT_BAR_TARGET] = detailCommentBar;
                 wanted[DETAIL_COMMENT_STRIP_TARGET] = detailCommentBar;
                 for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
@@ -576,6 +583,7 @@ public final class VideoOverlayHider {
         targets[ACTION_BAR_TARGET] = ACTION_BAR_IDS;
         targets[SURVEY_TARGET] = SURVEY_IDS;
         targets[TAB_STRIP_TARGET] = TAB_STRIP_IDS;
+        targets[FOLLOWING_STORY_TARGET] = FOLLOWING_STORY_IDS;
         targets[DETAIL_COMMENT_BAR_TARGET] = DETAIL_COMMENT_BAR_IDS;
         targets[DETAIL_COMMENT_STRIP_TARGET] = DETAIL_COMMENT_STRIP_IDS;
         for (int i = 0; i < RAIL_BUTTON_IDS.length; i++) {
@@ -588,7 +596,7 @@ public final class VideoOverlayHider {
         return targets;
     }
 
-    /** The tab strip above the cells and the detail pager's comment bar below them. */
+    /** Main-feed tabs and story count, and the detail pager's comment bar, are outside the cells. */
     private static boolean outsideCells(int target) {
         return target >= TAB_STRIP_TARGET && target < RAIL_TARGET_START;
     }
