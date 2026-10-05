@@ -4,6 +4,8 @@ Every Hushfeed release, newest first.
 
 ## Unreleased
 
+* **TikTok:** Hiding the status bar now also removes the black strip TikTok keeps above videos for it, and on Android 14 and older the video draws behind the camera cutout instead of below it. A new Hide the Clear display controls switch takes the close button, progress bar and pause and speed buttons off the screen while Clear display is on, along with the close button photo posts show in the corner. They're back the moment you leave Clear display.
+
 * **TikTok:** Clear Display now hides the stories button above Following when TikTok leaves it up, and puts it back as soon as you leave Clear Display. Pause leaves both the stories button and the top tabs to TikTok. Automatic Clear Display also waits until TikTok has really cleared the screen before it counts a try, so a first video TikTok wasn't ready for still gets cleared.
 
 * **TikTok:** Automatic Clear Display retries on the current video after focus returns, including the first video after startup. A canceled or failed attempt no longer prevents another try. Manual exit remains respected, and callbacks from an earlier video cannot cancel the next video's timer.
